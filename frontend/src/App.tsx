@@ -219,7 +219,7 @@ export default function App() {
         <li>
           USD8 balanceOf: {dashboard.data ? formatUnits(dashboard.data.usd8Balance, usd8Decimals) : "-"}
         </li>
-        <li>WETH balanceOf: {dashboard.data ? dashboard.data.wethBalance.toString() : "-"}</li>
+        <li>WETH balanceOf: {dashboard.data ? formatUnits(dashboard.data.wethBalance, 18) : "-"}</li>
       </ul>
 
       <h3>Pool</h3>

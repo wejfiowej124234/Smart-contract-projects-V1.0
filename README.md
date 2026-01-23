@@ -64,7 +64,7 @@ npm run audit:all
 
 ## 1) Install
 ```bash
-npm i
+npm ci
 ```
 
 ## 2) Compile
@@ -119,7 +119,7 @@ Windows cmd:
 set SEED_ADDRESS=0xYourMetaMaskAddress
 ```
 
-然后运行 deploy 脚本，脚本会给该地址发 USD8/WETH：
+然后运行 deploy 脚本，脚本会向该地址发放 USD8/WETH：
 ```bash
 npx hardhat run scripts/deploy.ts --network localhost
 ```
