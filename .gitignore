@@ -1,0 +1,28 @@
+node_modules/
+artifacts/
+cache/
+typechain-types/
+coverage/
+coverage.json
+
+# Local Python env / tooling
+.venv/
+
+.env
+.DS_Store
+
+# Local logs / pid files
+.hardhat-node.log
+.hardhat-node.pid
+.deploy.log
+*.log
+*.pid
+
+frontend/dist/
+frontend/node_modules/
+
+# Non-source artifacts (keep private / avoid bloat in public repos)
+_translation_work/
+*.pdf
+*.docx
+*.zip
