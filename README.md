@@ -57,6 +57,43 @@ npm run audit:prod
 npm run audit:all
 ```
 
+## Interviewer quick verify (copy/paste)
+
+### A) One command to verify tests/lint/build
+
+```bash
+npm ci
+npm run ci:local
+```
+
+### B) Run the local demo end-to-end
+
+Terminal 1 (start local chain):
+
+```bash
+npx hardhat node
+```
+
+Terminal 2 (deploy + seed + export):
+
+```bash
+npx hardhat run scripts/deploy.ts --network localhost
+```
+
+Terminal 3 (start frontend dev server):
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+Optional: seed your own MetaMask address (instead of importing Hardhat Account #0):
+
+```bash
+SEED_ADDRESS=0xYourMetaMaskAddress npx hardhat run scripts/deploy.ts --network localhost
+```
+
 # Part 1 — Hardhat (Local) + One-click Deploy
 
 ## Prerequisites
