@@ -109,6 +109,16 @@ cd frontend && npm run dev
 SEED_ADDRESS=0xYourMetaMaskAddress
 ```
 
+Windows PowerShell:
+```powershell
+$env:SEED_ADDRESS = "0xYourMetaMaskAddress"
+```
+
+Windows cmd:
+```bat
+set SEED_ADDRESS=0xYourMetaMaskAddress
+```
+
 然后运行 deploy 脚本，脚本会给该地址发 USD8/WETH：
 ```bash
 npx hardhat run scripts/deploy.ts --network localhost

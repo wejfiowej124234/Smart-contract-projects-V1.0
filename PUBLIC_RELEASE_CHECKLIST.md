@@ -2,6 +2,8 @@
 
 This repo is designed to be reproducible for an assignment. If you plan to make it public, use this checklist to avoid leaking private/copyrighted material.
 
+This checklist is for safe public sharing; for the interview submission, the repository can remain private.
+
 ## 1) Remove non-source / copyrighted files
 
 Ensure these are NOT committed:
