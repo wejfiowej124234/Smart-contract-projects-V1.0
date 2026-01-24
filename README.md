@@ -6,6 +6,7 @@ This project fully implements all mandatory requirements of the coding assignmen
 
 Optional learning docs (CN/EN): see `docs/WALKTHROUGH.zh-en.md`.
 Optional demo runbook (CN/EN): see `docs/DEMO_CHECKLIST.zh-en.md`.
+For requirement-to-implementation mapping, see `docs/ASSESSMENT_MAPPING.md`.
 
 - React + TypeScript + ethers v6 frontend on Hardhat local chain (31337)
 - One-click deploys USD8/WETH/SimpleLending and exports ABI + addresses
@@ -27,10 +28,50 @@ Out of scope:
 - liquidation logic
 - production monitoring / alerting
 
+## Engineering notes (why this design)
+
+- See docs/ENGINEERING_RATIONALE.zh-cn.md for the design tradeoffs, explicit non-goals, and a short list of counterintuitive-but-intentional choices.
+
 ## Production hardening (optional)
 
 Roadmap and scope boundaries: see `docs/PRODUCTION_GRADE_ROADMAP.md`.
 Security communication policy: see `SECURITY.md`.
+
+Deployment headers (recommended): for any real hosting of the frontend, set a baseline Content Security Policy (CSP) and disable framing (e.g., `frame-ancestors 'none'` / `X-Frame-Options: DENY`) to reduce injection and clickjacking risks.
+
+## Enterprise hardening (in-scope, quick spot check)
+
+- Amount safety: strict decimal schema + bigint end-to-end (no number round-trip) — see [frontend/src/utils/amount.ts](frontend/src/utils/amount.ts) and its UI usage in [frontend/src/App.tsx](frontend/src/App.tsx)
+- Conservative Max actions: “Max (safe)” uses maxBorrow/maxWithdraw minus 1 wei as rounding headroom — see [frontend/src/App.tsx](frontend/src/App.tsx)
+- Approve safety: exact vs infinite toggle + USDT-style fallback approve(0)→approve(amount) — see [frontend/src/App.tsx](frontend/src/App.tsx) and [frontend/src/hooks/useActions.ts](frontend/src/hooks/useActions.ts)
+- Pre-wallet transaction summary (intent clarity): before any wallet prompt, the UI presents a concise, deterministic summary of the pending action, including **Action / Token / Spender / Amount**. For Supply and Repay, it also indicates whether an **Exact** or **Infinite** allowance is required and whether the flow includes an approval step — see [frontend/src/App.tsx](frontend/src/App.tsx)
+- Address display safety (checksum + full reveal): contract and account addresses are rendered using **EIP-55 checksum** format, with a consistent short form, optional full expansion, and one-click copy. Addresses are sourced exclusively from exported deployment artifacts and are not derived from URL parameters or local overrides — see [frontend/src/App.tsx](frontend/src/App.tsx) and [frontend/src/contracts/deployments.json](frontend/src/contracts/deployments.json)
+- Final consistency: confirmations + pending-tx restore + event backfill (queryFilter) — see [frontend/src/state/tx.ts](frontend/src/state/tx.ts), [frontend/src/state/txStore.ts](frontend/src/state/txStore.ts), [frontend/src/hooks/useDashboard.ts](frontend/src/hooks/useDashboard.ts)
+
+Pending txs are timeout-protected; users can re-check status or clear “stuck” local entries to handle dropped/replaced transactions on real RPCs.
+
+Scope boundary: these measures focus on frontend-level safety and correctness. Protocol-level risks (oracle integrity, liquidation design, MEV) are intentionally out of scope.
+
+### Post-state verification (best-effort)
+
+After a transaction is confirmed, the app performs a short post-state check by re-reading relevant on-chain views to verify that the intended state change is observable.
+
+Because RPC reads are eventually consistent, a missing update is **not treated as a failure**.  
+Instead, the transaction is marked as **“unverified”**, and the user is prompted to refresh the state manually.
+
+This avoids false negatives while still providing a clear and deterministic user experience under real-world RPC behavior.
+
+Verification checklist:
+- All contracts compile and tests pass
+- Frontend builds without warnings
+- E2E flow completes (approve → supply → borrow → repay → withdraw)
+
+Command (copy/paste): `npm run ci:local && npm run smoke:e2e`
+
+## Scripted E2E smoke (optional)
+
+- Runs: start local node (if needed) → deploy + export → perform a full approve→supply→borrow→repay→withdraw flow using the exported frontend ABIs.
+- Command: `npm run smoke:e2e`
 
 Run the same checks as CI:
 

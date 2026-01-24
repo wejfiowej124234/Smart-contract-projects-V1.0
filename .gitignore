@@ -23,6 +23,7 @@ frontend/node_modules/
 
 # Non-source artifacts (keep private / avoid bloat in public repos)
 _translation_work/
+_email_zip/
 *.pdf
 *.docx
 *.zip

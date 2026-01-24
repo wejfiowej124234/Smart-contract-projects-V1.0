@@ -62,7 +62,7 @@ export function useWallet() {
     isMetaMaskAvailable: typeof window !== "undefined" && !!window.ethereum,
   }));
 
-  const eth = useMemo(() => window.ethereum, []);
+  const eth = useMemo(() => (typeof window !== "undefined" ? window.ethereum : undefined), []);
 
   const refresh = useCallback(async () => {
     if (!eth) {
@@ -130,23 +130,21 @@ export function useWallet() {
 
     const onAccountsChanged = () => void refresh();
     const onChainChanged = () => void refresh();
+    const onConnect = () => void refresh();
+    const onDisconnect = () => void refresh();
 
     eth.on("accountsChanged", onAccountsChanged);
     eth.on("chainChanged", onChainChanged);
+    eth.on("connect", onConnect);
+    eth.on("disconnect", onDisconnect);
 
     return () => {
       eth.removeListener?.("accountsChanged", onAccountsChanged);
       eth.removeListener?.("chainChanged", onChainChanged);
+      eth.removeListener?.("connect", onConnect);
+      eth.removeListener?.("disconnect", onDisconnect);
     };
   }, [eth, refresh]);
-
-  useEffect(() => {
-    const wasConnected = localStorage.getItem("connected") === "true";
-    if (wasConnected) {
-      void connect();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return {
     ...state,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Contract } from "ethers";
 import { normalizeError } from "../state/errors";
 
@@ -12,6 +12,12 @@ export function useAllowance(params: { token?: Contract; owner?: string; spender
   const { token, owner, spender } = params;
 
   const [state, setState] = useState<AllowanceState>({ loading: false });
+
+  const [refreshNonce, setRefreshNonce] = useState(0);
+
+  const refresh = useCallback(() => {
+    setRefreshNonce((n) => n + 1);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -31,7 +37,25 @@ export function useAllowance(params: { token?: Contract; owner?: string; spender
     return () => {
       cancelled = true;
     };
-  }, [owner, spender, token]);
+  }, [owner, refreshNonce, spender, token]);
 
-  return state;
+  // Strategic note (why): allowance UX is fragile in real wallets.
+  // We sync primarily via Approval events (and a confirmed callback from writes),
+  // and also expose a manual `refresh()` escape hatch to avoid UI drift.
+  useEffect(() => {
+    if (!token || !owner || !spender) return;
+
+    const onApproval = (approvalOwner: string, approvalSpender: string) => {
+      if (approvalOwner.toLowerCase() !== owner.toLowerCase()) return;
+      if (approvalSpender.toLowerCase() !== spender.toLowerCase()) return;
+      refresh();
+    };
+
+    token.on("Approval", onApproval);
+    return () => {
+      token.off("Approval", onApproval);
+    };
+  }, [owner, refresh, spender, token]);
+
+  return { ...state, refresh };
 }

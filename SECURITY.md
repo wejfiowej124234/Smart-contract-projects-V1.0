@@ -4,6 +4,8 @@ This repository is a coding assignment / demo project. The goal of this document
 
 This project has not undergone third-party security audit and is not intended for mainnet use.
 
+It is not designed to safeguard real funds; use it only in local/test/demo environments.
+
 本仓库是编程作业/演示项目。本文档用于**清晰沟通**（如何上报、范围边界、预期），**不**代表公司级 SLA、**不**提供漏洞赏金、**不**承诺响应时限。
 
 ---
@@ -51,6 +53,20 @@ This repo separates **production runtime** and **dev toolchain** dependencies:
 Rationale / 原因：
 - `npm audit --omit=dev` reflects the *runtime* security posture.
 - Full `npm audit` often flags transitive vulnerabilities in dev tooling. Fixes frequently require **breaking upgrades** (`npm audit fix --force`), which we avoid in an assignment repo unless there is a strong reason.
+
+### Current audit results (snapshot) / 当前审计结果（快照）
+
+This section documents what we actually observed in this repository at the time of writing.
+
+- Production runtime deps: `npm run audit:prod` reports **0 vulnerabilities**.
+- Full graph (`npm run audit:all`) may still report **low-severity** findings originating from the **dev toolchain** (Hardhat / legacy crypto deps). These do not ship to the frontend runtime bundle.
+
+Mitigations applied (non-breaking) / 已应用的非破坏性缓解：
+- We use `npm overrides` in `package.json` to patch selected transitive dependencies (e.g., `cookie`, `tmp`, `undici`) without changing the assignment toolchain surface.
+- We validate toolchain stability by re-running `npm run ci:local` after any override changes.
+
+Known limitation / 已知限制：
+- Some low-severity advisories (e.g., `elliptic` in old dependency paths) can have **no fix available** without a breaking upgrade of the Hardhat ecosystem. We treat this as **out of scope for the assignment** unless the toolchain vendor provides a compatible fix.
 
 ---
 
