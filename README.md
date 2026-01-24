@@ -4,6 +4,8 @@ Version: v0.1.0 (assignment release)
 
 This project fully implements all mandatory requirements of the coding assignment.
 
+**📚 中文学习资料 / Chinese Learning Materials**: see [`learning/`](learning/) folder for comprehensive tutorials and interview prep (零基础教程和面试准备资料)
+
 Optional learning docs (CN/EN): see `docs/WALKTHROUGH.zh-en.md`.
 Optional demo runbook (CN/EN): see `docs/DEMO_CHECKLIST.zh-en.md`.
 For requirement-to-implementation mapping, see `docs/ASSESSMENT_MAPPING.md`.
