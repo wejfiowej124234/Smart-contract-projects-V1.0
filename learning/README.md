@@ -20,6 +20,8 @@ flowchart TB
 
 想要“截图那种图/导出图片文件”：见 [DIAGRAMS_EXPORT.md](DIAGRAMS_EXPORT.md)
 
+学习时间表（每天 8 小时，小白可执行）：见 [STUDY_PLAN_8H.md](STUDY_PLAN_8H.md)
+
 ## 📚 文档结构
 
 ### 1. 基础知识篇
