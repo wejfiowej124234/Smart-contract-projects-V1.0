@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .bg { fill: #0b1020; }
+      .title { fill: #e6edf3; font: 800 44px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .subtitle { fill: #9da7b3; font: 600 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .box { fill: #111a33; stroke: #2a3a66; stroke-width: 2; rx: 18; }
+      .step { fill: #0f1a2a; stroke: #2a3a66; stroke-width: 2; rx: 18; }
+      .h { fill: #c9d1d9; font: 800 24px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .t { fill: #9da7b3; font: 500 20px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .a { stroke: #58a6ff; stroke-width: 4; fill: none; marker-end: url(#m); }
+      .g { stroke: #7ee787; stroke-width: 4; fill: none; marker-end: url(#m2); }
+    </style>
+    <marker id="m" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#58a6ff"/></marker>
+    <marker id="m2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#7ee787"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="900" />
+  <text class="title" x="80" y="92">Reproducible Pipeline</text>
+  <text class="subtitle" x="80" y="132">From clean install to verifiable demo + tests</text>
+
+  <rect class="box" x="80" y="190" width="1440" height="640" rx="18" />
+
+  <rect class="step" x="140" y="280" width="320" height="120" />
+  <text class="h" x="175" y="325">Install</text>
+  <text class="t" x="175" y="360">npm ci</text>
+
+  <rect class="step" x="520" y="280" width="320" height="120" />
+  <text class="h" x="555" y="325">Compile</text>
+  <text class="t" x="555" y="360">npm run compile</text>
+
+  <rect class="step" x="900" y="280" width="320" height="120" />
+  <text class="h" x="935" y="325">Test</text>
+  <text class="t" x="935" y="360">npm test</text>
+
+  <rect class="step" x="1280" y="280" width="240" height="120" />
+  <text class="h" x="1310" y="325">Build UI</text>
+  <text class="t" x="1310" y="360">frontend build</text>
+
+  <path class="a" d="M460 340 L520 340" />
+  <path class="a" d="M840 340 L900 340" />
+  <path class="a" d="M1220 340 L1280 340" />
+
+  <rect class="step" x="240" y="470" width="360" height="140" />
+  <text class="h" x="275" y="520">Start local chain</text>
+  <text class="t" x="275" y="555">npx hardhat node</text>
+
+  <rect class="step" x="660" y="470" width="420" height="140" />
+  <text class="h" x="695" y="520">Deploy + seed + export</text>
+  <text class="t" x="695" y="555">scripts/deploy.ts</text>
+
+  <rect class="step" x="1140" y="470" width="320" height="140" />
+  <text class="h" x="1175" y="520">Run frontend</text>
+  <text class="t" x="1175" y="555">npm run dev</text>
+
+  <path class="g" d="M600 540 L660 540" />
+  <path class="g" d="M1080 540 L1140 540" />
+
+  <rect class="step" x="520" y="650" width="560" height="130" />
+  <text class="h" x="555" y="700">Backup: scripted E2E smoke</text>
+  <text class="t" x="555" y="735">npm run smoke:e2e (approve→supply→borrow→repay→withdraw)</text>
+
+  <path class="a" d="M980 610 C980 630, 900 640, 800 650" />
+
+  <text class="subtitle" x="120" y="850">One command check: npm run ci:local</text>
+</svg>

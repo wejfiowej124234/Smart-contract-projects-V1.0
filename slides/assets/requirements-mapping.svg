@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .bg { fill: #0b1020; }
+      .title { fill: #e6edf3; font: 800 44px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .subtitle { fill: #9da7b3; font: 600 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .h { fill: #c9d1d9; font: 800 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .t { fill: #9da7b3; font: 500 20px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .box { fill: #111a33; stroke: #2a3a66; stroke-width: 2; rx: 18; }
+      .pill { fill: #132042; stroke: #2a3a66; stroke-width: 2; rx: 999; }
+      .tag { fill: #0f1a2a; stroke: #2a3a66; stroke-width: 2; rx: 12; }
+      .g { stroke: #58a6ff; stroke-width: 3; fill: none; marker-end: url(#m); }
+      .g2 { stroke: #7ee787; stroke-width: 3; fill: none; marker-end: url(#m2); }
+    </style>
+    <marker id="m" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#58a6ff"/></marker>
+    <marker id="m2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#7ee787"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="900" />
+
+  <text class="title" x="80" y="92">Assignment → Implementation Mapping</text>
+  <text class="subtitle" x="80" y="132">What the coding test asks vs what we actually implemented (with evidence pointers)</text>
+
+  <!-- Left: assignment -->
+  <rect class="box" x="80" y="190" width="660" height="640" rx="18" />
+  <text class="h" x="120" y="238">Coding Test Assignment (given)</text>
+  <text class="t" x="120" y="272">File: “Coding Test Assignment - Web3 engineer”</text>
+
+  <rect class="tag" x="120" y="320" width="600" height="150" rx="16" />
+  <text class="h" x="150" y="365">Part 1 — Hardhat</text>
+  <text class="t" x="150" y="400">Deploy contracts, seed accounts, export ABI + addresses</text>
+
+  <rect class="tag" x="120" y="500" width="600" height="170" rx="16" />
+  <text class="h" x="150" y="545">Part 2 — Frontend</text>
+  <text class="t" x="150" y="580">MetaMask connect, tx interactions, real-time updates</text>
+  <text class="t" x="150" y="612">Display tx status (pending/confirmed/failed)</text>
+
+  <rect class="tag" x="120" y="700" width="600" height="110" rx="16" />
+  <text class="h" x="150" y="745">Part 3 — Quality (bonus)</text>
+  <text class="t" x="150" y="780">Tests, error handling, loading UX</text>
+
+  <!-- Right: evidence -->
+  <rect class="box" x="800" y="190" width="720" height="640" rx="18" />
+  <text class="h" x="840" y="238">Evidence in this repo (implemented)</text>
+
+  <rect class="pill" x="840" y="300" width="640" height="110" rx="999" />
+  <text class="h" x="880" y="345">One-click deploy + export</text>
+  <text class="t" x="880" y="382">scripts/deploy.ts • scripts/_lib/export.ts</text>
+
+  <rect class="pill" x="840" y="430" width="640" height="110" rx="999" />
+  <text class="h" x="880" y="475">Frontend read/write model</text>
+  <text class="t" x="880" y="512">useWallet • useDashboard • useActions • tx state</text>
+
+  <rect class="pill" x="840" y="560" width="640" height="110" rx="999" />
+  <text class="h" x="880" y="605">Real-time updates (mandatory)</text>
+  <text class="t" x="880" y="642">tx confirmed refresh + contract events + fail-safe</text>
+
+  <rect class="pill" x="840" y="690" width="640" height="110" rx="999" />
+  <text class="h" x="880" y="735">Quality add-ons (bonus)</text>
+  <text class="t" x="880" y="772">integration tests • error normalization • strict amount</text>
+
+  <!-- connectors -->
+  <path class="g" d="M720 395 C760 395, 760 355, 840 355"/>
+  <path class="g" d="M720 585 C760 585, 760 485, 840 485"/>
+  <path class="g2" d="M720 585 C760 585, 760 615, 840 615"/>
+  <path class="g" d="M720 760 C760 760, 760 745, 840 745"/>
+
+  <text class="subtitle" x="80" y="860">Tip: keep the scope explicit — this is a coding test demo, not a production DeFi protocol.</text>
+</svg>

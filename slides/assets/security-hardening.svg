@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .bg { fill: #0b1020; }
+      .title { fill: #e6edf3; font: 800 44px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .subtitle { fill: #9da7b3; font: 600 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .box { fill: #111a33; stroke: #2a3a66; stroke-width: 2; rx: 18; }
+      .row { fill: #0f1a2a; stroke: #2a3a66; stroke-width: 2; rx: 14; }
+      .h { fill: #c9d1d9; font: 800 24px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .t { fill: #9da7b3; font: 500 20px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .ok { fill: #7ee787; font: 900 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .note { fill: #8b949e; font: 600 18px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="900" />
+  <text class="title" x="80" y="92">Security & Safety Hardening (within scope)</text>
+  <text class="subtitle" x="80" y="132">A coding test demo — we still apply baseline hardening & UX safety patterns</text>
+
+  <rect class="box" x="80" y="190" width="1440" height="640" rx="18" />
+
+  <!-- headers -->
+  <text class="h" x="120" y="240">Risk / Pitfall</text>
+  <text class="h" x="560" y="240">Mitigation</text>
+  <text class="h" x="1240" y="240">Evidence</text>
+
+  <!-- rows -->
+  <rect class="row" x="120" y="270" width="1360" height="90" rx="14" />
+  <text class="t" x="150" y="322">Reentrancy on state-changing flows</text>
+  <text class="t" x="560" y="322">ReentrancyGuard + CEI pattern</text>
+  <text class="ok" x="1240" y="322">contracts/SimpleLending.sol</text>
+
+  <rect class="row" x="120" y="380" width="1360" height="90" rx="14" />
+  <text class="t" x="150" y="432">Non-standard ERC20 behaviors</text>
+  <text class="t" x="560" y="432">SafeERC20, approve fallback (0→amount)</text>
+  <text class="ok" x="1240" y="432">useActions + contract</text>
+
+  <rect class="row" x="120" y="490" width="1360" height="90" rx="14" />
+  <text class="t" x="150" y="542">User sends tx on wrong network</text>
+  <text class="t" x="560" y="542">Auto switch/add chain + disable actions</text>
+  <text class="ok" x="1240" y="542">useWallet + App UI</text>
+
+  <rect class="row" x="120" y="600" width="1360" height="90" rx="14" />
+  <text class="t" x="150" y="652">Amount precision bugs (JS Number)</text>
+  <text class="t" x="560" y="652">Strict decimal parsing + bigint end-to-end</text>
+  <text class="ok" x="1240" y="652">utils/amount.ts</text>
+
+  <rect class="row" x="120" y="710" width="1360" height="90" rx="14" />
+  <text class="t" x="150" y="762">UI out of sync (events missed / RPC lag)</text>
+  <text class="t" x="560" y="762">confirmed refresh + events + fail-safe backfill</text>
+  <text class="ok" x="1240" y="762">useDashboard + tx.ts</text>
+
+  <text class="note" x="120" y="850">Scope boundary: no oracle, liquidation, interest accrual — intentionally out of assignment scope.</text>
+</svg>

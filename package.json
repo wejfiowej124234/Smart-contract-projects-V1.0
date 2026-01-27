@@ -22,7 +22,8 @@
     "mocha": "^10.8.2",
     "solc": "^0.8.19",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "@marp-team/marp-cli": "^4.2.3"
   },
   "scripts": {
     "compile": "hardhat compile",
@@ -33,6 +34,12 @@
     "audit:prod": "npm audit --omit=dev",
     "audit:all": "npm audit",
     "smoke:e2e": "node scripts/smoke-e2e.mjs",
+    "slides:pdf": "marp slides/INTERVIEW_DECK.zh-cn.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.zh-cn.pdf",
+    "slides:html": "marp slides/INTERVIEW_DECK.zh-cn.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.zh-cn.html",
+    "slides:html:en": "marp slides/INTERVIEW_DECK.en.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.en.html",
+    "slides:html:all": "npm run slides:html && npm run slides:html:en",
+    "slides:pdf:en": "marp slides/INTERVIEW_DECK.en.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.en.pdf",
+    "slides:pdf:all": "npm run slides:pdf && npm run slides:pdf:en",
     "ci:local": "npm run compile && npm test && cd frontend && npm run lint && npm run build"
   }
 }

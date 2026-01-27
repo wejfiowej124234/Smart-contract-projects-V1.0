@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .bg { fill: #0b1020; }
+      .title { fill: #e6edf3; font: 800 44px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .subtitle { fill: #9da7b3; font: 600 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .box { fill: #111a33; stroke: #2a3a66; stroke-width: 2; rx: 18; }
+      .node { fill: #0f1a2a; stroke: #2a3a66; stroke-width: 2; rx: 18; }
+      .h { fill: #c9d1d9; font: 800 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .t { fill: #9da7b3; font: 500 20px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .bad { fill: #ff7b72; font: 800 20px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .a { stroke: #58a6ff; stroke-width: 4; fill: none; marker-end: url(#m); }
+      .c { stroke: #ff7b72; stroke-width: 4; fill: none; marker-end: url(#m3); }
+    </style>
+    <marker id="m" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#58a6ff"/></marker>
+    <marker id="m3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#ff7b72"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="900" />
+  <text class="title" x="80" y="92">LTV Constraints (hard on-chain checks)</text>
+  <text class="subtitle" x="80" y="132">LTV=75% enforced by the contract — UI just mirrors the rule</text>
+
+  <rect class="box" x="80" y="190" width="1440" height="640" rx="18" />
+
+  <rect class="node" x="160" y="280" width="420" height="120" />
+  <text class="h" x="200" y="330">Supplied (S)</text>
+  <text class="t" x="200" y="366">collateral amount</text>
+
+  <rect class="node" x="660" y="280" width="420" height="120" />
+  <text class="h" x="700" y="330">MaxBorrow</text>
+  <text class="t" x="700" y="366">MB = S × 75%</text>
+
+  <rect class="node" x="1160" y="280" width="300" height="120" />
+  <text class="h" x="1200" y="330">Borrowed (B)</text>
+  <text class="t" x="1200" y="366">current debt</text>
+
+  <path class="a" d="M580 340 L660 340" />
+  <path class="a" d="M1080 340 L1160 340" />
+
+  <rect class="node" x="660" y="460" width="420" height="120" />
+  <text class="h" x="700" y="510">Borrow check</text>
+  <text class="t" x="700" y="546">require(B + x ≤ MB)</text>
+
+  <rect class="node" x="660" y="620" width="420" height="120" />
+  <text class="h" x="700" y="670">Withdraw check</text>
+  <text class="t" x="700" y="706">newS = S − w; require(B ≤ newS × 75%)</text>
+
+  <path class="a" d="M870 400 C870 430, 870 440, 870 460" />
+  <path class="a" d="M870 580 C870 610, 870 610, 870 620" />
+
+  <rect class="node" x="1160" y="540" width="300" height="120" />
+  <text class="bad" x="1195" y="590">If violated</text>
+  <text class="h" x="1195" y="625">REVERT</text>
+  <text class="t" x="1195" y="658">Exceeds limit / unhealthy</text>
+
+  <path class="c" d="M1080 520 C1120 520, 1120 600, 1160 600" />
+  <path class="c" d="M1080 680 C1120 680, 1120 620, 1160 620" />
+
+  <text class="subtitle" x="120" y="850">This makes the demo credible: constraints are enforced on-chain, not by frontend logic.</text>
+</svg>
