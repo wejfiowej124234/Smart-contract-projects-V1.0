@@ -7,15 +7,15 @@
 ```mermaid
 %%{init: {'theme': 'dark'}}%%
 flowchart TB
-	L[learning/ 中文资料] --> B[基础知识篇\n00/01/02/15/16/17]
-	L --> P[项目实战篇\n03/04/05/18-24]
-	L --> I[面试准备篇\n06-14]
-	L --> H[实操练习\n09]
+	L[learning/ 中文资料] --> B[基础知识篇<br/>00/01/02/15/16/17]
+	L --> P[项目实战篇<br/>03/04/05/18-24]
+	L --> I[面试准备篇<br/>06-14]
+	L --> H[实操练习<br/>09]
 
-	P --> C[合约\nSimpleLending/TestToken]
-	P --> FE[前端\nuseWallet/useDashboard/useActions]
-	P --> DEP[部署导出\nscripts/deploy.ts]
-	P --> T[测试\ntest/*.ts]
+	P --> C[合约<br/>SimpleLending/TestToken]
+	P --> FE[前端<br/>useWallet/useDashboard/useActions]
+	P --> DEP[部署导出<br/>scripts/deploy.ts]
+	P --> T[测试<br/>test/*.ts]
 ```
 
 想要“截图那种图/导出图片文件”：见 [DIAGRAMS_EXPORT.md](DIAGRAMS_EXPORT.md)

@@ -13,18 +13,18 @@
 ```mermaid
 %%{init: {'theme': 'dark'}}%%
 flowchart TB
-  U[用户] --> A1[Supply\ntransferFrom 用户→合约]
-  U --> A2[Borrow\ntransfer 合约→用户]
-  U --> A3[Repay\ntransferFrom 用户→合约]
-  U --> A4[Withdraw\ntransfer 合约→用户]
+  U[用户] --> A1[Supply<br/>transferFrom 用户→合约]
+  U --> A2[Borrow<br/>transfer 合约→用户]
+  U --> A3[Repay<br/>transferFrom 用户→合约]
+  U --> A4[Withdraw<br/>transfer 合约→用户]
 
   A1 --> S[userSupply ↑]
   A2 --> B[userBorrow ↑]
   A3 --> B2[userBorrow ↓]
   A4 --> S2[userSupply ↓]
 
-  B --> R1{规则1\n借款后<=supply*75%}
-  S2 --> R2{规则2\n取款后borrow<=newSupply*75%}
+  B --> R1{规则1<br/>借款后<=supply*75%}
+  S2 --> R2{规则2<br/>取款后borrow<=newSupply*75%}
 ```
 
 对应源码：`contracts/SimpleLending.sol`

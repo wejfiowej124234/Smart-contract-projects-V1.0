@@ -26,6 +26,14 @@
 
 ---
 
+## Mermaid 兼容性注意（避免 GitHub 渲染报错）
+
+- Mermaid 的关键字必须用英文：`flowchart` / `sequenceDiagram` / `stateDiagram-v2`。
+- 在节点文本里不要写 `\n`（反斜杠+n）当换行；GitHub Mermaid 可能会解析失败。
+   - 推荐写法：用 `<br/>` 换行，例如 `A[第一行<br/>第二行]`。
+
+---
+
 ## 小提示：怎么找到每篇的“主图”
 
 每篇文档都新增了一个：
