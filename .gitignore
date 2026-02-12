@@ -74,3 +74,8 @@ slides/优化完成报告.md
 slides/中文演讲稿评估报告.md
 slides/演讲稿评估报告_面试与金融级别.md
 slides/考试题对齐检查报告.md
+# Chinese slides: not for English-only interviewer repo
+slides/INTERVIEW_DECK.zh-cn.md
+slides/SPEAKER_SCRIPT.zh-cn.md
+# Internal dev notes: not for lead/interviewer
+CODING_TEST_PITFALLS_AND_OPTIMIZATIONS.md

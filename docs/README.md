@@ -66,4 +66,4 @@ The following are in **`.gitignore`** and no longer tracked; they do **not** app
 | **Scripts internal** | move-docs-to-archive, split-app-css, check-slide-margins, clean-slides-dist, demo-ui, generate-pdf |
 | **Root** | generate-pdf.bat, GeneratePDF.bat |
 
-**Slides** kept in the repo: `INTERVIEW_DECK.en.md`, `INTERVIEW_DECK.zh-cn.md`, `SPEAKER_SCRIPT.zh-cn.md`, `README.md`, `assets/*.svg`.
+**Slides** kept in the repo: `INTERVIEW_DECK.en.md`, `README.md`, `assets/*.svg` (Chinese deck and speaker script are local-only, not in repo).
