@@ -1,10 +1,8 @@
 // File: contracts/SimpleLending.sol
 // SPDX-License-Identifier: MIT
 //
-// CN：SimpleLending 是一个“单币种”借贷示例合约：同一个 token 既用于 supply 也用于 borrow。
-//     本作业中我们选择 USD8 作为借贷 token（本项目的 TestToken decimals 固定为 18）；WETH 仅用于前端余额展示。
-// EN: SimpleLending is a single-asset lending example: the same token is used for supply and borrow.
-//     In this assignment we use USD8 as the lending token; WETH is display-only in the frontend.
+// SimpleLending is a single-asset lending example: the same token is used for supply and borrow.
+// In this assignment USD8 is the lending token (TestToken decimals fixed at 18); WETH is display-only in the frontend.
 pragma solidity ^0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";

@@ -7,7 +7,7 @@
   color: var(--color-text);
   background-color: var(--color-bg);
 
-  /* P4-Q6: 主题切换过渡；尊重 prefers-reduced-motion */
+  /* P4-Q6: theme switch transition; respect prefers-reduced-motion */
   transition: background-color var(--transition-normal), color var(--transition-normal);
 
   font-synthesis: none;
@@ -15,7 +15,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* P4 风格名: Web3 Pro Light — 非纯白底，淡 indigo 背景，高级感 / Web3 */
+  /* P4 theme: Web3 Pro Light — off-white, subtle indigo background */
   --color-primary: #4f46e5;
   --color-primaryHover: #4338ca;
   --color-success: #059669;
@@ -84,11 +84,11 @@
   --transition-normal: 0.2s ease;
   --duration-spinner: 0.8s;
   --borderWidth: 1px;
-  /** P5.10: HF 行左侧色块宽度，避免 App.css 裸 px */
+  /** P5.10: HF row left bar width (no raw px in App.css) */
   --borderWidth-hfBar: 3px;
-  /** P6.3: HF 阈值图例圆点尺寸 */
+  /** P6.3: HF threshold legend dot size */
   --size-legend-dot: 0.5rem;
-  /** P6.5: 操作卡输入框与主按钮最小高度 */
+  /** P6.5: action card input and primary button min height */
   --input-min-height: 2.5rem;
   --btn-primary-min-height: 2.75rem;
   /* Modal overlay: black with token opacity (single definition, no raw color in App.css) */
@@ -102,7 +102,7 @@
   --warning: var(--color-warning);
   --success: var(--color-success);
   --border: var(--color-border);
-  /* 浅色下卡片用默认边框与阴影；深色由 [data-theme] 覆盖 */
+  /* Light theme card default border/shadow; dark overridden by [data-theme] */
   --color-card-border: var(--color-border);
   --shadow-card: var(--shadow-lg);
   --color-hero-value: var(--color-text);
@@ -116,13 +116,13 @@
   --card-hover-glow: none;
   --header-backdrop: none;
   --header-bg: var(--color-bg);
-  /* P6-O3: 标题 letter-spacing 统一 token */
+  /* P6-O3: title letter-spacing token */
   --letter-spacing-title: 0.03em;
 }
 
-/* P4 风格名: DeFi Dark — Web3/DeFi 深色（slate 灰），与 Aave 等一致 */
-/* P4 十五：暗色主题对比度 — 禁用态略提高可见度，文本层级保持可读 */
-/* Web3 层次：深色下卡片边框主色微透、阴影可辨、关键数字主色强调 */
+/* P4 theme: DeFi Dark — Web3/DeFi dark (slate), Aave-style */
+/* P4: dark theme contrast — disabled state slightly more visible, text hierarchy readable */
+/* Web3 hierarchy: card primary border, visible shadow, key numbers primary emphasis */
 [data-theme="dark"] {
   color-scheme: dark;
   --color-bg: #0b0f1a;
@@ -139,7 +139,7 @@
   --color-danger: #f87171;
   --modalOverlayBg: rgba(0, 0, 0, var(--opacity-overlay-dark));
   --opacity-disabled: 0.6;
-  /* 深色下卡片层次：主色描边 + 可见阴影 */
+  /* Dark theme card hierarchy: primary border + visible shadow */
   --color-card-border: rgba(99, 102, 241, 0.28);
   --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 28px rgba(0, 0, 0, 0.5);
   --color-hero-value: #a5b4fc;
@@ -151,13 +151,13 @@
   --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   --input-inset-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
   --card-hover-glow: 0 0 32px rgba(99, 102, 241, 0.12);
-  /* P6-O5: 顶栏毛玻璃略强，浮起感更明显 */
+  /* P6-O5: header backdrop blur stronger for floating feel */
   --header-backdrop: blur(16px);
   --header-bg: rgba(11, 15, 26, 0.88);
 }
 
-/* P4 风格名: Navy Pro — 深色系蓝黑，午夜蓝、偏技术/合约感 */
-/* Web3 层次：卡片主色描边、阴影、hero 数字高亮 */
+/* P4 theme: Navy Pro — dark blue-black, midnight blue, technical/contract feel */
+/* Web3 hierarchy: card primary border, shadow, hero number highlight */
 [data-theme="dark-navy"] {
   color-scheme: dark;
   --color-bg: #080c14;
@@ -185,7 +185,7 @@
   --header-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
   --input-inset-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
   --card-hover-glow: 0 0 32px rgba(59, 130, 246, 0.14);
-  /* P6-O5: 顶栏毛玻璃略强 */
+  /* P6-O5: header backdrop blur stronger */
   --header-backdrop: blur(16px);
   --header-bg: rgba(8, 12, 20, 0.9);
 }
@@ -241,7 +241,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* P4 焦点环：input 键盘焦点使用主色，与 button 一致 */
+/* P4 focus ring: input keyboard focus uses primary, same as button */
 input:focus-visible {
   outline: var(--focusRing) solid var(--color-primary);
   outline-offset: 2px;

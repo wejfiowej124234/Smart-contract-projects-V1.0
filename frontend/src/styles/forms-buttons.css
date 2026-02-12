@@ -18,7 +18,7 @@
   border-radius: var(--radius-card);
 }
 
-/* Web3 科技感：主按钮渐变 + 深色下 hover 主色光晕 */
+/* Web3 style: primary button gradient + hover glow in dark theme */
 .btnPrimary {
   background: var(--gradient-primary);
   border-color: var(--color-primary);
@@ -34,7 +34,7 @@
 .btnPrimary:active:not(:disabled) {
   filter: brightness(0.95);
 }
-/* P6-O7: 主按钮点击态轻微 scale，reduced-motion 时仅保留 brightness */
+/* P6-O7: primary button active state slight scale; brightness only when reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
   .btnPrimary:active:not(:disabled) {
     transform: scale(0.98);
@@ -70,7 +70,7 @@
   font-weight: var(--fontWeight-semibold);
 }
 
-/* P4 优化：区块内垂直间距略增，降低视觉密度 */
+/* P4: slightly more vertical spacing in blocks, lower visual density */
 .fieldLabel {
   font-size: var(--fontSize-xs);
   opacity: var(--opacity-muted);
@@ -84,7 +84,7 @@
   margin-top: var(--spacing-xxs);
 }
 
-/* P4 优化：操作阻止文案使用错误色，与成功/中性提示区分 */
+/* P4: disabled action reason uses danger color, distinct from success/neutral */
 .actionDisabledReason {
   font-size: var(--fontSize-xs);
   color: var(--color-danger);
@@ -100,7 +100,7 @@
   margin-bottom: var(--spacing-xxs);
 }
 
-/* 科技感：输入框深色下内凹阴影（recessed） */
+/* Recessed input shadow in dark theme */
 input {
   border: var(--borderWidth) solid var(--color-border);
   border-radius: var(--radius-md);
@@ -111,7 +111,7 @@ input {
   box-shadow: var(--input-inset-shadow);
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
-/* P6-O4: 深色下输入框 focus 环主色略加强 */
+/* P6-O4: input focus ring slightly stronger in dark theme */
 [data-theme="dark"] input:focus {
   box-shadow: var(--input-inset-shadow), 0 0 0 3px rgba(99, 102, 241, 0.35);
 }
@@ -119,7 +119,7 @@ input {
   box-shadow: var(--input-inset-shadow), 0 0 0 3px rgba(59, 130, 246, 0.4);
 }
 
-/* P6.5: 操作卡内金额输入框略加大，Aave 风格 */
+/* P6.5: larger amount input in action cards, Aave-style */
 .card input.fullWidth {
   padding: var(--spacing-md);
   min-height: var(--input-min-height);
@@ -129,7 +129,7 @@ input:focus {
   border-color: var(--color-primary);
 }
 
-/* P4 优化：输入框校验态 — 非法用 danger，合法用 success */
+/* P4: input validation state — invalid=danger, valid=success */
 input[aria-invalid="true"],
 .inputInvalid {
   border-color: var(--color-danger);
@@ -138,7 +138,7 @@ input[aria-invalid="true"],
   border-color: var(--color-success);
 }
 
-/* 焦点环由 index.css 的 input:focus-visible 提供（--color-primary），此处仅保留 border 强调 */
+/* Focus ring from index.css input:focus-visible (--color-primary); here only border emphasis */
 
 /* ErrorBoundary (design tokens only) */
 .errorBoundaryWrap {
@@ -161,7 +161,7 @@ input[aria-invalid="true"],
   margin-top: var(--spacing-md);
 }
 
-/* Aave-style: row1 balance full-width, row2 Pool | Position two columns — P6.1: 区块间距 */
+/* Aave-style: row1 balance full-width, row2 Pool | Position two columns — P6.1 block spacing */
 .dashboardGridTop {
   margin-top: var(--spacing-lg);
   display: grid;
@@ -171,7 +171,7 @@ input[aria-invalid="true"],
 .dashboardGridTop > .card:first-child {
   grid-column: 1 / -1;
 }
-/* P6 科技感：Balances 卡顶边主色条，强化「首行=主数据」层次 */
+/* P6: Balances card top accent bar, first row = primary data hierarchy */
 [data-theme="dark"] .dashboardGridBalance,
 [data-theme="dark-navy"] .dashboardGridBalance {
   border-top: 2px solid var(--color-section-accent);
@@ -184,7 +184,7 @@ input[aria-invalid="true"],
     grid-column: 1;
   }
 }
-/* P6 科技感：仪表盘卡片入场淡入，尊重 reduced-motion */
+/* P6: dashboard cards fade-in entrance; respect reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
   .dashboardGridTop .card {
     animation: cardFadeIn 0.45s ease both;
@@ -206,7 +206,7 @@ input[aria-invalid="true"],
 .preflightApprovalRow {
   opacity: var(--opacity-dim);
 }
-/* P6.4: Preflight Transaction overview（Aave 风格） */
+/* P6.4: Preflight transaction overview (Aave-style) */
 .preflightTransactionOverview {
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
@@ -235,7 +235,7 @@ input[aria-invalid="true"],
 .actionCardParsedError { font-size: var(--fontSize-xs); margin-top: var(--spacing-xxs); }
 .actionCardAllowanceRow { font-size: var(--fontSize-xs); opacity: var(--opacity-muted); margin-top: var(--spacing-xxs); }
 .actionCardPill { margin-left: var(--spacing-sm); }
-/* P6.5: 主按钮更突出 — 圆角、内边距、字重；Web3 前 3 P0: 阴影 */
+/* P6.5: primary submit button more prominent — radius, padding, weight; Web3 shadow */
 .actionCardSubmit {
   margin-top: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -244,7 +244,7 @@ input[aria-invalid="true"],
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
-/* P5.8: 交易进行中主按钮 spinner，仅用 token */
+/* P5.8: submit button spinner while tx in progress; token only */
 .actionCardSubmit--busy {
   display: inline-flex;
   align-items: center;

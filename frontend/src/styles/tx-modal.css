@@ -30,7 +30,7 @@
   margin-bottom: var(--spacing-xxs);
 }
 
-/* 科技感：交易状态块深色下左侧主色条 */
+/* Tx status block: left accent bar in dark theme */
 .txStatusBlock {
   margin-top: var(--spacing-md);
   margin-bottom: var(--spacing-md);
@@ -43,7 +43,7 @@
   border-left: var(--borderWidth-accent) solid rgba(59, 130, 246, 0.65);
   padding-left: var(--spacing-md);
 }
-/* Web3 前 3 标准 P2: 交易成功态短暂高亮 */
+/* Web3 P2: brief success state highlight */
 .txStatusBlock--success {
   border: 2px solid var(--color-success);
   border-radius: var(--radius-lg);
@@ -55,7 +55,7 @@
 [data-theme="dark-navy"] .txStatusBlock--success {
   background: rgba(52, 211, 153, 0.08);
 }
-/* P6-O1: 交易成功块微动效强化 — 轻微 scale + 主色描边闪烁，reduced-motion 时禁用 */
+/* P6-O1: success block micro animation; disabled when reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
   .txStatusBlock--success {
     animation: txSuccessIn 0.4s ease;
@@ -67,7 +67,7 @@
   to { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 transparent; }
 }
 
-/* 科技感：交易状态框与整体边框一致 */
+/* Tx status box border consistent with layout */
 .txBox {
   border: var(--borderWidth) solid var(--color-card-border);
   border-radius: var(--radius-card);
@@ -112,7 +112,7 @@
   font-weight: var(--fontWeight-semibold);
 }
 
-/* P5.3: signing/pending 状态 spinner，仅用 token */
+/* P5.3: signing/pending stage spinner; token only */
 .txStage.txStage--signing,
 .txStage.txStage--pending {
   display: inline-flex;
@@ -163,14 +163,14 @@
   padding: var(--spacing-lg);
   z-index: var(--zIndex-modal);
 }
-/* P6-S4: 弹层遮罩景深 — 深色下略加深，弹层更浮 */
+/* P6-S4: modal overlay depth — darker in dark theme so modal floats more */
 [data-theme="dark"] .modalOverlay {
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.72) 100%);
 }
 [data-theme="dark-navy"] .modalOverlay {
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.78) 100%);
 }
-/* P6-O6: Preflight 弹层入场略放慢、更顺滑 */
+/* P6-O6: Preflight modal entrance slightly slower, smoother */
 @media (prefers-reduced-motion: no-preference) {
   .modalOverlay {
     animation: overlayFadeIn 0.22s ease-out both;
@@ -188,7 +188,7 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-/* 科技感：弹层主色描边 + 强阴影 + 深色下外发光 */
+/* Modal: primary border + strong shadow + glow in dark theme */
 .modal {
   position: relative;
   width: min(var(--contentMaxWidth), 100%);
@@ -198,7 +198,7 @@
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-card), 0 24px 48px rgba(0, 0, 0, 0.3);
 }
-/* P6 科技感：弹层顶部极细主色渐变线，增强层次 */
+/* P6: modal top thin primary gradient line for hierarchy */
 .modalTopAccent {
   position: absolute;
   top: 0;
@@ -230,19 +230,19 @@
   gap: var(--spacing-md);
 }
 
-/* P6-V5: 弹层标题层次 — 字号略大，与正文层级更明显 */
+/* P6-V5: modal title hierarchy — slightly larger, clearer vs body */
 .modalTitle {
   font-size: var(--fontSize-lg);
   font-weight: var(--fontWeight-bold);
 }
 
-/* P6 科技感：Preflight 步骤提示，弱化色、小字 */
+/* P6: Preflight step hint — muted color, small text */
 .preflightStepHint {
   font-size: var(--fontSize-xs);
   color: var(--color-textMuted);
   margin: 0 0 var(--spacing-sm) 0;
 }
-/* P6 科技感：Preflight 关键数值主色 + 等宽，与说明文案区分 */
+/* P6: Preflight key values primary + tabular nums, distinct from labels */
 .preflightValue {
   color: var(--color-primary);
   font-variant-numeric: tabular-nums;
@@ -255,7 +255,7 @@
 [data-theme="dark-navy"] .preflightValue {
   color: rgba(96, 165, 250, 0.95);
 }
-/* 科技感：弹层内容行间细分隔，深色下更易扫读 */
+/* Modal body row spacing; easier scan in dark theme */
 .modalBody {
   margin-top: var(--spacing-md);
   display: grid;
@@ -277,4 +277,4 @@
   gap: var(--spacing-sm);
   justify-content: flex-end;
   flex-wrap: wrap;
-}
+}

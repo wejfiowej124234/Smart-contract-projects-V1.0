@@ -1,8 +1,7 @@
 // File: contracts/TestToken.sol
 // SPDX-License-Identifier: MIT
 //
-// CN：TestToken 是最简 ERC20 子集合，用于本地 Hardhat 测试（USD8/WETH）。decimals 固定为 18。
-// EN: TestToken is a minimal ERC20 subset for local Hardhat testing (USD8/WETH). Decimals are fixed to 18.
+// TestToken is a minimal ERC20 subset for local Hardhat testing (USD8/WETH). Decimals are fixed to 18.
 pragma solidity ^0.8.19;
 
 contract TestToken {

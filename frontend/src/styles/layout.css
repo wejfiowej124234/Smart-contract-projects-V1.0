@@ -1,6 +1,6 @@
 /* CSS variables are injected in index.css :root (from design-tokens). Do not redefine here. */
 
-/* P6-S3: 根容器留白略增，空间感 */
+/* P6-S3: root container slightly more padding for breathing room */
 #root {
   width: 100%;
   max-width: var(--rootMaxWidth);
@@ -10,7 +10,7 @@
   text-align: left;
 }
 
-/* P1.1 Fixed header bar — 科技感：底边主色 + 下阴影 + 深色毛玻璃 */
+/* P1.1 Fixed header bar — bottom primary edge + shadow + dark theme backdrop blur */
 .headerBar {
   position: fixed;
   top: 0;
@@ -48,7 +48,7 @@
   min-height: var(--headerHeight);
 }
 
-/* P6.6: 顶栏品牌区（可选 logo + 标题） */
+/* P6.6: header brand area (optional logo + title) */
 .headerBrand {
   display: flex;
   align-items: center;
@@ -94,14 +94,14 @@
 .headerAccount .addressLabel { display: none; }
 .headerAccount .addressValue { font-size: var(--fontSize-sm); }
 
-/* Main content below fixed header — P6.1: 明确背景层次 */
+/* Main content below fixed header — P6.1 clear background hierarchy */
 .mainContent {
   padding-top: var(--headerHeight);
   padding-bottom: var(--spacing-xl);
   background-color: var(--color-bg);
   min-height: 100vh;
 }
-/* P6-S1: 主内容区背景景深 — 深色下极淡径向渐变，增强空间感 */
+/* P6-S1: main content background depth — subtle radial gradient in dark theme */
 [data-theme="dark"] .mainContent,
 [data-theme="dark-navy"] .mainContent {
   position: relative;
@@ -113,7 +113,7 @@
 [data-theme="dark-navy"] .mainContent {
   background-image: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(59, 130, 246, 0.045) 0%, transparent 50%);
 }
-/* P6-T2: 主内容区极淡网格线 — 深色下科技感，不抢内容 */
+/* P6-T2: main content subtle grid — tech feel in dark, not competing */
 [data-theme="dark"] .mainContent::before,
 [data-theme="dark-navy"] .mainContent::before {
   content: "";
@@ -137,7 +137,7 @@
   margin-top: var(--spacing-sm2);
 }
 
-/* 科技感：状态栏面板化，深色下用 surface + 主色描边 */
+/* Status bar panel style — surface + primary border in dark theme */
 .statusBar {
   margin-top: var(--spacing-sm2);
   border: var(--borderWidth) solid var(--color-card-border);
@@ -156,14 +156,14 @@
 [data-theme="dark-navy"] .statusBar {
   border-top: 2px solid rgba(59, 130, 246, 0.25);
 }
-/* P6-L1: 状态栏与内容区层次分离 — 深色下轻微投影 */
+/* P6-L1: status bar vs content hierarchy — subtle shadow in dark theme */
 [data-theme="dark"] .statusBar {
   box-shadow: var(--shadow-card), 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 [data-theme="dark-navy"] .statusBar {
   box-shadow: var(--shadow-card), 0 4px 12px rgba(0, 0, 0, 0.3);
 }
-/* P6 后续：刷新时状态栏轻量高亮反馈 */
+/* P6: status bar light highlight on refresh */
 .statusBar.statusBar--refreshing {
   animation: statusBarRefreshFlash 0.4s ease;
 }
@@ -212,7 +212,7 @@
   align-items: center;
   flex-wrap: wrap;
 }
-/* P6-V2: 状态栏 label/value 层次 — 深色下标签更弱、数值更突出 */
+/* P6-V2: status bar label/value hierarchy — label weaker, value prominent in dark */
 [data-theme="dark"] .statusLabel,
 [data-theme="dark-navy"] .statusLabel {
   opacity: 0.6;
@@ -265,7 +265,7 @@
   border-color: var(--danger);
 }
 
-/* P6-O3 + P6-L2: 区块标题 letter-spacing 与层级（略大字重/字号） */
+/* P6-O3 + P6-L2: section title letter-spacing and hierarchy (slightly larger weight/size) */
 .sectionTitle {
   font-family: var(--fontFamily-display);
   font-size: var(--fontSize-xl);
@@ -279,7 +279,7 @@
   border-left-color: var(--color-primary);
   border-left-width: 3px;
 }
-/* P6-V6: 区块标题竖条科技感 — 深色下极淡主色发光 */
+/* P6-V6: section title vertical bar — subtle primary glow in dark theme */
 [data-theme="dark"] .sectionTitle {
   box-shadow: inset 4px 0 12px -4px rgba(99, 102, 241, 0.25);
 }
@@ -287,13 +287,13 @@
   box-shadow: inset 4px 0 12px -4px rgba(59, 130, 246, 0.28);
 }
 
-/* P6.1 + P6-S3: 操作区与上方区块间距，略增留白增强层次感 */
+/* P6.1 + P6-S3: actions area vs blocks spacing, more whitespace for hierarchy */
 .actionsSection {
   margin-top: calc(var(--spacing-xl) + var(--spacing-lg));
   padding-top: var(--spacing-lg);
 }
 
-/* 科技感：深色下分割线主色细线，分区更清晰 */
+/* Divider: primary thin line in dark theme for clearer sections */
 .divider {
   border: 0;
   border-top: var(--borderWidth) solid var(--color-border);
@@ -305,7 +305,7 @@
 [data-theme="dark-navy"] .divider {
   border-top-color: rgba(59, 130, 246, 0.3);
 }
-/* P6-V1: 分割线层次/科技感 — 深色下极淡主色渐变（左→右） */
+/* P6-V1: divider hierarchy — subtle primary gradient (L→R) in dark theme */
 [data-theme="dark"] .divider {
   border-top: none;
   height: 1px;
@@ -317,7 +317,7 @@
   background: linear-gradient(90deg, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
 }
 
-/* P4 企业级：底部合约区可折叠，默认折叠 */
+/* P4: bottom contract section collapsible, collapsed by default */
 .metaGridDetails {
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-sm);
@@ -335,7 +335,7 @@
   margin-top: var(--spacing-sm);
   margin-bottom: 0;
 }
-/* P4 优化：次要文字用 theme 的 textMuted，避免 opacity 叠加导致深色下对比度不足 */
+/* P4: secondary text uses theme textMuted to avoid contrast issues in dark theme */
 .metaGrid {
   font-size: var(--fontSize-xs);
   color: var(--color-textMuted);
@@ -348,4 +348,4 @@
 }
 .metaGrid .addressRow { margin: 0; }
 .metaGrid .addressLabel { font-weight: var(--fontWeight-normal); }
-
+

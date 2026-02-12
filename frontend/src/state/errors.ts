@@ -58,7 +58,7 @@ function rewriteMessage(raw: string): { message: string; meta?: Record<string, u
   if (/insufficient balance/i.test(m) || /ERC20: transfer amount exceeds balance/i.test(m))
     return { message: errorInsufficientTokenBalance, meta: { rawMessage: m } };
 
-  // We replace noisy RPC messages (e.g. "missing revert data") with a clearer message so the user sees a consistent error. Regex includes localized ethers message.
+  // Replace noisy RPC messages (e.g. "missing revert data" / localized ethers) with a clearer message.
   if (/missing revert data|缺少还原数据/i.test(m))
     return { message: errorDashboardContractReadFailed, meta: { rawMessage: m } };
   if (/failed to fetch|network error|socket hang up|ECONNRESET|ECONNREFUSED/i.test(m))

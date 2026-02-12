@@ -1,26 +1,26 @@
-# Contributing / 参与规范
+# Contributing
 
-企业级约定：在改代码或文档前请遵守以下入口与规范，保证仓库干净、可复现。
+Conventions: follow these entry points and rules before changing code or docs so the repo stays clean and reproducible.
 
-## 文档入口
+## Documentation
 
-- **全部文档索引入口**：[docs/README.md](docs/README.md)
-- **设计与实现总览（P0～P6）**：[docs/P0_P6_全阶段总结_从零到当前.md](docs/P0_P6_全阶段总结_从零到当前.md)
-- **题目与验收**：根目录 [README_CODING_TEST_CHECKLIST.md](README_CODING_TEST_CHECKLIST.md)、[docs/ASSESSMENT_MAPPING.md](docs/ASSESSMENT_MAPPING.md)
+- **Doc index**: [docs/README.md](docs/README.md)
+- **Design and implementation (P0–P6)**: [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md)
+- **Assignment and acceptance**: Root [README_CODING_TEST_CHECKLIST.md](README_CODING_TEST_CHECKLIST.md); [docs/archive/ASSESSMENT_MAPPING.md](docs/archive/ASSESSMENT_MAPPING.md) when needed
 
-## 代码规范
+## Code
 
-- **前端**：遵守 [frontend/FRONTEND_STYLE_GUIDE.md](frontend/FRONTEND_STYLE_GUIDE.md)（命名、导出、ethers bigint、错误归一化、交易状态机、事件监听）
-- **合约**：Solidity 0.8.x，Hardhat 编译与测试
-- **提交前**：`npm run ci:local` 通过；无新增硬编码（文案/色值/链 ID 来自 config 与 design-tokens）
+- **Frontend**: Follow [frontend/FRONTEND_STYLE_GUIDE.md](frontend/FRONTEND_STYLE_GUIDE.md) (naming, exports, ethers bigint, error normalization, tx state machine, event listeners)
+- **Contracts**: Solidity 0.8.x, Hardhat compile and test
+- **Before commit**: `npm run ci:local` passes; no new hardcoding (copy/colors/chain ID from config and design-tokens)
 
-## 文档维护
+## Doc maintenance
 
-- 新增文档请在 [docs/README.md](docs/README.md) 对应章节补充一行
-- 废弃文档移入 **docs/archive/**，并在 doc 索引中注明「已归档」
-- 清理建议与归档说明见 [docs/DOCS_清理建议_保留与可删.md](docs/DOCS_清理建议_保留与可删.md)
+- New docs: add a line in the right section of [docs/README.md](docs/README.md)
+- Deprecated docs: move to **docs/archive/** and note “archived” in the index
+- Cleanup and archive notes: see docs in [docs/archive/](docs/archive/) when needed
 
-## 安全与发布
+## Security and release
 
-- 安全策略见 [SECURITY.md](SECURITY.md)
-- 公开发布前按 [PUBLIC_RELEASE_CHECKLIST.md](PUBLIC_RELEASE_CHECKLIST.md) 自检
+- Security policy: [SECURITY.md](SECURITY.md)
+- Before public release: self-check with [PUBLIC_RELEASE_CHECKLIST.md](PUBLIC_RELEASE_CHECKLIST.md)

@@ -1,76 +1,69 @@
-# 项目文档 (docs)
+# Project documentation (docs)
 
-**约定**：主目录只保留**负责人必看 + P0–P6 必留**，干干净净。其余已移入 **archive/**，需要时再查。
+**Convention**: The main folder keeps only **essential docs** (lead/review + P0–P6). Everything else is in **archive/** for reference.
 
-**主目录这 5 份文档都可以给项目负责人和面试官看**，内容通用、无内部限定。唯一区别：给面试官时建议**隐藏或删除 `docs/archive/`**（见下）。
-
----
-
-## 给面试官看时（需隐藏/清除）
-
-若将本项目给**面试官**展示，请：
-
-- **保留**：主目录这 5 个文件均可保留（或只打开 **PROJECT_LEAD_REVIEW.md** + **项目负责人_技术说明与文档入口.md** 即可）。
-- **隐藏或清除**：**`docs/archive/` 整个文件夹** — 内含内部过程稿、审计清单、清理建议、脚本等，不必给面试官看。可整夹删除或打包/克隆时排除。
-
-主目录文件名中的「项目负责人」仅为内部区分，**项目负责人_技术说明与文档入口.md** 内容为通用技术说明与运行指南，面试官可直接阅读。
+**All 5 main docs are suitable for project leads and interviewers.** The only difference: for interviewers, **hide or delete `docs/archive/`** (see below).
 
 ---
 
-## 项目负责人只看这里
+## For interviewers (what to hide)
 
-您只需看这 **2 份**：
+When sharing this repo with an **interviewer**:
 
-1. **[PROJECT_LEAD_REVIEW.md](PROJECT_LEAD_REVIEW.md)** — 整库结构、企业级标准、自检清单（英文）
-2. **[项目负责人_技术说明与文档入口.md](项目负责人_技术说明与文档入口.md)** — 技术栈、运行与验证、文档入口
-
----
-
-## 主目录当前文件（共 5 个）
-
-| 文件 | 用途 |
-|------|------|
-| **README.md** | 本索引（您在这里） |
-| **PROJECT_LEAD_REVIEW.md** | 整库审阅 + 自检（英文） |
-| **项目负责人_技术说明与文档入口.md** | 技术说明与运行指南（通用） |
-| **P0_P6_全阶段总结_从零到当前.md** | P0～P6 设计/实现/验收总览（必留） |
-| **P6_完成度与科技感优化评估.md** | P6 完成度结论（必留） |
+- **Keep**: All 5 main files (or only **PROJECT_LEAD_REVIEW.md** + **Technical_Overview_and_Entry.md**).
+- **Hide or remove**: The **`docs/archive/`** folder — internal process docs, audit checklists, cleanup notes, scripts. Omit it when packaging or cloning for them.
 
 ---
 
-## 其余文档（archive/）— 里面是什么？
+## Where to start (project lead)
 
-**archive 里是**：审计报告、安全审计、UI/UX 审计、题目验收与映射、演示清单、代码规范/注释审计、深度检查报告、文档整理与清理建议、部分脚本等**过程稿与内部留档**，主目录 5 份文档已足够展示项目，这些仅作历史与按需查阅。
+You only need these **2**:
 
-列表见 [archive/README.md](archive/README.md)。
-
----
-
-## 上传 Git 会不会让对方看到 archive？要不要上传？
-
-- **如果你把 archive 一起 push 到 Git**：对方 clone 会看到**整个仓库**，包括 archive，所以**会影响**对方看到的范围。
-- **如果希望面试官/对方看不到 archive**，可以二选一：
-  1. **推荐：上传时不包含 archive**  
-     在项目根目录的 **`.gitignore`** 里加一行：`docs/archive/`  
-     这样 Git 不会跟踪 archive，push 后对方 clone 到的就只有主目录 5 个文档，没有 archive。你本地可以照常保留 archive 自己用。
-  2. **照常 push archive**  
-     给面试官时再单独给一个「删掉 `docs/archive` 后的 zip」或新 clone 后删掉 archive 再打包。
-
-总结：**不想让对方看到 archive → 在 .gitignore 里加 `docs/archive/`，然后只上传其余部分即可。**
+1. **[PROJECT_LEAD_REVIEW.md](PROJECT_LEAD_REVIEW.md)** — Repo structure, standards, self-check (English).
+2. **[Technical_Overview_and_Entry.md](Technical_Overview_and_Entry.md)** — Tech stack, run and verify, doc index.
 
 ---
 
-## 仓库已清除的项（负责人/面试官无需看到）
+## Main folder (5 files)
 
-以下内容已加入 `.gitignore` 且已从 Git 跟踪中移除，**不会**出现在 GitHub 仓库里；本地可保留自用。
+| File | Purpose |
+|------|---------|
+| **README.md** | This index |
+| **PROJECT_LEAD_REVIEW.md** | Full repo review + self-check (English) |
+| **Technical_Overview_and_Entry.md** | Technical overview and run guide |
+| **P0_P6_Summary.md** | P0–P6 design / implementation / acceptance overview |
+| **P6_Completion_Assessment.md** | P6 completion and tech-style assessment |
 
-| 类型 | 说明 |
-|------|------|
-| **.cursorrules** | Cursor IDE 规则，内部工具配置 |
-| **docs/archive/** | 过程稿、审计清单、清理建议等（见上） |
-| **slides/dist/** | 幻灯片导出 HTML、QA 截图（_pagecheck_*） |
-| **slides 内部报告** | 内容一致性检查、最终审阅、优化/演讲稿/考试题等评估报告、PDF 生成与录屏说明 |
-| **scripts 内部脚本** | move-docs-to-archive、split-app-css、check-slide-margins、clean-slides-dist、demo-ui、generate-pdf 等 |
-| **根目录** | generate-pdf.bat、生成PDF.bat |
+---
 
-仓库中保留的 **slides** 仅：`INTERVIEW_DECK.en.md`、`INTERVIEW_DECK.zh-cn.md`、`SPEAKER_SCRIPT.zh-cn.md`、`README.md`、`assets/*.svg`（演示用）。
+## Archive (archive/)
+
+**Contents**: Audit reports, security audits, UI/UX audits, requirement mapping, demo checklists, code-style and comment audits, deep-check reports, doc cleanup notes, scripts. The 5 main docs are enough to present the project; archive is for history and on-demand lookup.
+
+List: [archive/README.md](archive/README.md).
+
+**When sharing with an interviewer**: Hide or delete the **archive** folder.
+
+---
+
+## Git and archive
+
+- If you **push** `docs/archive/` to Git, anyone who clones will see it.
+- To **hide archive from interviewers**: Add `docs/archive/` to **`.gitignore`** at the repo root so Git does not track it; your local copy can still keep it.
+
+---
+
+## Items removed from the repo (not for lead/interviewer)
+
+The following are in **`.gitignore`** and no longer tracked; they do **not** appear on GitHub. You can keep them locally.
+
+| Type | Description |
+|------|-------------|
+| **.cursorrules** | Cursor IDE rules, internal tool config |
+| **docs/archive/** | Process docs, audit checklists (see above) |
+| **slides/dist/** | Exported slide HTML, QA screenshots (_pagecheck_*) |
+| **Slides internal** | Content checks, final review, optimization/speaker/exam reports, PDF and recording notes |
+| **Scripts internal** | move-docs-to-archive, split-app-css, check-slide-margins, clean-slides-dist, demo-ui, generate-pdf |
+| **Root** | generate-pdf.bat, 生成PDF.bat |
+
+**Slides** kept in the repo: `INTERVIEW_DECK.en.md`, `INTERVIEW_DECK.zh-cn.md`, `SPEAKER_SCRIPT.zh-cn.md`, `README.md`, `assets/*.svg`.

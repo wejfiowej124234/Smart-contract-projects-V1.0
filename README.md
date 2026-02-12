@@ -4,10 +4,11 @@ Version: v0.1.0 (assignment release)
 
 This project fully implements all mandatory requirements of the coding assignment.
 
-**📚 Documentation**: Single index for all docs → [**docs/README.md**](docs/README.md).  
-**📚 For project lead**: [docs/项目负责人_技术说明与文档入口.md](docs/项目负责人_技术说明与文档入口.md)（技术栈、结构、运行与验证、文档入口）.  
-**📚 中文学习与面试**: [learning/](learning/)（零基础教程与面试准备）.  
-Optional: [docs/archive/WALKTHROUGH.zh-en.md](docs/archive/WALKTHROUGH.zh-en.md), [docs/archive/DEMO_CHECKLIST.zh-en.md](docs/archive/DEMO_CHECKLIST.zh-en.md). Requirement mapping: [docs/archive/ASSESSMENT_MAPPING.md](docs/archive/ASSESSMENT_MAPPING.md).
+**📚 Documentation**: Doc index → [**docs/README.md**](docs/README.md).  
+**📚 For project lead / interviewer**: [docs/Technical_Overview_and_Entry.md](docs/Technical_Overview_and_Entry.md) (tech stack, structure, run and verify, doc index).  
+**📚 Design and acceptance**: [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md), [docs/P6_Completion_Assessment.md](docs/P6_Completion_Assessment.md).  
+**📚 Local run and MetaMask**: [LOCAL_RUN.md](LOCAL_RUN.md). **📚 Project overview**: [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md).  
+Optional: [docs/archive/](docs/archive/) (walkthrough, demo checklist, assessment mapping) when needed.
 
 - React + TypeScript + ethers v6 frontend on Hardhat local chain (31337)
 - One-click deploys USD8/WETH/SimpleLending and exports ABI + addresses
@@ -16,15 +17,17 @@ Optional: [docs/archive/WALKTHROUGH.zh-en.md](docs/archive/WALKTHROUGH.zh-en.md)
 - Refresh strategy: tx confirmed + contract event listeners (Mandatory)
 - Optional fail-safe: 3s throttled `provider.on('block')` refresh (not the main logic)
 
-## Repo structure (enterprise)
+## Repo structure
 
-| 目录/文件 | 说明 |
-|-----------|------|
-| [docs/README.md](docs/README.md) | **文档索引入口**（按用途与角色查找） |
-| [docs/P0_P6_全阶段总结_从零到当前.md](docs/P0_P6_全阶段总结_从零到当前.md) | P0～P6 设计/实现/验收唯一总览 |
-| [learning/](learning/) | 学习与面试资料（中文） |
-| [slides/](slides/) | 演讲稿与 PDF 生成 |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | 参与规范与文档/代码约定 |
+| Path | Description |
+|------|-------------|
+| [docs/README.md](docs/README.md) | **Doc index** (by role and purpose) |
+| [docs/Technical_Overview_and_Entry.md](docs/Technical_Overview_and_Entry.md) | Tech stack, runbook, doc index |
+| [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md) | P0–P6 design, implementation, acceptance |
+| [docs/P6_Completion_Assessment.md](docs/P6_Completion_Assessment.md) | P6 completion and polish |
+| [learning/](learning/) | Learning and interview materials |
+| [slides/](slides/) | Slide decks and exports |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution and code/doc conventions |
 
 ## Scope & Non-Goals
 
@@ -41,7 +44,7 @@ Out of scope:
 
 ## Engineering notes (why this design)
 
-- See docs/ENGINEERING_RATIONALE.zh-cn.md for the design tradeoffs, explicit non-goals, and a short list of counterintuitive-but-intentional choices.
+- Design tradeoffs, non-goals, and intentional choices: see docs in [docs/archive/](docs/archive/) (e.g. ENGINEERING_RATIONALE) when needed.
 
 ## Production hardening (optional)
 
@@ -166,34 +169,34 @@ npx hardhat compile
 npx hardhat node
 ```
 
-## README：写死的复现步骤（建议直接照做）
+## Reproduction steps (copy-paste)
 
-### ✅ 快速启动（默认 A：导入 Hardhat Account #0）
+### Option A: Use Hardhat Account #0 (quickest)
 
-启动本地链：
+1. Start local chain:
 ```bash
 npx hardhat node
 ```
 
-部署合约并 seed：
+2. Deploy and seed:
 ```bash
 npx hardhat run scripts/deploy.ts --network localhost
 ```
 
-配置 MetaMask（只为本地演示/开发，非题目功能）：
-- 添加网络：RPC `http://127.0.0.1:8545`，chainId `31337`
-- 导入 Hardhat Account #0 私钥（来自 `hardhat node` 输出）
+3. Configure MetaMask (for local demo only):
+- Add network: RPC `http://127.0.0.1:8545`, chainId `31337`
+- Import Hardhat Account #0 private key (from `hardhat node` output)
 
-启动前端（Part 2 完成后执行）：
+4. Start frontend (after step 2):
 ```bash
 cd frontend && npm run dev
 ```
 
-说明：导入私钥不是题面要求，是为了保证连接账户与 seed 账户一致，避免余额为 0 导致无法演示 approve/supply。
+Importing the key is not required by the assignment; it ensures the connected account matches the seeded one so balances are non-zero for approve/supply.
 
-### ✅ 备选方案（B：不导入私钥，用你自己的 MetaMask 地址）
+### Option B: Use your own MetaMask address (no key import)
 
-在部署前设置环境变量（示例）：
+Set before deploy:
 ```bash
 SEED_ADDRESS=0xYourMetaMaskAddress
 ```
@@ -208,12 +211,12 @@ Windows cmd:
 set SEED_ADDRESS=0xYourMetaMaskAddress
 ```
 
-然后运行 deploy 脚本，脚本会向该地址发放 USD8/WETH：
+Then run deploy; the script will send USD8/WETH to that address:
 ```bash
 npx hardhat run scripts/deploy.ts --network localhost
 ```
 
-说明：此方案同样符合“seed 测试账户”要求，只是需要你提供一个目标地址。
+This still satisfies“seed test account”requirement; you only need to provide the target address.
 
 ## 4) Deploy + seed + export
 In a second terminal:

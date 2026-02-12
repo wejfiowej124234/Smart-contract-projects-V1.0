@@ -3,7 +3,7 @@
 **Purpose**: One place for the project lead to see the whole repo, structure, and enterprise standards.  
 **Last updated**: After code-style audit, personified comments, and editing-discipline docs.
 
-**Note for lead**: You only need **this file** and **项目负责人_技术说明与文档入口.md**. The rest of `docs/` (audits, security, UI/UX, demo, checklists) is for delivery/audit/dev — **no need to read** unless you want to dive deep.
+**Note for lead**: You only need **this file** and **[Technical_Overview_and_Entry.md](Technical_Overview_and_Entry.md)**. The rest of `docs/` (audits, security, UI/UX, demo, checklists) is for delivery/audit/dev — **no need to read** unless you want to dive deep.
 
 ---
 
@@ -58,7 +58,7 @@ Smart contract projects/
 ├── package.json, tsconfig.json
 ├── README.md, SECURITY.md, CONTRIBUTING.md, CHANGELOG.md
 ├── PUBLIC_RELEASE_CHECKLIST.md, README_CODING_TEST_CHECKLIST.md
-└── PROJECT_OVERVIEW_项目全景.md
+└── PROJECT_OVERVIEW (project overview doc when present)
 ```
 
 ---
@@ -72,7 +72,7 @@ Smart contract projects/
 | **Style** | Single convention: camelCase/PascalCase/SCREAMING_SNAKE as per audit | Same |
 | **Editing discipline** | Rename + CSS rules documented; .cursorrules for AI/human | docs/EDITING_DISCIPLINE.md |
 | **Structure** | Clear separation: contracts / frontend (config, hooks, state, components, styles, types, utils) / scripts / test / docs | — |
-| **Security** | 根目录 SECURITY.md | 详细审计见 docs/archive/ |
+| **Security** | Root SECURITY.md | Full audit in docs/archive/ |
 | **CI** | .github/workflows/ci.yml | — |
 | **Single source for UI copy** | frontend/src/config/ui.ts (no hardcoded strings in components) | — |
 | **Types** | Centralized in types/dashboard.ts, types/ethereum.ts | — |
@@ -105,12 +105,13 @@ Smart contract projects/
 | Need | Document |
 |------|----------|
 | **Whole folder + standards** | This file (PROJECT_LEAD_REVIEW.md) |
-| **Technical entry** | docs/项目负责人_技术说明与文档入口.md |
+| **Technical entry** | docs/Technical_Overview_and_Entry.md |
 | **Doc index** | docs/README.md |
-| **P0–P6 总览** | docs/P0_P6_全阶段总结_从零到当前.md |
-| **Security** | 根目录 SECURITY.md |
+| **P0–P6 overview** | docs/P0_P6_Summary.md |
+| **P6 completion** | docs/P6_Completion_Assessment.md |
+| **Security** | Root SECURITY.md |
 
-其余（审计、安全、UI/UX、代码规范等）在 **docs/archive/**，需要时再查。
+Other docs (audits, security, UI/UX, code style) are in **docs/archive/** when needed.
 
 ---
 
