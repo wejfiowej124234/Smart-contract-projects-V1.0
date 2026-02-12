@@ -1,14 +1,14 @@
-# Smart Contract Coding Test — Summary
+# Smart Contract Demo Project — Summary
 
-Version: v0.1.0 (assignment release)
+Version: v0.1.0
 
-This project fully implements all mandatory requirements of the coding assignment.
+This project fully implements all mandatory requirements of the project scope. **The repository is self-contained and public**: an interviewer can clone it and run the verification steps below (no extra assets or private docs required).
 
 **📚 Documentation**: Doc index → [**docs/README.md**](docs/README.md).  
 **📚 For project lead / interviewer**: [docs/Technical_Overview_and_Entry.md](docs/Technical_Overview_and_Entry.md) (tech stack, structure, run and verify, doc index).  
 **📚 Design and acceptance**: [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md), [docs/P6_Completion_Assessment.md](docs/P6_Completion_Assessment.md).  
 **📚 Local run and MetaMask**: [LOCAL_RUN.md](LOCAL_RUN.md). **📚 Project overview**: [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md).  
-Optional: [docs/archive/](docs/archive/) (walkthrough, demo checklist, assessment mapping) when needed.
+**📚 What’s in this repo**: [docs/REPO_AUDIT.md](docs/REPO_AUDIT.md) (tracked files + verification steps for reviewer).
 
 - React + TypeScript + ethers v6 frontend on Hardhat local chain (31337)
 - One-click deploys USD8/WETH/SimpleLending and exports ABI + addresses
@@ -44,12 +44,11 @@ Out of scope:
 
 ## Engineering notes (why this design)
 
-- Design tradeoffs, non-goals, and intentional choices: see docs in [docs/archive/](docs/archive/) (e.g. ENGINEERING_RATIONALE) when needed.
+- Design tradeoffs, non-goals, and intentional choices: see [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md) and [docs/PROJECT_LEAD_REVIEW.md](docs/PROJECT_LEAD_REVIEW.md).
 
 ## Production hardening (optional)
 
-Roadmap and scope boundaries: see `docs/PRODUCTION_GRADE_ROADMAP.md`.
-Security communication policy: see `SECURITY.md`.
+Scope boundaries: single-asset demo, no mainnet/oracle/liquidation; see [SECURITY.md](SECURITY.md) for reporting and scope.
 
 Deployment headers (recommended): for any real hosting of the frontend, set a baseline Content Security Policy (CSP) and disable framing (e.g., `frame-ancestors 'none'` / `X-Frame-Options: DENY`) to reduce injection and clickjacking risks.
 
@@ -192,7 +191,7 @@ npx hardhat run scripts/deploy.ts --network localhost
 cd frontend && npm run dev
 ```
 
-Importing the key is not required by the assignment; it ensures the connected account matches the seeded one so balances are non-zero for approve/supply.
+Importing the key is not required by the project; it ensures the connected account matches the seeded one so balances are non-zero for approve/supply.
 
 ### Option B: Use your own MetaMask address (no key import)
 
@@ -261,5 +260,5 @@ Run these steps and screenshot the key screens (these are the common reviewer ch
 - After events fire (`Supplied/Withdrawn/Borrowed/Repaid`) → dashboard updates, listeners cleaned up on unmount
 - Fail-safe: even if events are missed, UI still catches up within ~3s via throttled block listener
 
-This repository reflects a production-minded implementation of the assignment.
+This repository reflects a production-minded implementation of the project.
 Optional hardening steps (tests, audit, CI) are included for completeness but are not required by the original task.

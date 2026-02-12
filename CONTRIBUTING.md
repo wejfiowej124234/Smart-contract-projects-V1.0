@@ -6,7 +6,6 @@ Conventions: follow these entry points and rules before changing code or docs so
 
 - **Doc index**: [docs/README.md](docs/README.md)
 - **Design and implementation (P0–P6)**: [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md)
-- **Assignment and acceptance**: Root [README_CODING_TEST_CHECKLIST.md](README_CODING_TEST_CHECKLIST.md); [docs/archive/ASSESSMENT_MAPPING.md](docs/archive/ASSESSMENT_MAPPING.md) when needed
 
 ## Code
 
@@ -17,10 +16,9 @@ Conventions: follow these entry points and rules before changing code or docs so
 ## Doc maintenance
 
 - New docs: add a line in the right section of [docs/README.md](docs/README.md)
-- Deprecated docs: move to **docs/archive/** and note “archived” in the index
-- Cleanup and archive notes: see docs in [docs/archive/](docs/archive/) when needed
+- Deprecated docs: remove from the index or note “archived” in [docs/README.md](docs/README.md)
 
 ## Security and release
 
 - Security policy: [SECURITY.md](SECURITY.md)
-- Before public release: self-check with [PUBLIC_RELEASE_CHECKLIST.md](PUBLIC_RELEASE_CHECKLIST.md)
+- Before public release: run `npm run ci:local` and self-check (see local release checklist if needed).

@@ -1,6 +1,6 @@
 # Security Policy
 
-This repository is a coding assignment / demo project. The goal of this document is **clear communication** (how to report, what's in scope, what to expect). It is **not** a company SLA, not a bug bounty, and not a promise of response time.
+This repository is a demo project. The goal of this document is **clear communication** (how to report, what's in scope, what to expect). It is **not** a company SLA, not a bug bounty, and not a promise of response time.
 
 This project has not undergone third-party security audit and is not intended for mainnet use.
 
@@ -12,7 +12,7 @@ It is not designed to safeguard real funds; use it only in local/test/demo envir
 
 If you believe you found a security issue:
 - Prefer a **minimal** report with reproduction steps, affected component, and impact.
-- If the issue is sensitive, **avoid** publishing full exploit details in a public issue.
+- If the issue is sensitive, **avoid** publishing full reproduction details or attack steps in a public issue.
 
 Recommended channel:
 - If GitHub Security Advisories is enabled: use it.
@@ -34,7 +34,7 @@ Recommended channel:
 
 ### Response
 - This repo does not provide a guaranteed SLA. Best-effort triage and fixes.
-- Valid reports may be fixed with minimal, targeted patches consistent with the assignment scope.
+- Valid reports may be fixed with minimal, targeted patches consistent with the project scope.
 
 ---
 
@@ -46,7 +46,7 @@ This repo separates **production runtime** and **dev toolchain** dependencies:
 
 Rationale:
 - `npm audit --omit=dev` reflects the *runtime* security posture.
-- Full `npm audit` often flags transitive vulnerabilities in dev tooling. Fixes frequently require **breaking upgrades** (`npm audit fix --force`), which we avoid in an assignment repo unless there is a strong reason.
+- Full `npm audit` often flags transitive vulnerabilities in dev tooling. Fixes frequently require **breaking upgrades** (`npm audit fix --force`), which we avoid in this repo unless there is a strong reason.
 
 ### Current audit results (snapshot)
 
@@ -54,24 +54,24 @@ Rationale:
 - Full graph (`npm run audit:all`) may still report **low-severity** findings from the **dev toolchain** (Hardhat / legacy crypto deps). These do not ship to the frontend runtime bundle.
 
 Mitigations applied (non-breaking):
-- We use `npm overrides` in `package.json` to patch selected transitive dependencies (e.g., `cookie`, `tmp`, `undici`) without changing the assignment toolchain surface.
+- We use `npm overrides` in `package.json` to patch selected transitive dependencies (e.g., `cookie`, `tmp`, `undici`) without changing the project toolchain surface.
 - We validate toolchain stability by re-running `npm run ci:local` after any override changes.
 
 Known limitation:
-- Some low-severity advisories (e.g., `elliptic` in old dependency paths) can have **no fix available** without a breaking upgrade of the Hardhat ecosystem. We treat this as **out of scope for the assignment** unless the toolchain vendor provides a compatible fix.
+- Some low-severity advisories (e.g., `elliptic` in old dependency paths) can have **no fix available** without a breaking upgrade of the Hardhat ecosystem. We treat this as **out of scope for the project** unless the toolchain vendor provides a compatible fix.
 
 ---
 
 ## Smart contract notes
 
-Baseline hardening applied (assignment-scope):
+Baseline hardening applied (project scope):
 - `Ownable` admin controls
 - `Pausable` emergency stop
 - `ReentrancyGuard` on state-changing functions
 - `SafeERC20` for token transfers
 
 Important boundary:
-- The protocol is intentionally **single-asset** for the assignment. It does not implement oracle/liquidation/interest accrual.
+- The protocol is intentionally **single-asset** for this project. It does not implement oracle/liquidation/interest accrual.
 
 ---
 

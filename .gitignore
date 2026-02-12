@@ -56,6 +56,7 @@ scripts/clean-slides-dist.mjs
 scripts/demo-ui.mjs
 scripts/generate-pdf.mjs
 scripts/generate-pdf.ps1
+scripts/seed-solc-cache.cjs
 slides/dist/
 slides/CONTENT_CONSISTENCY_CHECK.md
 slides/FINAL_CONTENT_REVIEW.md
@@ -79,3 +80,10 @@ slides/INTERVIEW_DECK.zh-cn.md
 slides/SPEAKER_SCRIPT.zh-cn.md
 # Internal dev notes: not for lead/interviewer
 CODING_TEST_PITFALLS_AND_OPTIMIZATIONS.md
+# Internal / process docs: not for interviewer (keep repo project-only)
+CHANGELOG.md
+PUBLIC_RELEASE_CHECKLIST.md
+README_CODING_TEST_CHECKLIST.md
+# Local-only audit and pre-push checklist (do not push)
+AUDIT_LOCAL.md
+docs/ACCEPTANCE_STATUS.md

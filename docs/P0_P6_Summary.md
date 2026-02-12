@@ -12,7 +12,7 @@
 
 | Goal | Description |
 |------|-------------|
-| **Business** | Assignment requirements C–G 100%: connect/switch chain, balance and allowance, pool and position, four actions, post-tx refresh and events, tx status display. |
+| **Business** | Project requirements C–G 100%: connect/switch chain, balance and allowance, pool and position, four actions, post-tx refresh and events, tx status display. |
 | **Enterprise** | No hardcoding; style and copy from design tokens + config/ui only; clear structure, maintainable, testable. |
 | **UX** | Aave-style single-market dashboard layout and information hierarchy; product-grade tech look and depth. |
 
@@ -31,7 +31,7 @@
 ## 2. P0: Requirements 100% + enterprise base
 
 - **Design tokens and config**: `design-tokens` → `:root` in `index.css`; `config/ui.ts` for chain names, app name, placeholders, button/label/error mapping. No literal colors/px/copy in components.
-- **Assignment requirements**: C wallet and network; D token (USD8/WETH balance, Approve, allowance); E pool and position (5 pool + 5 position metrics incl. HF color); F four actions with validation and hints; G live update and tx status (events, refresh on confirm, pending/confirmed/failed).
+- **Project requirements**: C wallet and network; D token (USD8/WETH balance, Approve, allowance); E pool and position (5 pool + 5 position metrics incl. HF color); F four actions with validation and hints; G live update and tx status (events, refresh on confirm, pending/confirmed/failed).
 - **Structure**: Types → utils + config → components (AddressDisplay, PoolOverview, UserPosition, ActionCard, TxStatus, Header, PreflightModal) → useDashboardForm / useTxDisplay / usePreflight → slim App (composition only). Single source for contracts: `dashboard.contracts`.
 
 ---
@@ -75,4 +75,4 @@
 - E2E: Connect → Supply (with Approve) → Borrow → Repay → Withdraw.
 - No hardcoded colors/px/copy in UI; single source for contracts and config.
 
-For detailed section-by-section and appendix references, see the full design and audit docs in `docs/archive/` when needed.
+For verification steps and repo contents, see [docs/REPO_AUDIT.md](REPO_AUDIT.md).

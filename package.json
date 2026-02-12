@@ -29,9 +29,6 @@
     "compile": "hardhat compile",
     "clean": "hardhat clean",
     "node": "hardhat node",
-    "dev:local": "node scripts/demo-ui.mjs",
-    "dev:local:no-open": "node scripts/demo-ui.mjs --no-open",
-    "dev:local:dry": "node scripts/demo-ui.mjs --dry-run",
     "deploy:localhost": "hardhat run scripts/deploy.ts --network localhost",
     "test": "hardhat test",
     "test:frontend": "cd frontend && npm test",
@@ -40,16 +37,8 @@
     "audit:prod": "npm audit --omit=dev",
     "audit:all": "npm audit",
     "smoke:e2e": "node scripts/smoke-e2e.mjs",
-    "demo:ui": "node scripts/demo-ui.mjs",
-    "slides:pdf": "marp slides/INTERVIEW_DECK.zh-cn.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.zh-cn.pdf",
-    "slides:html": "marp slides/INTERVIEW_DECK.zh-cn.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.zh-cn.html",
-    "slides:speaker:pdf": "marp slides/SPEAKER_SCRIPT.zh-cn.md --pdf --allow-local-files --pdf-outlines --output slides/dist/SPEAKER_SCRIPT.zh-cn.pdf",
-    "slides:speaker:html": "marp slides/SPEAKER_SCRIPT.zh-cn.md --html --allow-local-files --output slides/dist/SPEAKER_SCRIPT.zh-cn.html",
-    "slides:html:en": "marp slides/INTERVIEW_DECK.en.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.en.html",
-    "slides:html:all": "npm run slides:html && npm run slides:html:en",
-    "slides:pdf:en": "marp slides/INTERVIEW_DECK.en.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.en.pdf",
-    "slides:pdf:all": "npm run slides:pdf && npm run slides:pdf:en",
-    "slides:dist:clean": "node scripts/clean-slides-dist.mjs",
+    "slides:pdf": "marp slides/INTERVIEW_DECK.en.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.en.pdf",
+    "slides:html": "marp slides/INTERVIEW_DECK.en.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.en.html",
     "ci:local": "npm run compile && npm test && npm run test:frontend && cd frontend && npm run lint && npm run build"
   }
 }

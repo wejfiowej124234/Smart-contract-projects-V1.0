@@ -75,7 +75,7 @@ This project aims for a small-but-clean architecture: predictable folders, typed
 - Disable buttons when `tx.stage` is `signing`/`pending`.
 - Show tx hash prefix and stage for quick debugging.
 
-## Domain Constraints (must match assignment assumptions)
+## Domain Constraints (must match project assumptions)
 
 - WETH is **display-only** (balance shown), not used in lending math.
 - Lending token is USD8 only.

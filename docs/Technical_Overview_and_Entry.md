@@ -6,7 +6,7 @@ One-page technical overview for **review and interview**: tech stack, repo struc
 
 ## 1. Project scope
 
-- **Smart Contract Coding Test** — full implementation: local Hardhat chain + frontend integration.
+- **Smart Contract Demo Project** — full implementation: local Hardhat chain + frontend integration.
 - Features: single-asset (USD8) lending dashboard; **Approve → Supply, Withdraw, Borrow, Repay**; MetaMask connect; auto add/switch chain and persistent connection; refresh on tx confirmation + contract events.
 - Scope: single page, single pool, local-chain demo; no mainnet deployment, oracle, or liquidation logic.
 
@@ -35,7 +35,7 @@ One-page technical overview for **review and interview**: tech stack, repo struc
 ├── docs/                     # Documentation; index at docs/README.md
 │   ├── README.md             # Doc index (by purpose / role)
 │   ├── P0_P6_Summary.md      # Design / implementation / acceptance overview
-│   └── archive/              # Archived process docs (optional)
+│   └── REPO_AUDIT.md         # Tracked files + verification
 ├── deployments/              # Deployment output 31337.json
 └── learning/                 # Learning materials (local only; not in repo)
 ```
@@ -73,7 +73,7 @@ For detailed steps and “MetaMask balance wrong after restart”, see root **LO
 | Find all docs by purpose | **docs/README.md** |
 | Security and vulnerability reporting | **SECURITY.md** |
 
-Other docs are under **docs/archive/** for reference when needed.
+Full doc list and verification: **docs/REPO_AUDIT.md**.
 
 ---
 

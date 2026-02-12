@@ -11,19 +11,19 @@
 
 ```
 Smart contract projects/
-├── .cursorrules              # AI/edit rules to avoid regressions (renames, CSS)
 ├── .github/workflows/ci.yml   # CI pipeline
 ├── contracts/                 # Solidity
 │   ├── SimpleLending.sol      # Single-asset lending (supply/withdraw/borrow/repay)
 │   └── TestToken.sol          # ERC20 for USD8/WETH
 ├── deployments/               # Deploy output (chainId → addresses)
 │   └── 31337.json
-├── docs/                      # All project documentation (see docs/README.md index)
+├── docs/                      # See docs/README.md for index
 │   ├── PROJECT_LEAD_REVIEW.md # ← this file
-│   ├── CODE_STYLE_AND_NAMING_AUDIT.md
-│   ├── CODE_COMMENTS_AUDIT.md
-│   ├── EDITING_DISCIPLINE.md
-│   └── … (assessment, security, UI/UX audits, etc.)
+│   ├── Technical_Overview_and_Entry.md
+│   ├── P0_P6_Summary.md
+│   ├── P6_Completion_Assessment.md
+│   ├── REPO_AUDIT.md          # Tracked files + verification for reviewer
+│   └── README.md
 ├── frontend/
 │   ├── src/
 │   │   ├── abis/              # Contract ABI JSON (SimpleLending, TestToken)
@@ -45,20 +45,17 @@ Smart contract projects/
 │   │   └── index.css          # :root + theme overrides
 │   ├── vite.config.ts, tsconfig.*, eslint.config.js
 │   └── package.json
-├── learning/                  # Study materials (local only; not in repo)
 ├── scripts/
 │   ├── deploy.ts              # Deploy contracts + seed; export to frontend
 │   ├── _lib/                  # export, fs helpers
-│   ├── smoke-e2e.mjs, demo-ui.mjs, …
+│   ├── smoke-e2e.mjs
 │   └── README.md
-├── slides/                    # Interview deck, speaker script, PDF generation
+├── slides/                    # INTERVIEW_DECK.en.md, README.md, assets/*.svg
 ├── test/
 │   └── SimpleLending.integration.ts
 ├── hardhat.config.ts
-├── package.json, tsconfig.json
-├── README.md, SECURITY.md, CONTRIBUTING.md, CHANGELOG.md
-├── PUBLIC_RELEASE_CHECKLIST.md, README_CODING_TEST_CHECKLIST.md
-└── PROJECT_OVERVIEW (project overview doc when present)
+├── package.json, package-lock.json, tsconfig.json
+├── README.md, PROJECT_OVERVIEW.md, LOCAL_RUN.md, SECURITY.md, CONTRIBUTING.md
 ```
 
 ---
@@ -72,7 +69,7 @@ Smart contract projects/
 | **Style** | Single convention: camelCase/PascalCase/SCREAMING_SNAKE as per audit | Same |
 | **Editing discipline** | Rename + CSS rules documented; .cursorrules for AI/human | docs/EDITING_DISCIPLINE.md |
 | **Structure** | Clear separation: contracts / frontend (config, hooks, state, components, styles, types, utils) / scripts / test / docs | — |
-| **Security** | Root SECURITY.md | Full audit in docs/archive/ |
+| **Security** | Root SECURITY.md | Scope and reporting in repo |
 | **CI** | .github/workflows/ci.yml | — |
 | **Single source for UI copy** | frontend/src/config/ui.ts (no hardcoded strings in components) | — |
 | **Types** | Centralized in types/dashboard.ts, types/ethereum.ts | — |
@@ -111,7 +108,7 @@ Smart contract projects/
 | **P6 completion** | docs/P6_Completion_Assessment.md |
 | **Security** | Root SECURITY.md |
 
-Other docs (audits, security, UI/UX, code style) are in **docs/archive/** when needed.
+See **docs/REPO_AUDIT.md** for a full list of tracked docs and verification steps.
 
 ---
 

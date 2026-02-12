@@ -44,7 +44,7 @@ npm run build
 ## Scope & assumptions
 
 - `WETH` is display-only and does not participate in lending math.
-- The protocol is intentionally simplified for the assignment and is not intended for mainnet use.
+- The protocol is intentionally simplified for this demo and is not intended for mainnet use.
 
 ## Architecture (minimal, production-minded)
 

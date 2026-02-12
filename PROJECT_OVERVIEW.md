@@ -1,13 +1,13 @@
 # Project overview
 
-This document gives a single pass over the repo: **assignment source, tech stack, folder structure, contracts, frontend, scripts, tests, docs, and interview materials**, so any later change or walkthrough uses the same picture.
+This document gives a single pass over the repo: **requirements source, tech stack, folder structure, contracts, frontend, scripts, tests, docs, and demo materials**, so any later change or walkthrough uses the same picture.
 
 ---
 
 ## 1. Purpose and source
 
-- **Type**: Web3 full-stack coding test (assignment from interviewer).
-- **Assignment**: Root `Coding Test Assignment - Web3 engineer.pdf` or `docs/archive/CODING_TEST_ASSIGNMENT.txt`.
+- **Type**: Web3 full-stack demo project (portfolio for technical roles).
+- **Requirements**: Summarized in [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md) and [docs/README.md](docs/README.md).
 - **Requirements (summary)**:
   - **Part 1 (required)**: Hardhat project; deploy USD8/WETH/SimpleLending; seed test accounts; export ABI and addresses for the frontend.
   - **Part 2 (required)**: React + TypeScript + ethers v6 frontend; MetaMask connect; auto switch to chain 31337; show balance/pool/user position; Supply/Withdraw/Borrow/Repay and Approval; tx status (pending/confirmed/failed); event listeners and UI update.
@@ -38,7 +38,7 @@ Smart contract projects/
 ├── deployments/         # 31337.json (chainId → addresses)
 ├── frontend/src/        # abis/, config/, contracts/, hooks/, state/, utils/, components/, App.tsx
 ├── test/                # SimpleLending.integration.ts
-├── docs/                # README.md index, PROJECT_LEAD_REVIEW, Technical_Overview_and_Entry, P0_P6_Summary, P6_Completion_Assessment, archive/
+├── docs/                # README.md index, PROJECT_LEAD_REVIEW, Technical_Overview_and_Entry, P0_P6_Summary, P6_Completion_Assessment, REPO_AUDIT
 ├── learning/            # Study materials (local only; not in repo)
 ├── slides/              # INTERVIEW_DECK.*.md, assets/*.svg
 ├── hardhat.config.ts
