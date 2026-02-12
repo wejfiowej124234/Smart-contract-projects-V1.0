@@ -39,7 +39,7 @@ Smart contract projects/
 ├── frontend/src/        # abis/, config/, contracts/, hooks/, state/, utils/, components/, App.tsx
 ├── test/                # SimpleLending.integration.ts
 ├── docs/                # README.md index, PROJECT_LEAD_REVIEW, Technical_Overview_and_Entry, P0_P6_Summary, P6_Completion_Assessment, archive/
-├── learning/            # Study and interview materials
+├── learning/            # Study materials (local only; not in repo)
 ├── slides/              # INTERVIEW_DECK.*.md, assets/*.svg
 ├── hardhat.config.ts
 ├── package.json

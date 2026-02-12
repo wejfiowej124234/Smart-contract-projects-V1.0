@@ -45,7 +45,7 @@ Smart contract projects/
 │   │   └── index.css          # :root + theme overrides
 │   ├── vite.config.ts, tsconfig.*, eslint.config.js
 │   └── package.json
-├── learning/                  # Study/interview materials (Chinese)
+├── learning/                  # Study materials (local only; not in repo)
 ├── scripts/
 │   ├── deploy.ts              # Deploy contracts + seed; export to frontend
 │   ├── _lib/                  # export, fs helpers

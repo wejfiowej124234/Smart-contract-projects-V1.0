@@ -37,7 +37,7 @@ One-page technical overview for **review and interview**: tech stack, repo struc
 │   ├── P0_P6_Summary.md      # Design / implementation / acceptance overview
 │   └── archive/              # Archived process docs (optional)
 ├── deployments/              # Deployment output 31337.json
-└── learning/                 # Learning and interview materials
+└── learning/                 # Learning materials (local only; not in repo)
 ```
 
 ---

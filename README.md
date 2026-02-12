@@ -25,7 +25,7 @@ Optional: [docs/archive/](docs/archive/) (walkthrough, demo checklist, assessmen
 | [docs/Technical_Overview_and_Entry.md](docs/Technical_Overview_and_Entry.md) | Tech stack, runbook, doc index |
 | [docs/P0_P6_Summary.md](docs/P0_P6_Summary.md) | P0–P6 design, implementation, acceptance |
 | [docs/P6_Completion_Assessment.md](docs/P6_Completion_Assessment.md) | P6 completion and polish |
-| [learning/](learning/) | Learning and interview materials |
+| learning/ | Learning materials (local only; not in repo) |
 | [slides/](slides/) | Slide decks and exports |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution and code/doc conventions |
 

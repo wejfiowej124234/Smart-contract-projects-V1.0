@@ -16,6 +16,9 @@ frontend/.env.*
 # Docs archive: internal only, do not push (interviewer/lead see main docs only)
 docs/archive/
 
+# Learning materials: not for repo / interviewer (PDFs already ignored below)
+learning/
+
 # Local logs / pid files
 .hardhat-node.log
 .hardhat-node.pid
