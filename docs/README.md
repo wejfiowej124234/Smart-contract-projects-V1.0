@@ -1,17 +1,13 @@
 # Project documentation (docs)
 
-**Convention**: The main folder keeps only **essential docs** (lead/review + P0–P6). Everything else is in **archive/** for reference.
-
-**All 6 main docs are suitable for project leads and interviewers.** The only difference: for interviewers, **hide or delete `docs/archive/`** (see below).
+**Convention**: The main folder keeps only **essential docs** (lead/review + P0–P6). This repo does **not** include `docs/archive/`; the 6 main docs are sufficient for project leads and interviewers.
 
 ---
 
-## For interviewers (what to hide)
+## For reviewers
 
-When sharing this repo with an **interviewer**:
-
-- **Keep**: All 6 main files (or only **PROJECT_LEAD_REVIEW.md** + **Technical_Overview_and_Entry.md**; **REPO_AUDIT.md** for a quick “what’s in the repo” snapshot).
-- **Hide or remove**: The **`docs/archive/`** folder — internal process docs, audit checklists, cleanup notes, scripts. Omit it when packaging or cloning for them.
+- **Quick start**: [PROJECT_LEAD_REVIEW.md](PROJECT_LEAD_REVIEW.md) and [Technical_Overview_and_Entry.md](Technical_Overview_and_Entry.md).
+- **What’s in the repo**: [REPO_AUDIT.md](REPO_AUDIT.md) (tracked files and verification steps).
 
 ---
 
