@@ -16,12 +16,11 @@ export function DashboardGrid(props: {
   formatPercent: (v: bigint | undefined) => string;
 }) {
   const { hasAccount, loading, data, usd8Decimals, formatToken, formatPercent } = props;
-  const pool = data?.pool;
-  const position = data?.position;
+  // When wallet is not connected, do not show Pool/User Position (avoid showing stale data from a previous session).
+  const pool = hasAccount ? data?.pool : undefined;
+  const position = hasAccount ? data?.position : undefined;
   const usd8Raw = data?.usd8Balance !== undefined ? clampDecimalsForDisplay(formatUnits(data.usd8Balance, usd8Decimals), DISPLAY_MAX_DECIMALS) : emptyPlaceholder;
   const wethRaw = data?.wethBalance !== undefined ? clampDecimalsForDisplay(formatUnits(data.wethBalance, WETH_DECIMALS), DISPLAY_MAX_DECIMALS) : emptyPlaceholder;
-  const usd8Str = usd8Raw === emptyPlaceholder ? usd8Raw : formatWithThousandsSeparator(usd8Raw) + " " + usd8Label;
-  const wethStr = wethRaw === emptyPlaceholder ? wethRaw : formatWithThousandsSeparator(wethRaw) + " " + wethLabel;
 
   return (
     <div className="dashboardGridTop">
@@ -35,12 +34,16 @@ export function DashboardGrid(props: {
           <>
             <div className="metricGrid">
               <div className="metricItem">
-                <span className="metricLabel">{usd8Label}</span>
-                <span className="metricValue">{usd8Str}</span>
+                <span className="metricLabel" translate="no">{usd8Label}</span>
+                <span className="metricValue">
+                  {usd8Raw === emptyPlaceholder ? usd8Raw : <>{formatWithThousandsSeparator(usd8Raw)} <span translate="no">{usd8Label}</span></>}
+                </span>
               </div>
               <div className="metricItem">
-                <span className="metricLabel">{wethLabel}</span>
-                <span className="metricValue">{wethStr}</span>
+                <span className="metricLabel" translate="no">{wethLabel}</span>
+                <span className="metricValue">
+                  {wethRaw === emptyPlaceholder ? wethRaw : <>{formatWithThousandsSeparator(wethRaw)} <span translate="no">{wethLabel}</span></>}
+                </span>
               </div>
             </div>
             {!data && (
@@ -58,6 +61,11 @@ export function DashboardGrid(props: {
         </div>
       ) : pool ? (
         <PoolOverview totalSupply={pool.totalSupply} totalBorrow={pool.totalBorrow} utilization={pool.utilizationRate} supplyRate={pool.supplyRate} borrowRate={pool.borrowRate} formatToken={formatToken} formatPercent={formatPercent} />
+      ) : !hasAccount ? (
+        <div className="card dashboardGridSkeleton" aria-label={poolTitle}>
+          <div className="cardTitle">{poolTitle}</div>
+          <div className="muted">{connectWalletToLoadBalances}</div>
+        </div>
       ) : null}
       {loading && !position ? (
         <div className="card dashboardGridSkeleton" aria-busy="true" aria-label={userPositionTitle}>
@@ -66,6 +74,11 @@ export function DashboardGrid(props: {
         </div>
       ) : position ? (
         <UserPosition supplied={position.supplied} borrowed={position.borrowed} healthFactor={position.healthFactor} maxWithdraw={position.maxWithdraw} maxBorrow={position.maxBorrow} healthColor={healthFactorColor(position.healthFactor)} formatToken={formatToken} formatPercent={formatPercent} />
+      ) : !hasAccount ? (
+        <div className="card dashboardGridSkeleton" aria-label={userPositionTitle}>
+          <div className="cardTitle">{userPositionTitle}</div>
+          <div className="muted">{connectWalletToLoadBalances}</div>
+        </div>
       ) : null}
     </div>
   );

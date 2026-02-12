@@ -43,4 +43,14 @@ describe("parseAmountStrict", () => {
       expect(r.normalized).toBe("10.5");
     }
   });
+
+  it("parses decimal inputs like 11.1 and 111.1 without throwing", () => {
+    const r1 = parseAmountStrict("11.1", 18);
+    expect(r1.ok).toBe(true);
+    if (r1.ok) expect(r1.normalized).toBe("11.1");
+
+    const r2 = parseAmountStrict("111.1", 18);
+    expect(r2.ok).toBe(true);
+    if (r2.ok) expect(r2.normalized).toBe("111.1");
+  });
 });

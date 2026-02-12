@@ -34,6 +34,13 @@ For a smooth local demo, this repo includes `frontend/.env.development` (no secr
 
 To override locally, create `frontend/.env.local`.
 
+## Demo / interview notes
+
+- **Wallet language:** The app UI is in English. Transaction and approval prompts (e.g. “Confirm”, “Expenditure limit”) are shown by the **wallet** (e.g. MetaMask). Their language follows the wallet or browser locale, not the app. For an English demo, set MetaMask (and/or the browser) to English.
+- **Amount after confirm:** After a transaction is confirmed, the amount input for that action (Supply / Withdraw / Borrow / Repay) is cleared automatically.
+- **Amount in wallet vs app:** The wallet may display a rounded amount (e.g. 11.11) while the app shows 11.111. The value sent on-chain is the exact amount entered; the difference is only how the wallet chooses to display it.
+- **Browser translation:** The app is built in English. If you use the browser’s “Translate page” to Chinese, labels can be wrong (e.g. “USD8” → “8 美元”, “Withdrawing” → “戒断反应”). For a correct demo, use English or keep the page untranslated. Card titles now use `translate="no"` on the token symbol so “USD8” stays as-is.
+
 ## Commands
 
 ```bash

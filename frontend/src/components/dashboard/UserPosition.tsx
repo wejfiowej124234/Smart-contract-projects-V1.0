@@ -19,7 +19,7 @@ import {
   positionEmptyCtaLabel,
   emptyPlaceholder,
 } from "../../config/ui";
-import { healthFactorColor, healthFactorStatusText, formatWithThousandsSeparator } from "../../utils/format";
+import { healthFactorColor, healthFactorStatusText, formatHealthFactorForDisplay, formatWithThousandsSeparator } from "../../utils/format";
 import type { UserPositionProps } from "../../types/dashboard";
 
 export function UserPosition({
@@ -33,7 +33,6 @@ export function UserPosition({
 }: UserPositionProps) {
   const suppliedStr = typeof supplied === "string" ? supplied : (formatToken ? formatToken(supplied, DEFAULT_DECIMALS) : supplied.toString());
   const borrowedStr = typeof borrowed === "string" ? borrowed : (formatToken ? formatToken(borrowed, DEFAULT_DECIMALS) : borrowed.toString());
-  const healthVal = typeof healthFactor === "string" ? healthFactor : healthFactor.toString();
   const color = healthColor ?? (typeof healthFactor === "bigint" ? healthFactorColor(healthFactor) : undefined);
   const healthStatusText = typeof healthFactor === "bigint" ? healthFactorStatusText(healthFactor) : null;
   const isEmpty = suppliedStr === "0" && borrowedStr === "0";
@@ -45,7 +44,12 @@ export function UserPosition({
   const displayMaxWithdraw = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(maxWithdrawStr);
   const displayMaxBorrow = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(maxBorrowStr);
   const isInfiniteHealth = healthStatusText === healthFactorStatusInfinite;
-  const displayHealthVal = isEmpty || isInfiniteHealth ? healthFactorStatusInfinite : formatWithThousandsSeparator(healthVal);
+  const displayHealthVal =
+    isEmpty || isInfiniteHealth
+      ? healthFactorStatusInfinite
+      : typeof healthFactor === "bigint"
+        ? formatHealthFactorForDisplay(healthFactor)
+        : formatWithThousandsSeparator(String(healthFactor));
   const healthBarModifier =
     isEmpty ? "--empty" : healthStatusText === healthFactorStatusDanger ? "--danger" : healthStatusText === healthFactorStatusWarning ? "--warn" : "--safe";
 

@@ -114,6 +114,14 @@ export function useDashboard(provider?: BrowserProvider, account?: string, chain
     }
   }, [account, chainId, contracts, deployments, provider]);
 
+  // When wallet disconnects, clear dashboard data so we don't show stale balances/position (e.g. "Available: 9,999..." or Pool data).
+  useEffect(() => {
+    if (account !== undefined) return;
+    setData(undefined);
+    setError(undefined);
+    setLoading(false);
+  }, [account]);
+
   // Mandatory: listen for contract events and update UI
   const refreshTimer = useRef<number | null>(null);
   const lastBackfillFromBlock = useRef<number | undefined>(undefined);

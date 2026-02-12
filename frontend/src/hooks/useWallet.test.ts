@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 
-// Mock network config to keep the test deterministic
+// Mock network config to keep the test deterministic (DEFAULT_CHAIN_ID required for switchToExpectedChain)
 vi.mock("../config/network", () => {
   return {
     AUTO_ADD_CHAIN: false,
+    DEFAULT_CHAIN_ID: 31337,
     EXPECTED_CHAIN_ID: 31337,
     EXPECTED_CHAIN_NAME: "Local (31337)",
     LOCAL_RPC_URL: undefined,

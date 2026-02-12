@@ -29,7 +29,7 @@ function normalizeInput(raw: string): string {
 /**
  * Cleans what the user types so we only allow digits and one decimal point; we also trim to the token’s decimals. Use parseAmountStrict when you need a valid amount for the chain.
  */
-export function sanitizeAmountInput(raw: string, decimals: number): string {
+export function sanitizeAmountInput(raw: string, decimals: number | bigint): string {
   if (!raw) return "";
   const input = raw.replaceAll(",", ".").trim();
 
@@ -58,7 +58,8 @@ export function sanitizeAmountInput(raw: string, decimals: number): string {
 
   const whole = out.slice(0, dot);
   const frac = out.slice(dot + 1);
-  return `${whole}.${frac.slice(0, Math.max(0, decimals))}`;
+  const maxFrac = typeof decimals === "bigint" ? Number(decimals) : decimals;
+  return `${whole}.${frac.slice(0, Math.max(0, maxFrac))}`;
 }
 
 /**
@@ -68,7 +69,7 @@ export function sanitizeAmountInput(raw: string, decimals: number): string {
  * - max fractional digits = `decimals`
  * - round-trips via parseUnits (bigint end-to-end)
  */
-export function parseAmountStrict(raw: string, decimals: number): ParseAmountResult {
+export function parseAmountStrict(raw: string, decimals: number | bigint): ParseAmountResult {
   const input = normalizeInput(raw);
   if (!input) return { ok: false, error: amountErrorRequired };
 
@@ -81,12 +82,13 @@ export function parseAmountStrict(raw: string, decimals: number): ParseAmountRes
   if (!/^\d+(?:\.\d+)?$/.test(input)) return { ok: false, error: amountErrorInvalidFormat };
 
   const [, fractional = ""] = input.split(".");
-  if (fractional.length > decimals) {
-    return { ok: false, error: amountErrorTooManyDecimalsTemplate.replace("{max}", String(decimals)) };
+  const dec = typeof decimals === "bigint" ? Number(decimals) : decimals;
+  if (fractional.length > dec) {
+    return { ok: false, error: amountErrorTooManyDecimalsTemplate.replace("{max}", String(dec)) };
   }
 
   try {
-    const value = parseUnits(input, decimals);
+    const value = parseUnits(input, dec);
     if (value <= 0n) return { ok: false, error: amountErrorMustBeGreaterThanZero };
     return { ok: true, value, normalized: input };
   } catch {
@@ -100,8 +102,9 @@ export function requireAmountStrict(raw: string, decimals: number): bigint {
   return r.value;
 }
 
-export function formatAmount(value: bigint, decimals: number): string {
-  return formatUnits(value, decimals);
+export function formatAmount(value: bigint, decimals: number | bigint): string {
+  const dec = typeof decimals === "bigint" ? Number(decimals) : decimals;
+  return formatUnits(value, dec);
 }
 
 /** Subtracts 1 wei from the max so "Max" buttons don’t hit rounding or reentrancy edge cases on-chain. */

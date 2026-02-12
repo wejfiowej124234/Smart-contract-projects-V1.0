@@ -21,11 +21,12 @@ export function useTokenMetadata(token?: Contract) {
       if (!token) return;
       setState({ loading: true });
       try {
-        const [symbol, decimals] = await Promise.all([
+        const [symbol, decimalsRaw] = await Promise.all([
           token.symbol() as Promise<string>,
-          token.decimals() as Promise<number>,
+          token.decimals() as Promise<number | bigint>,
         ]);
         if (cancelled) return;
+        const decimals = typeof decimalsRaw === "bigint" ? Number(decimalsRaw) : decimalsRaw;
         setState({ symbol, decimals, loading: false });
       } catch (e: unknown) {
         if (cancelled) return;

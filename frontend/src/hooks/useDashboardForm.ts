@@ -1,5 +1,5 @@
 import { formatUnits } from "ethers";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DISPLAY_MAX_DECIMALS } from "../config/runtime";
 import {
   emptyPlaceholder,
@@ -66,6 +66,19 @@ export function useDashboardForm(params: {
   const canWithdraw = !!withdrawParsed?.ok;
   const canBorrow = !!borrowParsed?.ok;
   const canRepay = !!repayParsed?.ok;
+
+  // When dashboard refreshes and a cap becomes 0, clear the corresponding input to avoid e.g. "11.110999" with "Max withdrawable: 0"
+  useEffect(() => {
+    const pos = dashboardData?.position;
+    if (pos === undefined) return;
+    setInputs((prev) => {
+      let next = prev;
+      if (pos.maxWithdraw === 0n && prev.withdraw.trim()) next = { ...next, withdraw: "" };
+      if (pos.maxBorrow === 0n && prev.borrow.trim()) next = { ...next, borrow: "" };
+      if (pos.borrowed === 0n && prev.repay.trim()) next = { ...next, repay: "" };
+      return next !== prev ? next : prev;
+    });
+  }, [dashboardData?.position?.maxWithdraw, dashboardData?.position?.maxBorrow, dashboardData?.position?.borrowed]);
 
   const formatToken = (v: bigint | undefined, decimals: number): string => {
     if (v === undefined) return emptyPlaceholder;

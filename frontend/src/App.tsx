@@ -143,6 +143,19 @@ export default function App() {
     return () => window.clearTimeout(t);
   }, [actions.tx.stage]);
 
+  // Clear the amount input for the action that just succeeded so the field doesn’t keep showing e.g. 11.111
+  useEffect(() => {
+    if (actions.tx.stage !== "confirmed" || !actions.tx.label) return;
+    const label = actions.tx.label;
+    form.setInputs((prev) => ({
+      ...prev,
+      supply: label === "Supply" ? "" : prev.supply,
+      withdraw: label === "Withdraw" ? "" : prev.withdraw,
+      borrow: label === "Borrow" ? "" : prev.borrow,
+      repay: label === "Repay" ? "" : prev.repay,
+    }));
+  }, [actions.tx.stage, actions.tx.label, form.setInputs]);
+
   const lastUpdatedText = dashboard.updatedAt ? new Date(dashboard.updatedAt).toLocaleTimeString() : emptyPlaceholder;
   const displayChainId = wallet.chainId ?? DEFAULT_CHAIN_ID;
   const chainName = getChainName(displayChainId);

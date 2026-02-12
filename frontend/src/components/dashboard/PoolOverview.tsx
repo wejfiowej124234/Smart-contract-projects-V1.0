@@ -13,7 +13,7 @@ import {
   poolEmptyCtaLabel,
   emptyPlaceholder,
 } from "../../config/ui";
-import { formatWithThousandsSeparator } from "../../utils/format";
+import { formatWithThousandsSeparator, bigintToNumberSafe } from "../../utils/format";
 import type { PoolOverviewProps } from "../../types/dashboard";
 
 function fmt(v: string | bigint, formatToken?: (v: bigint, d: number) => string, formatPercent?: (v: bigint) => string): string {
@@ -47,7 +47,7 @@ export function PoolOverview({
   const displayUtil = formatNumericDisplay(isEmpty ? emptyPlaceholder : utilizationStr);
   const displaySupplyRate = formatNumericDisplay(supplyRateStr);
   const displayBorrowRate = formatNumericDisplay(borrowRateStr);
-  const utilizationNum = typeof utilization === "bigint" ? Number(utilization) : 0;
+  const utilizationNum = bigintToNumberSafe(utilization, 0);
   const utilizationPercent = Math.min(100, Math.max(0, utilizationNum));
 
   return (

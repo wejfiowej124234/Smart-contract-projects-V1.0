@@ -42,19 +42,51 @@ export function healthFactorStatusText(healthFactor: bigint): string {
   return healthFactorStatusHealthy;
 }
 
+/** Contract stores healthFactor = (maxBorrowable * 100) / borrowed; display as ratio e.g. "1.00" not "100". */
+export function formatHealthFactorForDisplay(healthFactor: bigint): string {
+  const max = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+  if (healthFactor === max) return healthFactorStatusInfinite;
+  const n = Number(healthFactor);
+  if (!Number.isFinite(n) || n < 0) return "0.00";
+  const ratio = n / 100;
+  return ratio % 1 === 0 ? ratio.toFixed(1) : ratio.toFixed(2);
+}
+
 /** Clamps fractional digits for display so we don’t add unnecessary trailing zeros. */
-export function clampDecimalsForDisplay(raw: string, maxDecimals: number): string {
+/** Safely convert bigint/number/string to number for Math/CSS (avoids "Cannot convert a BigInt value to a number"). */
+export function bigintToNumberSafe(value: unknown, fallback = 0): number {
+  if (value === undefined || value === null) return fallback;
+  if (typeof value === "number") return Number.isFinite(value) ? value : fallback;
+  if (typeof value === "string") {
+    const n = parseFloat(value);
+    return Number.isFinite(n) ? n : fallback;
+  }
+  if (typeof value === "bigint") {
+    try {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+  return fallback;
+}
+
+export function clampDecimalsForDisplay(raw: string, maxDecimals: number | bigint): string {
   if (!raw.includes(".")) return raw;
   const [w, f = ""] = raw.split(".");
-  const frac = f.slice(0, Math.max(0, maxDecimals));
+  const max = typeof maxDecimals === "bigint" ? Number(maxDecimals) : maxDecimals;
+  const frac = f.slice(0, Math.max(0, max));
   const trimmed = frac.replace(/0+$/u, "");
   return trimmed ? `${w}.${trimmed}` : w;
 }
 
 /** Formats a number with thousands separators (e.g. 10,000.5). Leaves non-numeric or placeholder text unchanged. */
 export function formatWithThousandsSeparator(s: string): string {
-  if (!s || s.trim() === "") return s;
+  if (s == null) return "";
+  if (typeof s !== "string") return String(s);
   const trimmed = s.trim();
+  if (trimmed === "") return s;
   if (trimmed.includes(",")) return s;
   if (!/^-?\d+(\.\d*)?$/.test(trimmed)) return s;
   const hasMinus = trimmed.startsWith("-");

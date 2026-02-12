@@ -30,7 +30,6 @@ export function ActionCard({
   submitBusy,
 }: ActionCardProps) {
   const [hasTouched, setHasTouched] = useState(false);
-  const title = `${ACTION_LABELS[type]} (${symbol})`;
   const buttonLabel = submitButtonLabel ?? ACTION_LABELS[type];
   const showBusy = Boolean(disabled && submitBusy);
 
@@ -41,7 +40,7 @@ export function ActionCard({
 
   return (
     <div className="card actionCard" id={cardId}>
-      <div className="cardTitle">{title}</div>
+      <div className="cardTitle">{ACTION_LABELS[type]} (<span translate="no">{symbol}</span>)</div>
       <div className="fieldLabel" id={`${type}-amount-label`}>{amountLabel}</div>
       <div className="inlineRow">
         <button

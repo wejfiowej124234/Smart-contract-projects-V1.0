@@ -62,7 +62,7 @@ export function PreflightModal(props: {
         </div>
         <div className="modalBody">
           <div>{actionLabel}: <b>{preflight.action}</b></div>
-          <div>{amountLabel}: <b>{preflight.amountText.trim() || emptyPlaceholder}</b> {symbol}</div>
+          <div>{amountLabel}: <b>{preflight.amountText.trim() || emptyPlaceholder}</b> <span translate="no">{symbol}</span></div>
           <div>{chainIdLabel}: <b>{preflight.snapshot.chainId ?? emptyPlaceholder}</b></div>
           <AddressDisplay label={accountLabel} address={preflight.snapshot.account} />
           <AddressDisplay label={tokenLabel} address={preflight.snapshot.token} />
