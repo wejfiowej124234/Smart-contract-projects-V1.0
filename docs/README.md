@@ -57,3 +57,20 @@
      给面试官时再单独给一个「删掉 `docs/archive` 后的 zip」或新 clone 后删掉 archive 再打包。
 
 总结：**不想让对方看到 archive → 在 .gitignore 里加 `docs/archive/`，然后只上传其余部分即可。**
+
+---
+
+## 仓库已清除的项（负责人/面试官无需看到）
+
+以下内容已加入 `.gitignore` 且已从 Git 跟踪中移除，**不会**出现在 GitHub 仓库里；本地可保留自用。
+
+| 类型 | 说明 |
+|------|------|
+| **.cursorrules** | Cursor IDE 规则，内部工具配置 |
+| **docs/archive/** | 过程稿、审计清单、清理建议等（见上） |
+| **slides/dist/** | 幻灯片导出 HTML、QA 截图（_pagecheck_*） |
+| **slides 内部报告** | 内容一致性检查、最终审阅、优化/演讲稿/考试题等评估报告、PDF 生成与录屏说明 |
+| **scripts 内部脚本** | move-docs-to-archive、split-app-css、check-slide-margins、clean-slides-dist、demo-ui、generate-pdf 等 |
+| **根目录** | generate-pdf.bat、生成PDF.bat |
+
+仓库中保留的 **slides** 仅：`INTERVIEW_DECK.en.md`、`INTERVIEW_DECK.zh-cn.md`、`SPEAKER_SCRIPT.zh-cn.md`、`README.md`、`assets/*.svg`（演示用）。
