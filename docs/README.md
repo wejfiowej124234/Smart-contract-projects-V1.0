@@ -64,6 +64,6 @@ The following are in **`.gitignore`** and no longer tracked; they do **not** app
 | **slides/dist/** | Exported slide HTML, QA screenshots (_pagecheck_*) |
 | **Slides internal** | Content checks, final review, optimization/speaker/exam reports, PDF and recording notes |
 | **Scripts internal** | move-docs-to-archive, split-app-css, check-slide-margins, clean-slides-dist, demo-ui, generate-pdf |
-| **Root** | generate-pdf.bat, 生成PDF.bat |
+| **Root** | generate-pdf.bat, GeneratePDF.bat |
 
 **Slides** kept in the repo: `INTERVIEW_DECK.en.md`, `INTERVIEW_DECK.zh-cn.md`, `SPEAKER_SCRIPT.zh-cn.md`, `README.md`, `assets/*.svg`.
