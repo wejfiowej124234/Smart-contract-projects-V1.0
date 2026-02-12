@@ -1,5 +1,6 @@
 import type { TxStage } from "./tx";
 
+/** Persists pending tx so after a refresh we can show "Still pending" and offer refresh/clear instead of losing the tx. */
 export type PersistedTx = {
   stage: Extract<TxStage, "pending" | "confirmed" | "failed">;
   label: string;

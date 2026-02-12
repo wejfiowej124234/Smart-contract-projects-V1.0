@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { BrowserProvider } from "ethers";
-import { deployments } from "../contracts/deployments";
+import { getDeployments } from "../contracts/deployments";
 import { getContracts } from "../contracts/contracts";
 import { normalizeError } from "../state/errors";
-import { EVENT_BACKFILL_MAX_BLOCKS } from "../config/runtime";
+import { errorWrongNetworkExpectedGotTemplate } from "../config/ui";
+import { EVENT_BACKFILL_MAX_BLOCKS, REFRESH_THROTTLE_MS } from "../config/runtime";
 
 /**
- * CN：读模型（Read-model）：负责读取链上数据（余额、pool、position）并管理刷新策略（confirmed + events）。
- * EN: Read-model: reads on-chain data (balances, pool, position) and manages refresh strategy (confirmed + events).
+ * Drives the read side: fetches balances, pool, and position from the chain and refreshes
+ * after confirmations and events so the UI stays up to date.
  */
 
 export type PoolInfo = {
@@ -30,16 +31,22 @@ export type UserPosition = {
 export type DashboardSnapshot = {
   usd8Balance: bigint;
   wethBalance: bigint;
-  pool: PoolInfo;
-  position: UserPosition;
+  pool?: PoolInfo;
+  position?: UserPosition;
 };
 
-export function useDashboard(provider?: BrowserProvider, account?: string) {
-  const contracts = useMemo(() => (provider ? getContracts(provider) : undefined), [provider]);
+export function useDashboard(provider?: BrowserProvider, account?: string, chainId?: number) {
+  const contracts = useMemo(
+    () => (provider && chainId !== undefined ? getContracts(provider, chainId) : undefined),
+    [provider, chainId]
+  );
+  const deployments = getDeployments(chainId);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [data, setData] = useState<DashboardSnapshot | undefined>();
+  const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  const [blockNumber, setBlockNumber] = useState<number | undefined>();
 
   // Prevent stale overwrites when multiple refreshes overlap.
   const refreshSeq = useRef(0);
@@ -50,15 +57,24 @@ export function useDashboard(provider?: BrowserProvider, account?: string) {
     setLoading(true);
     setError(undefined);
     try {
-      const [network, usd8Balance, wethBalance] = await Promise.all([
+      const [network, block, usd8Balance, wethBalance] = await Promise.all([
         provider.getNetwork(),
+        provider.getBlockNumber(),
         contracts.usd8.balanceOf(account) as Promise<bigint>,
         contracts.weth.balanceOf(account) as Promise<bigint>,
       ]);
 
-      if (Number(network.chainId) !== deployments.chainId) {
-        throw new Error(`Wrong network: expected ${deployments.chainId}, got ${network.chainId}`);
+      if (!deployments || Number(network.chainId) !== deployments.chainId) {
+        const msg = errorWrongNetworkExpectedGotTemplate
+          .replace("{expected}", String(deployments?.chainId ?? chainId))
+          .replace("{got}", String(network.chainId));
+        throw new Error(msg);
       }
+
+      if (seq !== refreshSeq.current) return;
+      setData({ usd8Balance, wethBalance });
+      setUpdatedAt(Date.now());
+      setBlockNumber(block);
 
       const [poolInfo, userPosition, maxWithdraw, maxBorrow] = await Promise.all([
         contracts.lending.getPoolInfo() as Promise<[bigint, bigint, bigint, bigint, bigint]>,
@@ -68,32 +84,35 @@ export function useDashboard(provider?: BrowserProvider, account?: string) {
       ]);
 
       if (seq !== refreshSeq.current) return;
-      setData({
-        usd8Balance,
-        wethBalance,
-        pool: {
-          totalSupply: poolInfo[0],
-          totalBorrow: poolInfo[1],
-          utilizationRate: poolInfo[2],
-          supplyRate: poolInfo[3],
-          borrowRate: poolInfo[4],
-        },
-        position: {
-          supplied: userPosition[0],
-          borrowed: userPosition[1],
-          collateralValue: userPosition[2],
-          healthFactor: userPosition[3],
-          maxWithdraw,
-          maxBorrow,
-        },
-      });
+      setData((prev) =>
+        prev
+          ? {
+              ...prev,
+              pool: {
+                totalSupply: poolInfo[0],
+                totalBorrow: poolInfo[1],
+                utilizationRate: poolInfo[2],
+                supplyRate: poolInfo[3],
+                borrowRate: poolInfo[4],
+              },
+              position: {
+                supplied: userPosition[0],
+                borrowed: userPosition[1],
+                collateralValue: userPosition[2],
+                healthFactor: userPosition[3],
+                maxWithdraw,
+                maxBorrow,
+              },
+            }
+          : prev,
+      );
     } catch (e) {
       if (seq !== refreshSeq.current) return;
       setError(normalizeError(e).message);
     } finally {
       if (seq === refreshSeq.current) setLoading(false);
     }
-  }, [account, contracts, provider]);
+  }, [account, chainId, contracts, deployments, provider]);
 
   // Mandatory: listen for contract events and update UI
   const refreshTimer = useRef<number | null>(null);
@@ -107,7 +126,7 @@ export function useDashboard(provider?: BrowserProvider, account?: string) {
     refreshTimer.current = window.setTimeout(() => {
       refreshTimer.current = null;
       void refresh();
-    }, 250);
+    }, REFRESH_THROTTLE_MS);
   }, [refresh]);
 
   // Best-effort backfill for missed events (provider reconnect / dropped subscription).
@@ -182,6 +201,6 @@ export function useDashboard(provider?: BrowserProvider, account?: string) {
     };
   }, [account, contracts?.lending, provider, scheduleRefresh]);
 
-  return { contracts, loading, error, data, refresh, backfillEvents };
+  return { contracts, loading, error, data, refresh, backfillEvents, updatedAt, blockNumber };
 }
 

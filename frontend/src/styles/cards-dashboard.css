@@ -1,0 +1,421 @@
+/* 科技感 Web3：卡片主色描边 + 深色下左侧主色条 + hover 加强 */
+.card {
+  border: var(--borderWidth) solid var(--color-card-border);
+  border-left-width: var(--card-accent-left);
+  border-left-style: solid;
+  border-left-color: var(--color-primary);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+/* P6-S2: 卡片默认景深 — 深色下未 hover 时阴影略强，浮起感更明显 */
+[data-theme="dark"] .card {
+  box-shadow: var(--shadow-card), 0 6px 20px rgba(0, 0, 0, 0.28);
+}
+[data-theme="dark-navy"] .card {
+  box-shadow: var(--shadow-card), 0 6px 20px rgba(0, 0, 0, 0.32);
+}
+:root .card {
+  border-left-width: var(--borderWidth);
+  border-left-color: var(--color-card-border);
+}
+.card:hover {
+  box-shadow: var(--shadow-card);
+}
+[data-theme="dark"] .card:hover {
+  border-color: rgba(99, 102, 241, 0.38);
+  box-shadow: var(--card-hover-glow), 0 0 0 1px rgba(255,255,255,0.07), 0 12px 32px rgba(0,0,0,0.5);
+}
+[data-theme="dark-navy"] .card:hover {
+  border-color: rgba(59, 130, 246, 0.42);
+  box-shadow: var(--card-hover-glow), 0 0 0 1px rgba(59,130,246,0.12), 0 12px 32px rgba(0,0,0,0.55);
+}
+/* P6 后续：仪表盘卡片（Balances/Pool/Position）悬停顶边主色，与操作卡一致 */
+[data-theme="dark"] .dashboardGridTop .card:hover,
+[data-theme="dark-navy"] .dashboardGridTop .card:hover {
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-top-color: var(--color-primary);
+}
+/* P6 科技感：操作卡悬停顶边主色细线，增强层次 */
+.actionCard:hover {
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-top-color: var(--color-primary);
+}
+
+/* 科技感：Pool hero 区块，底边主色微透 */
+.poolHero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: var(--borderWidth) solid var(--color-border);
+}
+[data-theme="dark"] .poolHero {
+  border-bottom-color: rgba(99, 102, 241, 0.2);
+}
+[data-theme="dark-navy"] .poolHero {
+  border-bottom-color: rgba(59, 130, 246, 0.25);
+}
+/* P6-V4: Pool hero 底边层次 — 深色下极淡主色渐变条 */
+[data-theme="dark"] .poolHero {
+  position: relative;
+  border-bottom-color: transparent;
+}
+[data-theme="dark"] .poolHero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(99, 102, 241, 0.4) 30%, rgba(99, 102, 241, 0.25) 70%, transparent 100%);
+}
+[data-theme="dark-navy"] .poolHero {
+  position: relative;
+  border-bottom-color: transparent;
+}
+[data-theme="dark-navy"] .poolHero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.45) 30%, rgba(59, 130, 246, 0.28) 70%, transparent 100%);
+}
+.poolHeroItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxxs);
+}
+.poolHeroLabel {
+  font-family: var(--fontFamily-display);
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+/* 深色下 APY 等关键数字用主色系高亮 + 等宽数字 */
+.poolHeroValue {
+  font-family: var(--fontFamily-display);
+  font-size: var(--fontSize-xl);
+  font-weight: var(--fontWeight-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-hero-value);
+}
+/* P6-T1: 关键数值极淡发光 — 深色下数据面板感 */
+[data-theme="dark"] .poolHeroValue {
+  text-shadow: 0 0 20px rgba(99, 102, 241, 0.18);
+}
+[data-theme="dark-navy"] .poolHeroValue {
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+/* Aave-style: dashboard metric blocks (label small, value prominent) */
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--metricMinWidth), 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+/* P6.2: 市场感单行/多列布局（Pool / Position 像 Aave 列） */
+.metricGrid--market {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+.metricGrid--market .metricItem,
+.metricGrid--market .metricCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxxs);
+  min-width: var(--metricMinWidth);
+}
+.metricGrid--market .metricLabel {
+  text-align: left;
+}
+.metricGrid--market .metricValue {
+  text-align: left;
+  font-weight: var(--fontWeight-semibold);
+}
+
+/* P6 科技感：Pool 利用率 0–100% 进度条 */
+.utilizationBar {
+  margin-top: var(--spacing-sm);
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surfaceAlt);
+  overflow: hidden;
+}
+/* P6-V7: 利用率条轨道科技感 — 深色下极淡内凹与主色描边 */
+[data-theme="dark"] .utilizationBar {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.12);
+}
+[data-theme="dark-navy"] .utilizationBar {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.15);
+}
+.utilizationBarFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-primary);
+  transition: width 0.25s ease;
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxxs);
+}
+.metricLabel {
+  font-size: var(--fontSize-xs);
+  opacity: var(--opacity-label);
+  font-weight: var(--fontWeight-normal);
+  text-align: left;
+}
+/* P6-L3: 指标 label 与 value 层次 — 深色下 label 略弱，数值更突出 */
+[data-theme="dark"] .metricLabel,
+[data-theme="dark-navy"] .metricLabel {
+  opacity: 0.65;
+}
+/* 科技感：数值等宽，数据面板感；防长数字撑破布局 */
+.metricValue {
+  font-family: var(--fontFamily-display);
+  font-size: var(--fontSize-md);
+  font-weight: var(--fontWeight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* P5.5: 重要数值强调（HF 等），仅用 token */
+.metricValue--emphasis {
+  font-size: var(--fontSize-lg);
+  font-weight: var(--fontWeight-bold);
+}
+/* P6 后续：关键数值轻量呼吸动效，尊重 reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .poolHeroValue,
+  .metricValue--emphasis {
+    animation: heroPulse 2.8s ease-in-out infinite;
+  }
+}
+@keyframes heroPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.94; }
+}
+/* P6-T1: 关键数值极淡发光（emphasis） */
+[data-theme="dark"] .metricValue--emphasis {
+  text-shadow: 0 0 18px rgba(99, 102, 241, 0.15);
+}
+[data-theme="dark-navy"] .metricValue--emphasis {
+  text-shadow: 0 0 18px rgba(59, 130, 246, 0.18);
+}
+
+.healthFactorStatus {
+  font-size: var(--fontSize-xs);
+  opacity: var(--opacity-muted);
+}
+
+/* P4 十二：无仓位时「No debt」使用中性色，避免与 Critical 红色混淆 */
+.healthFactorEmpty {
+  color: var(--color-textMuted);
+}
+
+/* P5.1: Health Factor 行左侧色块，绿/黄/红一眼可辨 */
+.healthFactorRowBar {
+  border-left: var(--borderWidth-hfBar) solid transparent;
+  padding-left: var(--spacing-xs);
+}
+.healthFactorRowBar--safe {
+  border-left-color: var(--color-success);
+}
+.healthFactorRowBar--warn {
+  border-left-color: var(--color-warning);
+}
+.healthFactorRowBar--danger {
+  border-left-color: var(--color-danger);
+}
+.healthFactorRowBar--empty {
+  border-left-color: var(--color-textMuted);
+}
+
+/* P6.3: HF 阈值图例（橙/红圆点 + 文案），仅用 token */
+.healthFactorThresholdLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xs);
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+.healthFactorLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+.healthFactorLegendDot {
+  width: var(--size-legend-dot);
+  height: var(--size-legend-dot);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+.healthFactorLegendDot--warn {
+  background-color: var(--color-warning);
+}
+.healthFactorLegendDot--danger {
+  background-color: var(--color-danger);
+}
+
+/* P4 补充：健康因素危险态整行强调 */
+.healthFactorRowDanger {
+  background: var(--color-surfaceWarn);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  margin: 0 calc(-1 * var(--spacing-sm));
+}
+.healthFactorCriticalHint {
+  font-size: var(--fontSize-xs);
+  color: var(--color-danger);
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+.positionEmptyHint,
+.poolEmptyHint {
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+
+/* P6 科技感：空状态区极淡点阵背景，不抢内容 */
+.emptyStateBlock {
+  position: relative;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+/* P6-O2: 空状态区点阵背景微调 — 略提高可见度，仍不抢内容 */
+.emptyStateBlock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 8px 8px;
+  opacity: 0.07;
+  pointer-events: none;
+}
+[data-theme="dark"] .emptyStateBlock::before,
+[data-theme="dark-navy"] .emptyStateBlock::before {
+  opacity: 0.08;
+}
+
+/* P6-O3 + P6-V3/V8: 卡片标题 letter-spacing、与内容间距、深色底边主色倾向 */
+.cardTitle {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--fontWeight-semibold);
+  font-size: var(--fontSize-md);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xxs);
+  border-bottom: 1px solid var(--color-border);
+  letter-spacing: var(--letter-spacing-title, 0.03em);
+}
+[data-theme="dark"] .cardTitle,
+[data-theme="dark-navy"] .cardTitle {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+/* P6-V8: 卡片标题底边极淡主色 */
+[data-theme="dark"] .cardTitle {
+  border-bottom-color: rgba(99, 102, 241, 0.18);
+}
+[data-theme="dark-navy"] .cardTitle {
+  border-bottom-color: rgba(59, 130, 246, 0.2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--gridMinCol), 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Aave-style: Supply/Withdraw/Borrow/Repay in fixed 2×2 */
+/* P4 十五：Actions 卡片统一高度，避免视觉跳动 */
+.actionsGrid {
+  grid-template-columns: repeat(2, 1fr);
+  align-items: stretch;
+}
+.actionsGrid .card {
+  min-height: var(--actionCardMinHeight);
+}
+/* P6 科技感：Actions 区卡片 stagger 入场，尊重 reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .actionsGrid .card {
+    animation: cardFadeIn 0.4s ease both;
+  }
+  .actionsGrid .card:nth-child(1) { animation-delay: 0s; }
+  .actionsGrid .card:nth-child(2) { animation-delay: 0.05s; }
+  .actionsGrid .card:nth-child(3) { animation-delay: 0.1s; }
+  .actionsGrid .card:nth-child(4) { animation-delay: 0.15s; }
+}
+@media (max-width: var(--breakpoint-actions)) {
+  .actionsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.cardHint {
+  font-size: var(--fontSize-xs);
+  margin-top: var(--spacing-xxs);
+  margin-bottom: 0;
+}
+.healthFactorThresholdHint {
+  font-size: var(--fontSize-xs);
+  margin-top: var(--spacing-xxs);
+  margin-bottom: 0;
+}
+.balancesLoadFailedHint {
+  font-size: var(--fontSize-xs);
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+/* P6.7: 空状态 CTA 更明显；深色下主色描边（outline primary）增强科技感 */
+.emptyStateCta {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+[data-theme="dark"] .emptyStateCta {
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  color: var(--color-hero-value);
+}
+[data-theme="dark"] .emptyStateCta:hover:not(:disabled) {
+  border-color: rgba(99, 102, 241, 0.8);
+  background: rgba(99, 102, 241, 0.08);
+}
+[data-theme="dark-navy"] .emptyStateCta {
+  border: 2px solid rgba(59, 130, 246, 0.55);
+  color: var(--color-hero-value);
+}
+[data-theme="dark-navy"] .emptyStateCta:hover:not(:disabled) {
+  border-color: rgba(59, 130, 246, 0.85);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.muted {
+  font-size: var(--fontSize-xs);
+  opacity: var(--opacity-label);
+}
+
+.errorText {
+  color: var(--danger);
+}
+
+.dashboardErrorInline {
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+

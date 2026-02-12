@@ -80,6 +80,77 @@ describe("SimpleLending (integration)", function () {
     );
   });
 
+  it("calculateMaxBorrow/calculateMaxWithdraw track the position", async function () {
+    const { user, usd8, lending } = await deploy();
+
+    const lendAddr = await lending.getAddress();
+    const usd8User = usd8.connect(user);
+    const lendingUser = lending.connect(user);
+
+    const supplyAmt = ethers.parseUnits("10", 18);
+    const borrowAmt = ethers.parseUnits("5", 18);
+
+    await usd8User.getFunction("approve")(lendAddr, supplyAmt);
+    await lendingUser.getFunction("supply")(supplyAmt);
+
+    const maxBorrow1 = await lending.calculateMaxBorrow(user.address);
+    expect(maxBorrow1).to.eq((supplyAmt * 75n) / 100n);
+
+    await lendingUser.getFunction("borrow")(borrowAmt);
+
+    const maxBorrow2 = await lending.calculateMaxBorrow(user.address);
+    expect(maxBorrow2).to.eq(((supplyAmt * 75n) / 100n) - borrowAmt);
+
+    const maxWithdraw = await lending.calculateMaxWithdraw(user.address);
+    // minRequiredSupply = floor(borrowed * 100 / 75)
+    const minRequiredSupply = (borrowAmt * 100n) / 75n;
+    expect(maxWithdraw).to.eq(supplyAmt - minRequiredSupply);
+  });
+
+  it("reverts when borrowing with no pool liquidity", async function () {
+    const { user, lending } = await deploy();
+    const lendingUser = lending.connect(user);
+
+    await expect(lendingUser.getFunction("borrow")(ethers.parseUnits("1", 18))).to.be.revertedWith(
+      "Insufficient liquidity",
+    );
+  });
+
+  it("reverts when repaying more than borrowed", async function () {
+    const { user, usd8, lending } = await deploy();
+
+    const lendAddr = await lending.getAddress();
+    const usd8User = usd8.connect(user);
+    const lendingUser = lending.connect(user);
+
+    const supplyAmt = ethers.parseUnits("10", 18);
+    const borrowAmt = ethers.parseUnits("5", 18);
+
+    await usd8User.getFunction("approve")(lendAddr, supplyAmt);
+    await lendingUser.getFunction("supply")(supplyAmt);
+    await lendingUser.getFunction("borrow")(borrowAmt);
+
+    await usd8User.getFunction("approve")(lendAddr, ethers.parseUnits("6", 18));
+    await expect(lendingUser.getFunction("repay")(ethers.parseUnits("6", 18))).to.be.revertedWith(
+      "Amount exceeds borrow",
+    );
+  });
+
+  it("reverts when withdrawing more than supplied", async function () {
+    const { user, usd8, lending } = await deploy();
+
+    const lendAddr = await lending.getAddress();
+    const usd8User = usd8.connect(user);
+    const lendingUser = lending.connect(user);
+
+    await usd8User.getFunction("approve")(lendAddr, ethers.parseUnits("1", 18));
+    await lendingUser.getFunction("supply")(ethers.parseUnits("1", 18));
+
+    await expect(lendingUser.getFunction("withdraw")(ethers.parseUnits("2", 18))).to.be.revertedWith(
+      "Insufficient supply",
+    );
+  });
+
   it("can be paused by owner and blocks actions", async function () {
     const { deployer, user, usd8, lending } = await deploy();
 

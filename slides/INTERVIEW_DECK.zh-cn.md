@@ -1,13 +1,13 @@
 ---
 marp: true
-paginate: true
+paginate: false
 size: 16:9
 theme: gaia
-footer: "Smart-contract-projects | Web3 Engineer Coding Test | 2026-01-27"
-title: "Web3 Engineer Coding Test - Technical Presentation (中文版)"
+footer: "SimpleLending | Product Roadshow Deck | 2026-02-10"
+title: "SimpleLending - 产品技术路演（中文版）"
 author: "Smart Contract Projects"
 keywords: "Web3, DeFi, Smart Contracts, Hardhat, React, TypeScript, Lending Protocol"
-description: "企业级技术演示：可复现的DeFi借贷协议实现"
+description: "产品技术路演：可复现、可验收的借贷 dApp（MVP）"
 style: |
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -26,10 +26,12 @@ style: |
   section {
     background: var(--bg);
     color: var(--fg);
-    padding: 56px 72px 120px 72px;
-    font-size: 30px;
+    padding: 56px 72px 112px 72px;
+    display: flex;
+    flex-direction: column;
+    font-size: 28px;
     font-family: "Inter", "SF Pro Display", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif;
-    line-height: 1.5;
+    line-height: 1.45;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -40,50 +42,51 @@ style: |
     font-weight: 600;
   }
   h1 { 
-    font-size: 64px; 
+    font-size: 60px; 
     letter-spacing: -0.5px; 
     line-height: 1.2;
-    margin-bottom: 24px;
-  }
-  h2 { 
-    font-size: 42px; 
-    letter-spacing: -0.3px; 
-    line-height: 1.3;
     margin-bottom: 20px;
   }
-  h3 { 
-    font-size: 32px; 
-    letter-spacing: -0.2px;
-    line-height: 1.4;
+  h2 { 
+    font-size: 40px; 
+    letter-spacing: -0.3px; 
+    line-height: 1.3;
     margin-bottom: 16px;
   }
+  h3 { 
+    font-size: 30px; 
+    letter-spacing: -0.2px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
   h4 {
-    font-size: 28px;
+    font-size: 26px;
     letter-spacing: -0.1px;
     line-height: 1.4;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-weight: 600;
   }
   h5 {
-    font-size: 26px;
-    letter-spacing: 0px;
-    line-height: 1.5;
-    margin-bottom: 10px;
-    font-weight: 500;
-  }
-  h6 {
     font-size: 24px;
     letter-spacing: 0px;
     line-height: 1.5;
     margin-bottom: 8px;
     font-weight: 500;
   }
-  strong { 
+  h6 {
+    font-size: 22px;
+    letter-spacing: 0px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  strong {
     color: var(--accent); 
     font-weight: 600;
   }
   a { 
     color: var(--link); 
+    position: relative;
     text-decoration: none;
     border-bottom: 1px solid rgba(88, 166, 255, 0.3);
     transition: border-color 0.2s;
@@ -92,24 +95,39 @@ style: |
     border-bottom-color: var(--link);
   }
   
+
+  /* Bottom pixel safety strip: override Marp pagination (::after) to avoid edge clipping */
+  section::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 2px !important;
+    padding: 0 !important;
+    background: var(--bg) !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+  }
   /* Enhanced readability for financial presentations */
   p {
-    margin: 0 0 16px 0;
-    line-height: 1.6;
+    margin: 0 0 12px 0;
+    line-height: 1.55;
   }
   
   ul, ol {
-    line-height: 1.6;
-    margin: 12px 0;
+    line-height: 1.55;
+    margin: 10px 0;
   }
   
   blockquote {
     border-left: 4px solid var(--accent);
     padding-left: 20px;
-    margin: 20px 0;
+    margin: 16px 0;
     font-style: italic;
     color: var(--muted);
-    font-size: 28px;
+    font-size: 25px;
     line-height: 1.5;
   }
 
@@ -185,14 +203,14 @@ style: |
   }
 
   .divider-title {
-    font-size: 68px;
-    margin-top: 80px;
+    font-size: 64px;
+    margin-top: 72px;
     font-weight: 700;
     letter-spacing: -1px;
   }
 
   .divider-sub {
-    margin-top: 16px;
+    margin-top: 12px;
     font-size: 28px;
     color: var(--muted);
     font-weight: 400;
@@ -202,11 +220,57 @@ style: |
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 24px 28px;
+    padding: 24px 30px;
     min-width: 0;
-    font-size: 28px;
-    line-height: 1.5;
+    font-size: 24px;
+    line-height: 1.45;
   }
+
+  /* Per-slide compact mode for dense pages */
+  section.compact { font-size: 26px; }
+  section.compact h1 { font-size: 56px; }
+  section.compact h2 { font-size: 36px; margin-bottom: 16px; }
+  section.compact h3 { font-size: 28px; margin-bottom: 14px; }
+  section.compact .card { font-size: 23px; padding: 22px 30px; }
+  section.compact .tight ul, section.compact .tight ol { margin: 4px 0 0 20px; }
+  section.compact .tight li { margin: 4px 0; line-height: 1.5; }
+
+  /* Per-slide dense mode (more aggressive than compact) */
+  section.dense { font-size: 24px; }
+  section.dense h1 { font-size: 52px; }
+  section.dense h2 { font-size: 34px; margin-bottom: 14px; }
+  section.dense h3 { font-size: 26px; margin-bottom: 12px; }
+  section.dense .card { font-size: 21px; padding: 18px 24px; }
+  section.dense .tight ul, section.dense .tight ol { margin: 2px 0 0 18px; }
+  section.dense .tight li { margin: 2px 0; line-height: 1.4; }
+  section.dense pre { font-size: 20px; padding: 16px 18px; margin: 12px 0; }
+  section.dense img { max-height: 58vh; }
+  section.dense footer { font-size: 12px; margin-bottom: 20px; }
+  section.dense .evidence { font-size: 12px; padding: 8px 12px; }
+
+  /* Ultra-dense mode for slides that still overflow */
+  section.ultra { font-size: 22px; }
+  section.ultra h1 { font-size: 48px; }
+  section.ultra h2 { font-size: 32px; margin-bottom: 12px; }
+  section.ultra h3 { font-size: 24px; margin-bottom: 10px; }
+  section.ultra .card { font-size: 19px; padding: 14px 20px; }
+  section.ultra .tight ul, section.ultra .tight ol { margin: 2px 0 0 16px; }
+  section.ultra .tight li { margin: 2px 0; line-height: 1.35; }
+  section.ultra pre { font-size: 18px; padding: 12px 14px; margin: 10px 0; }
+  section.ultra img { max-height: 54vh; }
+  section.ultra footer { font-size: 11px; margin-bottom: 18px; }
+  section.ultra .evidence { font-size: 11px; padding: 6px 10px; }
+
+  /* Extra safety for PDF viewers that clip bottom pixels */
+  section.safefooter { padding-bottom: 176px; }
+  section.safefooter footer { font-size: 12px; margin-bottom: 34px; }
+  section.safefooter .card { font-size: 18px; line-height: 1.35; padding: 18px 24px; }
+  section.safefooter .card p { margin: 0 0 8px 0; line-height: 1.35; }
+  section.safefooter .card li { margin: 1px 0; }
+  section.safefooter .tight ul, section.safefooter .tight ol { margin: 2px 0 0 18px; }
+  section.safefooter code { font-size: 18px; }
+  section.safefooter img { max-height: 14vh !important; box-shadow: none !important; }
+  section.safefooter .evidence { font-size: 11px; padding: 6px 10px; line-height: 1.35; backdrop-filter: none; margin-top: 12px !important; }
 
   .card h3, .card h4 {
     margin-top: 0;
@@ -236,7 +300,8 @@ style: |
   code {
     overflow-wrap: anywhere;
     word-break: break-word;
-    font-size: 26px;
+    white-space: normal;
+    font-size: 22px;
     font-family: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", "Consolas", monospace;
     background: rgba(22, 27, 34, 0.8);
     padding: 2px 6px;
@@ -244,8 +309,8 @@ style: |
     line-height: 1.5;
   }
 
-  .tight ul { margin: 8px 0 0 24px; }
-  .tight li { margin: 8px 0; line-height: 1.6; }
+  .tight ul, .tight ol { margin: 4px 0 0 22px; }
+  .tight li { margin: 4px 0; line-height: 1.5; }
 
   .subtitle {
     margin-top: 12px;
@@ -275,11 +340,12 @@ style: |
   }
 
   .evidence {
-    position: absolute;
-    left: 40px;
-    bottom: 80px;
+    position: static;
+    order: 98;
+    margin-top: auto;
+    align-self: flex-start;
     padding: 10px 16px;
-    font-size: 16px;
+    font-size: 14px;
     color: rgba(201, 209, 217, 0.9); /* Improved contrast */
     background: var(--panel-strong);
     border: 1px solid rgba(110, 118, 129, 0.5);
@@ -287,6 +353,12 @@ style: |
     backdrop-filter: blur(4px);
     font-weight: 400;
     line-height: 1.4;
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .evidence + footer {
+    margin-top: 12px;
   }
 
   .evidence strong { 
@@ -332,58 +404,54 @@ style: |
     }
   }
 
-  /* Keep footer & page number inside the PDF safe area */
+  /* Footer as a bottom row (never overlaps content) */
   section footer {
-    position: absolute;
-    left: 72px;
-    right: 140px;
-    bottom: 36px;
-    font-size: 16px;
+    order: 99;
+    margin-top: auto;
+    position: static !important;
+    inset: auto !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+    padding: 0 !important;
+    font-size: 14px;
     color: rgba(201, 209, 217, 0.65);
     text-align: left;
     font-weight: 400;
-  }
-
-  section::after {
-    right: 48px !important;
-    bottom: 32px !important;
-    font-size: 16px !important;
-    color: rgba(201, 209, 217, 0.65) !important;
-    font-weight: 400 !important;
+    margin-bottom: 28px;
   }
 ---
 
-# Smart-contract-projects
-## Web3 Engineer Coding Test — 面试技术演示
+# SimpleLending
+## 可复现的借贷产品原型（MVP）
 
-<div class="subtitle">可复现 · 可验收 · 录屏友好（金融企业叙事风格）</div>
+<div class="subtitle">可复现 · 可验收 · 安全基线 · 端到端闭环</div>
 
 <div class="card tight" style="margin-top: 32px; margin-bottom: 24px;">
 
-- **技术栈**：Hardhat + Solidity + React/TS + ethers v6
-- **本地链**：Hardhat 31337
-- **演示闭环**：approve（授权）→ supply（存入）→ borrow（借款）→ repay（还款）→ withdraw（取出）
+- **面向对象**：投资人 / 合作伙伴 / 技术决策者 / 架构工程师
+- **产品能力**：抵押存入 → 借款 → 还款 → 取出（端到端闭环）
+- **交付形态**：合约 + 前端 + 一键部署/导出 + 自动化验证
 
 </div>
 
-<!-- _notes: |
-  15 秒开场：先讲“可复现 + 工程可靠性”，再进入结构。
--->
-
 ---
 
-## Agenda（外企面试风格）
+## Agenda（面向多角色）
 
 <div class="topkicker">OVERVIEW · 概览</div>
+
+讲法：先审题列验收点，再展示证据与实现。
+
+按做题节奏：接到要求 → 审题 → 拆验收点 → 落地 → 验证 → 交付。
 
 <div class="cols" style="margin-top: 32px;">
 
 <div class="card tight">
 
 ### Part A
-1) 题目与 scope
+1) 产品价值与适用场景
 2) 端到端架构
-3) 关键设计取舍
+3) 关键设计取舍与边界
 4) 可靠性（交易生命周期 + 刷新）
 
 </div>
@@ -392,8 +460,8 @@ style: |
 
 ### Part B
 5) 安全 baseline
-6) 测试与可复现
-7) Demo + Q&A
+6) 测试、可复现与可运营
+7) Demo（演示）+ Q&A
 
 </div>
 
@@ -401,7 +469,7 @@ style: |
 
 ---
 
-## 术语 / 函数名速查（中英对照，方便你讲）
+## 关键术语与接口（中英对照）
 
 <div class="card">
 
@@ -410,7 +478,7 @@ style: |
 - **Repay（还款）**：`repay(amount)`
 - **Withdraw（取出/赎回）**：`withdraw(amount)`
 
-链与端口（你口播时用）：
+环境信息（本地 PoC 默认）：
 - **ChainId 31337**：Hardhat 本地链（不是端口）
 - **RPC**：`http://127.0.0.1:8545`（Hardhat node 默认）
 - **前端**：`http://localhost:5173`（Vite 默认）
@@ -419,35 +487,33 @@ style: |
 
 ---
 
-## Executive Summary（金融企业视角）
+## Executive Summary（对四类受众的一页结论）
 
 <div class="topkicker">OVERVIEW · 概览</div>
 
-- **交付物完整**：合约 + 前端 + 部署/导出/seed 脚本 + 集成测试
-- **规则强约束**：LTV=75%，borrow/withdraw 都由合约硬性 revert
-- **可靠性优先**：交易状态机 + confirmed 后强制刷新 + 事件监听 + backfill 兜底
-- **安全基线**：nonReentrant / SafeERC20 / Pausable + 前端网络与金额解析防护
+- **投资人**：可路演、可复盘的借贷 MVP（价值与边界清晰）
+- **合作伙伴**：ABI + 地址一键导出（`frontend/src/contracts/deployments.json` + `frontend/src/abis/*.json`）+ 标准化事件
+- **技术决策者**：on-chain 强约束 + 验收路径明确 + Non-goals 清晰
+- **架构工程师**：读写分离 + 交易状态机 + 刷新/回填兜底
 
 一句话：
-> “这是 coding test，但按企业项目交付标准组织：可复现、可验收、可解释风险边界。”
+> “可复现、可验收的借贷 MVP：端到端闭环 + on-chain 强约束 + 工程化交付。”
 
 ---
 
-## 题目 vs 实现（面试官最关心）
+## 产品能力与证据
 
 <div class="topkicker">OVERVIEW · 概览</div>
 
 ![requirements](./assets/requirements-mapping.svg)
 
-<div class="evidence">Evidence: <strong>docs/CODING_TEST_ASSIGNMENT.txt</strong> · <strong>scripts/deploy.ts</strong> · <strong>frontend/src/hooks/useDashboard.ts</strong></div>
-
-<!-- _notes: |
-  强调：这是 coding test，但我们把“可复现、可验收、可靠性”做到接近真实工程。
--->
+<div class="evidence">Evidence: <strong>docs/ASSESSMENT_MAPPING.md</strong> · <strong>scripts/deploy.ts</strong> · <strong>frontend/src/hooks/useDashboard.ts</strong></div>
 
 ---
 
-## 1 分钟电梯版（你开场就讲这段）
+<!-- _class: compact dense -->
+
+## 一分钟概览（价值 + 可信）
 
 <div class="topkicker">OVERVIEW · 概览</div>
 
@@ -455,18 +521,18 @@ style: |
 
 <div class="card tight">
 
-### 交付物（Deliverables）
-- 合约 + 前端完整闭环（approve → supply → borrow → repay → withdraw）
-- 一键 deploy+seed+导出 ABI/地址（可复现）
-- 集成测试覆盖关键 revert（可验收）
+### 产品价值（对业务/合作）
+- 端到端闭环：抵押借贷全流程可演示、可复盘
+- 易接入：导出 ABI + 地址 + 前端读写分离（便于集成与联调）
 
 </div>
 
 <div class="card tight">
 
-### 企业级亮点（Why enterprise-grade）
+### 技术可信（对决策/架构）
 - on-chain 强约束：LTV=75%，borrow/withdraw 硬 revert
-- 可靠性：交易状态机 + confirmed 强制刷新 + 事件监听 + backfill 兜底
+- 可靠性（主路径）：状态机 + confirmed(TX_CONFIRMATIONS) 后 `onConfirmed()` 刷新（dashboard/allowance）
+- 可靠性（读模型兜底）：事件 events + 有界回填 backfill（`EVENT_BACKFILL_MAX_BLOCKS = 2000`）
 - 安全基线：nonReentrant / SafeERC20 / Pausable + 前端网络/金额解析防护
 
 </div>
@@ -475,18 +541,16 @@ style: |
 
 ---
 
+<!-- _class: compact dense -->
+
 <div class="topkicker">ARCHITECTURE · 架构</div>
 
 <div class="divider-title">Architecture</div>
 <div class="divider-sub">端到端架构与工程边界</div>
 
-<!-- _notes: |
-  这一页要像“PRD 摘要”：说结论，不展开细节。
--->
-
 ---
 
-## Architecture（端到端）
+## 架构（端到端）
 
 <div class="topkicker">ARCHITECTURE · 架构</div>
 
@@ -494,13 +558,9 @@ style: |
 
 <div class="evidence">Evidence: <strong>scripts/_lib/export.ts</strong> · <strong>frontend/src/contracts/deployments.json</strong> · <strong>frontend/src/abis/*.json</strong></div>
 
-<!-- _notes: |
-  从左到右讲：Hardhat workspace -> local chain -> frontend。强调“导出 ABI/地址”是可复现关键。
--->
-
 ---
 
-## 项目结构（你要让面试官“看得懂仓库”）
+## 项目结构（快速定位关键模块）
 
 <div class="topkicker">ARCHITECTURE · 架构</div>
 
@@ -508,7 +568,7 @@ style: |
 
 - 合约：`contracts/`
   - `SimpleLending.sol`：业务规则 + 安全组件
-  - `TestToken.sol`：USD8/WETH 测试代币
+  - `TestToken.sol`：USD8 测试代币（WETH 仅前端余额展示，display-only）
 - 部署：`scripts/deploy.ts`（deploy+seed+export）
 - 前端：`frontend/`（React + ethers v6）
 - 测试：`test/SimpleLending.integration.ts`
@@ -517,7 +577,9 @@ style: |
 
 ---
 
-## 题面要求对齐（用“证据点”说话）
+<!-- _class: compact -->
+
+## 关键模块定位（证据点）
 
 <div class="topkicker">ARCHITECTURE · 架构</div>
 
@@ -531,23 +593,25 @@ style: |
 
 ### Part 2：Frontend 交互 + 实时更新
 - `frontend/src/hooks/useWallet.ts`
-- `frontend/src/hooks/useDashboard.ts`（events + backfill）
+- `frontend/src/hooks/useDashboard.ts`（事件 events + 回填 backfill）
 - `frontend/src/hooks/useActions.ts`（write model + tx）
 
 </div>
 
 <div class="card tight">
 
-### Part 3：加分项（工程化）
+### Part 3：工程化与可运营
 - `test/SimpleLending.integration.ts`（关键 revert 覆盖）
 - `frontend/src/state/tx.ts`（交易状态机）
-- `scripts/smoke-e2e.mjs`（演示兜底）
+- `scripts/smoke-e2e.mjs`（自动化验证 verification）
 
 </div>
 
 </div>
 
 ---
+
+<!-- _class: compact -->
 
 <div class="topkicker">CONTRACT · 合约</div>
 
@@ -556,22 +620,24 @@ style: |
 
 ---
 
+<!-- _class: compact dense ultra safefooter -->
+
 ## 合约：业务规则（核心）
 
 <div class="topkicker">CONTRACT · 合约</div>
 
 - 单币种：USD8 同时用于 supply 和 borrow
-- LTV = 75%
-  - `maxBorrow = supplied * 75%`
-- borrow 硬检查：借完不能超限
-- withdraw 硬检查：取完仍要健康
+- WETH：仅用于前端余额展示（display-only，不参与协议）
+- LTV = 75%（`maxBorrow = supplied * 75%`）
+- borrow require：`token.balanceOf(address(this)) >= amount`（"Insufficient liquidity"）；`userBorrow + amount <= (userSupply * 75)/100`（"Exceeds borrowing limit"）
+- withdraw require：`userSupply >= amount`（"Insufficient supply"）；`borrowed <= (newSupply * 75)/100`（"Withdrawal would make position unhealthy"）
 
-你可以一句话总结：
+总结：
 > “借款/取款不是 UI 控制，是合约强制 revert。”
 
 ---
 
-## LTV 约束（为什么这个 demo 可信）
+## LTV 约束（为何可信）
 
 <div class="topkicker">CONTRACT · 合约</div>
 
@@ -580,6 +646,8 @@ style: |
 <div class="evidence">Evidence: <strong>contracts/SimpleLending.sol</strong> (LTV_RATIO, borrow(), withdraw(), calculateMaxBorrow(), calculateMaxWithdraw())</div>
 
 ---
+
+<!-- _class: compact -->
 
 ## 设计取舍（Tradeoffs）
 
@@ -590,17 +658,17 @@ style: |
 <div class="card tight">
 
 ### Scope 取舍（刻意不做）
-- 单币种 + 固定 LTV：降低复杂度，聚焦题面验收
-- 不做预言机/清算/多资产：明确 non-goals，避免“半吊子生产化”
+- 单币种 + 固定 LTV：降低复杂度，聚焦核心闭环与可验证性
+- 不做预言机/清算/多资产：明确 non-goals，避免对“生产就绪”的误导
 
 </div>
 
 <div class="card tight">
 
-### 可靠性优先（演示不翻车）
-- 交易状态机：统一 pending/confirmed/failed
-- confirmed 后强制刷新：抵抗 RPC eventual consistency
-- 事件监听 + backfill 兜底：满足题面 + 更接近真实工程
+### 可靠性优先（面向真实网络条件）
+  - 交易状态机：idle → signing → pending → confirmed/failed/stuck（含 timeout、TRANSACTION_REPLACED）
+  - confirmed(TX_CONFIRMATIONS) 后触发 `onConfirmed()` 刷新读模型：抵抗 RPC eventual consistency
+- 事件 events 监听 + 有界回填 backfill 兜底：提升一致性与可恢复性（best-effort）
 
 </div>
 
@@ -611,7 +679,7 @@ style: |
 <div class="topkicker">RELIABILITY · 可靠性</div>
 
 <div class="divider-title">Reliability</div>
-<div class="divider-sub">交易生命周期 + UI 刷新（演示不翻车）</div>
+<div class="divider-sub">交易生命周期 + UI 刷新</div>
 
 ---
 
@@ -625,7 +693,9 @@ style: |
 
 ---
 
-## 合约：关键函数（讲清楚 Checks / Effects / Interactions）
+<!-- _class: compact dense ultra safefooter -->
+
+## 合约：关键函数（Checks / Effects / Interactions）
 
 <div class="topkicker">CONTRACT · 合约</div>
 
@@ -652,63 +722,74 @@ style: |
 - `Pausable` + `Ownable`：紧急暂停（止损开关）
 - `SafeERC20`：兼容非标准 ERC20，避免“返回值不规范”坑
 
-边界声明（加分）：
-- 本项目不做预言机/清算/多资产，保持题面范围
+边界声明：
+- 本项目不做预言机/清算/多资产，保持 MVP 范围
 
 ---
 
-## 前端：读写分离（provider vs signer）
+<!-- _class: compact dense -->
+
+## 前端：读写分离（Provider vs Signer）
 
 <div class="topkicker">FRONTEND · 前端</div>
 
-- Read model（稳定、可并发）：
-  - provider + view calls：余额 / pool / position / maxBorrow / maxWithdraw
+- Read model（纯读 RPC + 并发刷新）：
+  - `Promise.all` 并发读取：`balanceOf`/`getPoolInfo`/`getUserPosition`/`calculateMax*`
+  - `refreshSeq` 防止并发 refresh 的“旧数据覆盖新数据”
+  - chainId 校验：`network.chainId === deployments.chainId`（错链直接报错）
 - Write model（高不确定性）：
-  - signer 发交易 + 交易生命周期管理
+  - signer 发交易 + `runTxDetailed` 生命周期（含超时/替换）+ confirmed 后回调刷新
 
 收益：
-- 读模型不被写流程污染
-- confirmed 后再触发 refresh，状态更一致
+- 读写隔离：写流程不直接“手改余额/仓位”，以链上读为单一事实源
+- confirmed 后触发 `onConfirmed()`：`allowance.refresh()` + `dashboard.refresh()`
 
 ---
 
-## 前端：交易状态机（为什么不是“发完就算”）
+## 前端：交易状态机（为何不能“发完就算”）
 
 <div class="topkicker">RELIABILITY · 可靠性</div>
 
-- stages：idle → signing → pending → confirmed/failed
+- stages：idle → signing → pending → confirmed/failed/stuck
 - 处理现实世界问题：
   - 用户拒绝签名
   - pending 很久
   - speed up / replacement
   - RPC 读延迟（confirmed ≠ 立刻读到）
 
-<!-- _notes: |
-  这里要强调：区块链 UX 的不确定性来自钱包/网络/RPC，而不是代码“写错”。
--->
-
 ---
+
+<!-- _class: compact dense ultra safefooter -->
 
 ## 刷新策略（3 层）
 
 <div class="topkicker">RELIABILITY · 可靠性</div>
 
-<div class="card tight" style="margin-bottom: 20px;">
+<div class="card tight" style="margin-bottom: 12px;">
 
 **三层刷新机制**（按优先级）：
-1) **Tx confirmed后强制刷新**：`tx.wait()` 确认后立即刷新
+1) **Tx confirmed 后强制刷新**：`tx.wait(TX_CONFIRMATIONS)` / `provider.waitForTransaction` 后触发 `onConfirmed()` 刷新读模型
 2) **合约事件监听**（主路径）：`Supplied` / `Withdrawn` / `Borrowed` / `Repaid`
-3) **Fail-safe兜底**：节流block监听 + 小范围backfill（`EVENT_BACKFILL_MAX_BLOCKS = 2000`）
+3) **Fail-safe 兜底**：节流 block 监听（≈3s）+ 小范围回填 backfill（`EVENT_BACKFILL_MAX_BLOCKS = 2000`，best-effort）
+
+实现阈值（可审计）：
+- `scheduleRefresh`：≈250ms 节流（事件 burst 不抖 UI）
+- block listener：connected + correct chain + txStage≠signing/pending/stuck + dashboard 非 loading
+- backfillEvents（best-effort）：`queryFilter(from..to)`；有日志则 refresh；cursor=`to+1`；异常下次重试
+- pending 超时：`TX_PENDING_TIMEOUT_MS`（30s@31337 / 120s@非本地）
+- post-state 校验：每 500ms 轮询，预算 `POST_STATE_MAX_WAIT_MS`；超时标记 unverified（"RPC reads may be lagging; use Refresh to re-check"）
 
 </div>
 
-![refresh](./assets/refresh-strategy.svg)
+<img src="./assets/refresh-strategy.svg" style="max-height: 14vh;" />
 
 <div class="evidence">Evidence: <strong>frontend/src/hooks/useDashboard.ts</strong> · <strong>frontend/src/config/runtime.ts</strong></div>
 
 ---
 
-## 现场 Demo 结构（录屏更专业）
+<!-- _class: compact dense -->
+
+## 演示流程（端到端）
 
 <div class="topkicker">DEMO · 演示</div>
 
@@ -716,7 +797,7 @@ style: |
 
 <div class="card tight">
 
-### 先跑通（不解释太多）
+### 演示步骤
 1) Connect
 2) Supply（必要时 approve）
 3) Borrow（展示 LTV=75%）
@@ -727,10 +808,10 @@ style: |
 
 <div class="card tight">
 
-### 再解释“为什么可靠”
-- tx 状态机：pending/confirmed/failed
-- confirmed 后强制刷新：抵抗 RPC 读延迟
-- events 主路径 + backfill/节流兜底：避免演示翻车
+### 关键可靠性设计
+- tx 状态机：idle → signing → pending → confirmed/failed/stuck（含 timeout、TRANSACTION_REPLACED）
+- confirmed(TX_CONFIRMATIONS) 后强制刷新 + post-state 校验（verifying/verified/unverified）：抵抗 RPC 读延迟
+- 事件 events 主路径 + 有界回填 backfill/节流兜底：提升一致性与可恢复性（best-effort）
 
 </div>
 
@@ -738,7 +819,7 @@ style: |
 
 ---
 
-## 前端：Approve 细节（面试官爱追问）
+## 前端：Approve（Allowance）机制
 
 <div class="topkicker">FRONTEND · 前端</div>
 
@@ -768,7 +849,9 @@ style: |
 
 ---
 
-## 错误处理：归一化（你会显得很工程化）
+<!-- _class: compact dense -->
+
+## 错误处理：归一化
 
 <div class="topkicker">RELIABILITY · 可靠性</div>
 
@@ -780,15 +863,17 @@ style: |
 把 provider / ethers / wallet 的错误统一成“可解释、可展示、可追踪”的分类。
 
 ### 主要分类
-- UserRejected（4001）
-- Revert（CALL_EXCEPTION / reverted）
-- Rpc（timeout / network）
+- UserRejected（`code=4001` 或 message 命中 rejected）
+- NetworkMismatch（message 命中 "Wrong network"）
+- Revert（`code=CALL_EXCEPTION` 或 message 命中 reverted）
+- Rpc（message 命中 network/timeout/failed to fetch/ECONN）
+- 其他：InsufficientBalance / InsufficientAllowance / Validation / Unknown
 
 </div>
 
 <div class="card tight">
 
-### 展示策略（让面试官放心）
+### 展示策略
 - UI 文案：给用户一句话结论
 - 技术细节：保留原始错误（便于排查）
 - 重试引导：pending 超时 / RPC 失败给出可操作建议
@@ -807,10 +892,10 @@ style: |
 
 <div class="card tight">
 
-### 集成测试（贴近题面验收）
+### 集成测试（贴近验收与回归）
 - approve → supply → borrow → repay → withdraw
 
-你可以一句话总结：
+结论：
 > “完整闭环 + 可复现验收路径。”
 
 </div>
@@ -818,10 +903,10 @@ style: |
 <div class="card tight">
 
 ### 两个最关键的安全边界
-- borrow 超 LTV：应 revert
-- withdraw 导致不健康：应 revert
+- borrow 超 LTV：revertedWith("Exceeds borrowing limit")
+- withdraw 导致不健康：revertedWith("Withdrawal would make position unhealthy")
 
-你可以说：
+结论：
 > “happy path + 两个最重要的安全边界。”
 
 </div>
@@ -830,7 +915,9 @@ style: |
 
 ---
 
-## 安全与 UX Safety（我们额外补的细节）
+<!-- _class: dense -->
+
+## 安全与 UX 安全（补充项）
 
 <div class="topkicker">SECURITY · 安全</div>
 
@@ -840,7 +927,7 @@ style: |
 
 ---
 
-## 可复现流水线（你可以让面试官直接 copy/paste）
+## 可复现流水线（Reproducibility）
 
 <div class="topkicker">REPRODUCIBILITY · 可复现</div>
 
@@ -859,7 +946,7 @@ style: |
 <div class="card tight">
 
 ### 可复现 / 可验收
-- **可复现**：一键脚本 + ABI/地址导出 + lockfile
+- **可复现**：一键脚本 + ABI + 地址导出 + lockfile
 - **可验收**：集成测试覆盖闭环 + 两个关键 revert
 
 </div>
@@ -867,8 +954,9 @@ style: |
 <div class="card tight">
 
 ### 可演示 / 风险边界
-- **可演示**：`smoke:e2e` 兜底，降低现场不确定性
+- **可运营**：`smoke:e2e` 自动化验证，降低联调与演示不确定性
 - **边界清晰**：明确 Non-goals（无预言机/清算/多资产），避免误导“生产就绪”
+- **全栈对接（设计稿，非本仓实现）**：Next.js/Node 做 BFF（REST）+ JWT；PostgreSQL 存应用态/索引视图；可选 Kafka 做事件摄取与异步重试（best-effort）
 
 </div>
 
@@ -876,7 +964,7 @@ style: |
 
 ---
 
-## 现场演示脚本（5 分钟）
+## 演示脚本（5 分钟）
 
 <div class="topkicker">DEMO · 演示</div>
 
@@ -886,11 +974,11 @@ style: |
 3) Borrow（展示 LTV=75%）
 4) Repay（必要时 approve）
 5) Withdraw（展示健康检查）
-6) 收尾：两条亮点 + 证据点
+6) 收尾：亮点与边界
 
 ---
 
-## 演示“救场 Plan B”（很加分）
+## 自动化验证（Plan B）
 
 <div class="topkicker">DEMO · 演示</div>
 
@@ -899,15 +987,15 @@ style: |
 <div class="card tight">
 
 ### 什么时候用
-- MetaMask 临场抽风 / 钱包卡住 / UI 网络不稳定
+- 钱包交互不稳定 / 网络波动 / 需要快速回归验证
 
 </div>
 
 <div class="card tight">
 
-### 怎么救场
+### 验证方式
 - 直接跑脚本闭环：`npm run smoke:e2e`
-- 它会用导出的 ABI/地址完成同样 approve → supply → borrow → repay → withdraw
+- 它会用导出的 ABI + 地址完成同样 approve → supply → borrow → repay → withdraw
 
 </div>
 
@@ -915,7 +1003,7 @@ style: |
 
 ---
 
-## Scope / Non-goals（提前把“没做”说成“刻意不做”）
+## Scope / Non-goals
 
 <div class="topkicker">SCOPE · 范围</div>
 
@@ -925,14 +1013,14 @@ style: |
 - 预言机、多资产、清算、主网部署
 
 ### 为什么
-- 题面重点：**合约集成 + 前端交易体验 + 可复现性**
+- MVP 重点：**合约集成 + 前端交易体验 + 可复现性**
 - 明确边界比“假装生产就绪”更专业
 
 </div>
 
 ---
 
-## Q&A 备答（高频追问）
+## Q&A（投资/合作/技术共用）
 
 <div class="topkicker">Q&A · 问答</div>
 
@@ -952,7 +1040,8 @@ style: |
 ### 合约 / 安全 / 扩展
 - 为什么要 approve？
 - borrow/withdraw 的硬约束在哪里？
-- 如果要上生产，你会怎么扩展（oracle/liquidation/interest）？
+- 路线图：如何扩展（oracle / liquidation / interest / multi-asset）？
+- 若接入后端（Next.js/Node + JWT + Postgres + Kafka）：如何设计“链上为源 + 后端索引/缓存”的一致性与重试？
 
 </div>
 
@@ -960,14 +1049,14 @@ style: |
 
 ---
 
-## 英文版与讲稿
+## 相关材料
 
 <div class="topkicker">APPENDIX · 附录</div>
 
 <div class="card tight">
 
-- 英文 deck：`slides/INTERVIEW_DECK.en.md`
-- 讲稿（可照读）：`slides/SPEAKER_SCRIPT.zh-cn.md`
+- 英文版演示文稿：见仓库 slides 目录
+- 中文版演示文稿：见仓库 slides 目录
 
 </div>
 
@@ -977,4 +1066,4 @@ style: |
 
 <div class="topkicker">APPENDIX · 附录</div>
 
-你想看合约还是前端？
+欢迎交流：产品价值 / 集成方式 / 安全与架构

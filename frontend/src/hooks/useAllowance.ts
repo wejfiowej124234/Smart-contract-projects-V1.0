@@ -2,6 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import type { Contract } from "ethers";
 import { normalizeError } from "../state/errors";
 
+/**
+ * Tracks how much the lending contract can spend for a token so the UI can show
+ * "Needs approve" or "Sufficient" and we refresh when the user approves (via event or manual refresh).
+ */
 type AllowanceState = {
   allowance?: bigint;
   loading: boolean;
@@ -39,9 +43,7 @@ export function useAllowance(params: { token?: Contract; owner?: string; spender
     };
   }, [owner, refreshNonce, spender, token]);
 
-  // Strategic note (why): allowance UX is fragile in real wallets.
-  // We sync primarily via Approval events (and a confirmed callback from writes),
-  // and also expose a manual `refresh()` escape hatch to avoid UI drift.
+  // We listen for Approval events so the UI updates as soon as the user approves; we also expose refresh() so you can fix drift if needed.
   useEffect(() => {
     if (!token || !owner || !spender) return;
 

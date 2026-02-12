@@ -9,7 +9,12 @@ coverage.json
 .venv/
 
 .env
+frontend/.env
+frontend/.env.*
 .DS_Store
+
+# Docs archive: internal only, do not push (interviewer/lead see main docs only)
+docs/archive/
 
 # Local logs / pid files
 .hardhat-node.log
@@ -27,3 +32,12 @@ _email_zip/
 *.pdf
 *.docx
 *.zip
+
+# Windows / IDE junk
+nul
+NUL
+*.suo
+*.user
+*.userosscache
+.vscode/settings.json
+!.vscode/extensions.json

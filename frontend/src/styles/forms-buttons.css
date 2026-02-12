@@ -1,0 +1,287 @@
+/* Button row / form footer: flex end alignment */
+.actionsRow {
+  display: flex;
+  gap: var(--spacing-sm2);
+  justify-content: flex-end;
+  margin-top: var(--spacing-lg);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  border-radius: var(--radius-card);
+}
+
+/* Web3 科技感：主按钮渐变 + 深色下 hover 主色光晕 */
+.btnPrimary {
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow-card);
+}
+.btnPrimary:hover:not(:disabled) {
+  background: var(--gradient-primary);
+  border-color: var(--color-primaryHover);
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-glow-primary-hover, var(--shadow-glow-primary));
+}
+.btnPrimary:active:not(:disabled) {
+  filter: brightness(0.95);
+}
+/* P6-O7: 主按钮点击态轻微 scale，reduced-motion 时仅保留 brightness */
+@media (prefers-reduced-motion: no-preference) {
+  .btnPrimary:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+.btnPrimary:disabled {
+  background: var(--color-surfaceAlt);
+  border-color: var(--color-border);
+  color: var(--color-textMuted);
+  opacity: 1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btnSecondary {
+  background: var(--color-surfaceAlt);
+  border-color: var(--border);
+  color: inherit;
+}
+
+.btnWarn {
+  background: var(--color-surfaceWarn);
+  border-color: var(--warning);
+  color: inherit;
+}
+
+.btnSmall {
+  padding: var(--spacing-xxxs) var(--spacing-sm2);
+  border-radius: var(--radius-pill);
+  font-size: var(--fontSize-xs);
+}
+.btnMax {
+  font-weight: var(--fontWeight-semibold);
+}
+
+/* P4 优化：区块内垂直间距略增，降低视觉密度 */
+.fieldLabel {
+  font-size: var(--fontSize-xs);
+  opacity: var(--opacity-muted);
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.helpText {
+  font-size: var(--fontSize-xs);
+  opacity: var(--opacity-subtle);
+  margin-top: var(--spacing-xxs);
+}
+
+/* P4 优化：操作阻止文案使用错误色，与成功/中性提示区分 */
+.actionDisabledReason {
+  font-size: var(--fontSize-xs);
+  color: var(--color-danger);
+  margin-top: var(--spacing-xxs);
+}
+
+.inlineRow {
+  display: flex;
+  gap: var(--spacing-sm2);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-xxs);
+}
+
+/* 科技感：输入框深色下内凹阴影（recessed） */
+input {
+  border: var(--borderWidth) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm2) var(--spacing-md);
+  outline: none;
+  font: inherit;
+  background: var(--color-input-bg);
+  box-shadow: var(--input-inset-shadow);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+/* P6-O4: 深色下输入框 focus 环主色略加强 */
+[data-theme="dark"] input:focus {
+  box-shadow: var(--input-inset-shadow), 0 0 0 3px rgba(99, 102, 241, 0.35);
+}
+[data-theme="dark-navy"] input:focus {
+  box-shadow: var(--input-inset-shadow), 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+/* P6.5: 操作卡内金额输入框略加大，Aave 风格 */
+.card input.fullWidth {
+  padding: var(--spacing-md);
+  min-height: var(--input-min-height);
+}
+
+input:focus {
+  border-color: var(--color-primary);
+}
+
+/* P4 优化：输入框校验态 — 非法用 danger，合法用 success */
+input[aria-invalid="true"],
+.inputInvalid {
+  border-color: var(--color-danger);
+}
+.inputValid {
+  border-color: var(--color-success);
+}
+
+/* 焦点环由 index.css 的 input:focus-visible 提供（--color-primary），此处仅保留 border 强调 */
+
+/* ErrorBoundary (design tokens only) */
+.errorBoundaryWrap {
+  max-width: var(--contentMaxWidth);
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+.errorBoundaryBody {
+  font-size: var(--fontSize-sm);
+  opacity: var(--opacity-muted);
+}
+.errorBoundaryPre {
+  white-space: pre-wrap;
+  border: var(--borderWidth) solid var(--border);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-sm);
+}
+.errorBoundaryBtn {
+  margin-top: var(--spacing-md);
+}
+
+/* Aave-style: row1 balance full-width, row2 Pool | Position two columns — P6.1: 区块间距 */
+.dashboardGridTop {
+  margin-top: var(--spacing-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+.dashboardGridTop > .card:first-child {
+  grid-column: 1 / -1;
+}
+/* P6 科技感：Balances 卡顶边主色条，强化「首行=主数据」层次 */
+[data-theme="dark"] .dashboardGridBalance,
+[data-theme="dark-navy"] .dashboardGridBalance {
+  border-top: 2px solid var(--color-section-accent);
+}
+@media (max-width: var(--breakpoint-dashboard)) {
+  .dashboardGridTop {
+    grid-template-columns: 1fr;
+  }
+  .dashboardGridTop > .card:first-child {
+    grid-column: 1;
+  }
+}
+/* P6 科技感：仪表盘卡片入场淡入，尊重 reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .dashboardGridTop .card {
+    animation: cardFadeIn 0.45s ease both;
+  }
+  .dashboardGridTop .card:nth-child(1) { animation-delay: 0s; }
+  .dashboardGridTop .card:nth-child(2) { animation-delay: 0.06s; }
+  .dashboardGridTop .card:nth-child(3) { animation-delay: 0.12s; }
+}
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.balanceList {
+  margin: 0;
+  padding-left: var(--spacing-listIndent);
+}
+
+.preflightApprovalRow {
+  opacity: var(--opacity-dim);
+}
+/* P6.4: Preflight Transaction overview（Aave 风格） */
+.preflightTransactionOverview {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: var(--borderWidth) solid var(--border);
+}
+.preflightTransactionOverviewTitle {
+  font-size: var(--fontSize-sm);
+  font-weight: var(--fontWeight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+.preflightOverviewRow {
+  font-size: var(--fontSize-xs2);
+  margin-top: var(--spacing-xxs);
+}
+.preflightOverviewRow--muted {
+  color: var(--color-textMuted);
+}
+.preflightNote {
+  font-size: var(--fontSize-xs);
+  opacity: var(--opacity-subtle);
+  margin-top: var(--spacing-md);
+}
+
+.actionCardHelpTop { margin-top: 0; }
+.actionCardParsedError { font-size: var(--fontSize-xs); margin-top: var(--spacing-xxs); }
+.actionCardAllowanceRow { font-size: var(--fontSize-xs); opacity: var(--opacity-muted); margin-top: var(--spacing-xxs); }
+.actionCardPill { margin-left: var(--spacing-sm); }
+/* P6.5: 主按钮更突出 — 圆角、内边距、字重；Web3 前 3 P0: 阴影 */
+.actionCardSubmit {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-weight: var(--fontWeight-semibold);
+  min-height: var(--btn-primary-min-height);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+/* P5.8: 交易进行中主按钮 spinner，仅用 token */
+.actionCardSubmit--busy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+.actionCardSubmitSpinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-pill);
+  animation: txSpin var(--duration-spinner) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .actionCardSubmitSpinner {
+    animation: none;
+  }
+}
+
+.txHashShort { opacity: var(--opacity-dim); }
+.txHintRow { margin-top: var(--spacing-xxs); }
+.txConfirmedHint {
+  margin-top: var(--spacing-sm);
+  font-size: var(--fontSize-sm);
+  color: var(--color-success);
+  font-weight: var(--fontWeight-medium);
+}
+.txStuckBanner { margin-top: var(--spacing-sm); }
+.txStuckHint { font-size: var(--fontSize-xs2); opacity: var(--opacity-muted); }
+.txStuckActions { display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-sm); flex-wrap: wrap; }
+
+.approveToolbarWrap { margin-bottom: var(--spacing-md); }
+.approveToolbarLabelRow { font-size: var(--fontSize-sm); opacity: var(--opacity-dim); }
+.approveToolbarLabel { margin-left: var(--spacing-sm); }
+
+.dataStatusBanner { margin-top: var(--spacing-sm); }
+.dataStatusBannerBody { font-size: var(--fontSize-xs2); opacity: var(--opacity-muted); }
+.dataStatusBannerLink { margin-top: var(--spacing-sm); }

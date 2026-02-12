@@ -1,15 +1,24 @@
 import { BrowserProvider } from "ethers";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Eip1193Provider } from "../types/ethereum";
+import {
+  AUTO_ADD_CHAIN,
+  DEFAULT_CHAIN_ID,
+  EXPECTED_CHAIN_ID,
+  getChainName,
+  getRpcUrl,
+  NATIVE_CURRENCY_DECIMALS,
+  NATIVE_CURRENCY_NAME,
+  NATIVE_CURRENCY_SYMBOL,
+} from "../config/network";
+import { errorMetaMaskNotFound, errorChainNotAddedTemplate, errorMissingLocalRpcUrl } from "../config/ui";
 import { normalizeError } from "../state/errors";
 import { assertDefined } from "../utils/assert";
 
 /**
- * CN：钱包层（EIP-1193 / MetaMask）：连接、自动切链到 31337、持久化连接状态、监听账号/网络变化。
- * EN: Wallet layer (EIP-1193 / MetaMask): connect, auto-switch to chain 31337, persist connection, handle account/network changes.
+ * Handles the wallet: connect, switch to the right chain, remember connection,
+ * and react to account/network changes so the rest of the app stays in sync.
  */
-
-const LOCAL_CHAIN_ID = 31337;
 
 type WalletState = {
   isMetaMaskAvailable: boolean;
@@ -24,8 +33,8 @@ async function getChainId(eth: Eip1193Provider): Promise<number> {
   return Number.parseInt(hex, 16);
 }
 
-async function switchToLocalhost(eth: Eip1193Provider): Promise<void> {
-  const chainIdHex = "0x7a69"; // 31337
+async function switchToExpectedChain(eth: Eip1193Provider, targetChainId: number = DEFAULT_CHAIN_ID): Promise<void> {
+  const chainIdHex = `0x${targetChainId.toString(16)}`;
 
   try {
     await eth.request({
@@ -34,19 +43,30 @@ async function switchToLocalhost(eth: Eip1193Provider): Promise<void> {
     });
     return;
   } catch (err: unknown) {
-    // 4902 = chain not added
     const code = err && typeof err === "object" ? (err as { code?: unknown }).code : undefined;
     if (code !== 4902) throw err;
+    if (!AUTO_ADD_CHAIN) {
+      throw new Error(errorChainNotAddedTemplate.replace("{chainId}", String(targetChainId)));
+    }
   }
 
+  const rpcUrl = getRpcUrl(targetChainId);
+  const chainName = getChainName(targetChainId);
+  if (!rpcUrl) {
+    throw new Error(errorMissingLocalRpcUrl);
+  }
   await eth.request({
     method: "wallet_addEthereumChain",
     params: [
       {
         chainId: chainIdHex,
-        chainName: "Hardhat Local",
-        rpcUrls: ["http://127.0.0.1:8545"],
-        nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+        chainName,
+        rpcUrls: [rpcUrl],
+        nativeCurrency: {
+          name: NATIVE_CURRENCY_NAME,
+          symbol: NATIVE_CURRENCY_SYMBOL,
+          decimals: NATIVE_CURRENCY_DECIMALS,
+        },
       },
     ],
   });
@@ -66,7 +86,7 @@ export function useWallet() {
 
   const refresh = useCallback(async () => {
     if (!eth) {
-      setState({ isMetaMaskAvailable: false, error: "MetaMask not found" });
+      setState({ isMetaMaskAvailable: false, error: errorMetaMaskNotFound });
       return;
     }
 
@@ -97,9 +117,19 @@ export function useWallet() {
   }, [eth]);
 
   const connect = useCallback(async () => {
-    const ethProvider = assertDefined(eth, "MetaMask not found");
+    const ethProvider = assertDefined(eth, errorMetaMaskNotFound);
+    setState((prev) => ({ ...prev, error: undefined }));
     try {
-      await switchToLocalhost(ethProvider);
+      await switchToExpectedChain(ethProvider);
+      // Request permissions first so MetaMask shows connect/account picker (otherwise already-authorized site may return current account without prompt)
+      try {
+        await ethProvider.request({
+          method: "wallet_requestPermissions",
+          params: [{ eth_accounts: {} }],
+        });
+      } catch {
+        // Some wallets do not support or user rejected; continue with eth_requestAccounts
+      }
       const accounts = (await ethProvider.request({ method: "eth_requestAccounts" })) as string[];
       const account = accounts?.[0];
       const chainId = await getChainId(ethProvider);
@@ -116,12 +146,24 @@ export function useWallet() {
   }, [eth]);
 
   const ensureCorrectNetwork = useCallback(async () => {
-    const ethProvider = assertDefined(eth, "MetaMask not found");
+    const ethProvider = assertDefined(eth, errorMetaMaskNotFound);
     const chainId = await getChainId(ethProvider);
-    if (chainId !== LOCAL_CHAIN_ID) {
-      await switchToLocalhost(ethProvider);
+    if (chainId !== EXPECTED_CHAIN_ID) {
+      await switchToExpectedChain(ethProvider);
     }
   }, [eth]);
+
+  const disconnect = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      account: undefined,
+      provider: undefined,
+      chainId: undefined,
+      error: undefined,
+    }));
+    localStorage.removeItem("connected");
+    localStorage.removeItem("lastAccount");
+  }, []);
 
   useEffect(() => {
     void refresh();
@@ -149,6 +191,7 @@ export function useWallet() {
   return {
     ...state,
     connect,
+    disconnect,
     refresh,
     ensureCorrectNetwork,
   };

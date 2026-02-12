@@ -23,6 +23,17 @@ npm ci
 npm run dev
 ```
 
+## MetaMask auto-switch / auto-add (demo-ready)
+
+The app switches to the expected chainId from `frontend/src/contracts/deployments.json` (default: `31337`).
+
+For a smooth local demo, this repo includes `frontend/.env.development` (no secrets) to enable one-click chain add when MetaMask doesn’t have the local Hardhat chain yet:
+- `VITE_LOCAL_RPC_URL` (used only for `wallet_addEthereumChain`)
+- `VITE_AUTO_ADD_CHAIN=true`
+- optional `VITE_EXPECTED_CHAIN_NAME`
+
+To override locally, create `frontend/.env.local`.
+
 ## Commands
 
 ```bash

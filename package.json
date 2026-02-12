@@ -22,24 +22,34 @@
     "mocha": "^10.8.2",
     "solc": "^0.8.19",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.0",
+    "typescript": "~5.9.3",
     "@marp-team/marp-cli": "^4.2.3"
   },
   "scripts": {
     "compile": "hardhat compile",
     "clean": "hardhat clean",
     "node": "hardhat node",
+    "dev:local": "node scripts/demo-ui.mjs",
+    "dev:local:no-open": "node scripts/demo-ui.mjs --no-open",
+    "dev:local:dry": "node scripts/demo-ui.mjs --dry-run",
     "deploy:localhost": "hardhat run scripts/deploy.ts --network localhost",
     "test": "hardhat test",
+    "test:frontend": "cd frontend && npm test",
+    "test:e2e": "npm run -s smoke:e2e",
+    "test:all": "npm run -s test && npm run -s test:frontend && npm run -s test:e2e",
     "audit:prod": "npm audit --omit=dev",
     "audit:all": "npm audit",
     "smoke:e2e": "node scripts/smoke-e2e.mjs",
+    "demo:ui": "node scripts/demo-ui.mjs",
     "slides:pdf": "marp slides/INTERVIEW_DECK.zh-cn.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.zh-cn.pdf",
     "slides:html": "marp slides/INTERVIEW_DECK.zh-cn.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.zh-cn.html",
+    "slides:speaker:pdf": "marp slides/SPEAKER_SCRIPT.zh-cn.md --pdf --allow-local-files --pdf-outlines --output slides/dist/SPEAKER_SCRIPT.zh-cn.pdf",
+    "slides:speaker:html": "marp slides/SPEAKER_SCRIPT.zh-cn.md --html --allow-local-files --output slides/dist/SPEAKER_SCRIPT.zh-cn.html",
     "slides:html:en": "marp slides/INTERVIEW_DECK.en.md --html --allow-local-files --output slides/dist/INTERVIEW_DECK.en.html",
     "slides:html:all": "npm run slides:html && npm run slides:html:en",
     "slides:pdf:en": "marp slides/INTERVIEW_DECK.en.md --pdf --allow-local-files --pdf-outlines --output slides/dist/INTERVIEW_DECK.en.pdf",
     "slides:pdf:all": "npm run slides:pdf && npm run slides:pdf:en",
-    "ci:local": "npm run compile && npm test && cd frontend && npm run lint && npm run build"
+    "slides:dist:clean": "node scripts/clean-slides-dist.mjs",
+    "ci:local": "npm run compile && npm test && npm run test:frontend && cd frontend && npm run lint && npm run build"
   }
 }

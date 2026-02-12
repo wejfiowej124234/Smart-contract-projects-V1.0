@@ -4,11 +4,10 @@ Version: v0.1.0 (assignment release)
 
 This project fully implements all mandatory requirements of the coding assignment.
 
-**📚 中文学习资料 / Chinese Learning Materials**: see [`learning/`](learning/) folder for comprehensive tutorials and interview prep (零基础教程和面试准备资料)
-
-Optional learning docs (CN/EN): see `docs/WALKTHROUGH.zh-en.md`.
-Optional demo runbook (CN/EN): see `docs/DEMO_CHECKLIST.zh-en.md`.
-For requirement-to-implementation mapping, see `docs/ASSESSMENT_MAPPING.md`.
+**📚 Documentation**: Single index for all docs → [**docs/README.md**](docs/README.md).  
+**📚 For project lead**: [docs/项目负责人_技术说明与文档入口.md](docs/项目负责人_技术说明与文档入口.md)（技术栈、结构、运行与验证、文档入口）.  
+**📚 中文学习与面试**: [learning/](learning/)（零基础教程与面试准备）.  
+Optional: [docs/archive/WALKTHROUGH.zh-en.md](docs/archive/WALKTHROUGH.zh-en.md), [docs/archive/DEMO_CHECKLIST.zh-en.md](docs/archive/DEMO_CHECKLIST.zh-en.md). Requirement mapping: [docs/archive/ASSESSMENT_MAPPING.md](docs/archive/ASSESSMENT_MAPPING.md).
 
 - React + TypeScript + ethers v6 frontend on Hardhat local chain (31337)
 - One-click deploys USD8/WETH/SimpleLending and exports ABI + addresses
@@ -16,6 +15,16 @@ For requirement-to-implementation mapping, see `docs/ASSESSMENT_MAPPING.md`.
 - Supports approve→supply and withdraw/borrow/repay as real on-chain transactions
 - Refresh strategy: tx confirmed + contract event listeners (Mandatory)
 - Optional fail-safe: 3s throttled `provider.on('block')` refresh (not the main logic)
+
+## Repo structure (enterprise)
+
+| 目录/文件 | 说明 |
+|-----------|------|
+| [docs/README.md](docs/README.md) | **文档索引入口**（按用途与角色查找） |
+| [docs/P0_P6_全阶段总结_从零到当前.md](docs/P0_P6_全阶段总结_从零到当前.md) | P0～P6 设计/实现/验收唯一总览 |
+| [learning/](learning/) | 学习与面试资料（中文） |
+| [slides/](slides/) | 演讲稿与 PDF 生成 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 参与规范与文档/代码约定 |
 
 ## Scope & Non-Goals
 

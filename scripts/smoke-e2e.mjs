@@ -4,9 +4,8 @@ import path from "node:path";
 import net from "node:net";
 
 const ROOT = path.resolve(process.cwd());
-const RPC_HOST = "127.0.0.1";
-const RPC_PORT = 8545;
-const CHAIN_ID = 31337;
+const RPC_HOST = process.env.RPC_HOST ?? "127.0.0.1";
+const RPC_PORT = Number(process.env.RPC_PORT ?? 8545);
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -97,21 +96,24 @@ async function main() {
     console.log("[smoke:e2e] Deploying + exporting artifacts...");
     await run("npm", ["run", "-s", "deploy:localhost"]);
 
-    const deploymentsPath = path.join(ROOT, "deployments", `${CHAIN_ID}.json`);
     const frontendDeploymentsPath = path.join(ROOT, "frontend", "src", "contracts", "deployments.json");
     const usd8AbiPath = path.join(ROOT, "frontend", "src", "abis", "TestToken.json");
     const lendingAbiPath = path.join(ROOT, "frontend", "src", "abis", "SimpleLending.json");
 
-    assert(fs.existsSync(deploymentsPath), `Missing ${deploymentsPath}`);
     assert(fs.existsSync(frontendDeploymentsPath), `Missing ${frontendDeploymentsPath}`);
     assert(fs.existsSync(usd8AbiPath), `Missing ${usd8AbiPath}`);
     assert(fs.existsSync(lendingAbiPath), `Missing ${lendingAbiPath}`);
 
-    const deployments = readJson(deploymentsPath);
     const frontendDeployments = readJson(frontendDeploymentsPath);
+    assert(typeof frontendDeployments.chainId === "number", `Expected numeric chainId in ${frontendDeploymentsPath}`);
+    const chainId = frontendDeployments.chainId;
+
+    const deploymentsPath = path.join(ROOT, "deployments", `${chainId}.json`);
+    assert(fs.existsSync(deploymentsPath), `Missing ${deploymentsPath}`);
+    const deployments = readJson(deploymentsPath);
 
     for (const d of [deployments, frontendDeployments]) {
-      assert(d.chainId === CHAIN_ID, `Expected chainId ${CHAIN_ID}, got ${d.chainId}`);
+      assert(d.chainId === chainId, `Expected chainId ${chainId}, got ${d.chainId}`);
       assertAddressLike(d.usd8Address, "usd8Address");
       assertAddressLike(d.wethAddress, "wethAddress");
       assertAddressLike(d.simpleLendingAddress, "simpleLendingAddress");
@@ -142,14 +144,48 @@ async function main() {
     const supplyAmt = parseUnits("10", 18);
     const borrowAmt = parseUnits("5", 18);
 
+    const pool0 = await lending.getPoolInfo();
+    const totalSupply0 = pool0[0];
+    const totalBorrow0 = pool0[1];
+
     const approve1 = await usd8.approve(deployments.simpleLendingAddress, supplyAmt);
     await approve1.wait();
 
     const supplyTx = await lending.supply(supplyAmt);
     await supplyTx.wait();
 
+    const pool1 = await lending.getPoolInfo();
+    assert(pool1[0] === totalSupply0 + supplyAmt, `Expected totalSupply + supplyAmt, got ${pool1[0].toString()}`);
+
+    const pos1 = await lending.getUserPosition(userAddress);
+    assert(pos1[0] === supplyAmt, `Expected supplied == ${supplyAmt}, got ${pos1[0].toString()}`);
+    assert(pos1[1] === 0n, `Expected borrowed == 0, got ${pos1[1].toString()}`);
+
+    const maxBorrow1 = await lending.calculateMaxBorrow(userAddress);
+    assert(maxBorrow1 === (supplyAmt * 75n) / 100n, `Expected maxBorrow == 75% of supply, got ${maxBorrow1.toString()}`);
+
     const borrowTx = await lending.borrow(borrowAmt);
     await borrowTx.wait();
+
+    const pool2 = await lending.getPoolInfo();
+    assert(pool2[1] === totalBorrow0 + borrowAmt, `Expected totalBorrow + borrowAmt, got ${pool2[1].toString()}`);
+
+    const pos2 = await lending.getUserPosition(userAddress);
+    assert(pos2[0] === supplyAmt, `Expected supplied unchanged, got ${pos2[0].toString()}`);
+    assert(pos2[1] === borrowAmt, `Expected borrowed == ${borrowAmt}, got ${pos2[1].toString()}`);
+
+    const maxBorrow2 = await lending.calculateMaxBorrow(userAddress);
+    assert(
+      maxBorrow2 === ((supplyAmt * 75n) / 100n) - borrowAmt,
+      `Expected maxBorrow == 75% of supply - borrowed, got ${maxBorrow2.toString()}`,
+    );
+
+    const minRequiredSupply = (borrowAmt * 100n) / 75n;
+    const maxWithdraw2 = await lending.calculateMaxWithdraw(userAddress);
+    assert(
+      maxWithdraw2 === supplyAmt - minRequiredSupply,
+      `Expected maxWithdraw == supply - floor(borrow*100/75), got ${maxWithdraw2.toString()}`,
+    );
 
     const approve2 = await usd8.approve(deployments.simpleLendingAddress, borrowAmt);
     await approve2.wait();
@@ -157,8 +193,18 @@ async function main() {
     const repayTx = await lending.repay(borrowAmt);
     await repayTx.wait();
 
+    const pool3 = await lending.getPoolInfo();
+    assert(pool3[1] === totalBorrow0, `Expected totalBorrow back to baseline, got ${pool3[1].toString()}`);
+
     const withdrawTx = await lending.withdraw(supplyAmt);
     await withdrawTx.wait();
+
+    const pool4 = await lending.getPoolInfo();
+    assert(pool4[0] === totalSupply0, `Expected totalSupply back to baseline, got ${pool4[0].toString()}`);
+
+    const pos4 = await lending.getUserPosition(userAddress);
+    assert(pos4[0] === 0n, `Expected supplied == 0, got ${pos4[0].toString()}`);
+    assert(pos4[1] === 0n, `Expected borrowed == 0, got ${pos4[1].toString()}`);
 
     console.log("[smoke:e2e] OK: approve→supply→borrow→repay→withdraw flow succeeded against deployed addresses.");
   } finally {

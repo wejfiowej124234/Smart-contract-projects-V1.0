@@ -10,6 +10,9 @@ export type TxState = {
   label?: string;
   hash?: string;
   error?: AppError;
+  startedAtMs?: number;
+  submittedAtMs?: number;
+  confirmedAtMs?: number;
   postState?: {
     status: "verifying" | "verified" | "unverified";
     note?: string;
@@ -18,6 +21,7 @@ export type TxState = {
 
 export const TX_IDLE: TxState = { stage: "idle" };
 
+/** Runs a tx from signing through confirmation (or failure) and persists pending state so a refresh doesn’t lose it. */
 export async function runTxDetailed(
   label: string,
   send: () => Promise<TransactionResponse>,
@@ -27,10 +31,12 @@ export async function runTxDetailed(
     persist?: { chainId: number; account: string };
   },
 ): Promise<{ receipt?: TransactionReceipt; error?: unknown; hash?: string }> {
-  setTx({ stage: "signing", label });
+  const startedAtMs = Date.now();
+  setTx({ stage: "signing", label, startedAtMs });
   try {
     const tx = await send();
-    setTx({ stage: "pending", label, hash: tx.hash });
+    const submittedAtMs = Date.now();
+    setTx({ stage: "pending", label, hash: tx.hash, startedAtMs, submittedAtMs });
     if (opts?.persist) {
       savePendingTx(opts.persist.chainId, opts.persist.account, label, tx.hash);
     }
@@ -63,7 +69,8 @@ export async function runTxDetailed(
 
       if (code === "TRANSACTION_REPLACED" && replacement && typeof replacement.hash === "string") {
         finalHash = replacement.hash;
-        setTx({ stage: "pending", label, hash: replacement.hash });
+        const replacedSubmittedAtMs = Date.now();
+        setTx({ stage: "pending", label, hash: replacement.hash, startedAtMs, submittedAtMs: replacedSubmittedAtMs });
         if (opts?.persist) {
           savePendingTx(opts.persist.chainId, opts.persist.account, label, replacement.hash);
         }
@@ -72,10 +79,10 @@ export async function runTxDetailed(
         } catch (e2) {
           // If replacement tracking times out, treat as stuck.
           if ((e2 as Error)?.message === "TX_TIMEOUT") {
-            setTx({ stage: "stuck", label, hash: replacement.hash });
+            setTx({ stage: "stuck", label, hash: replacement.hash, startedAtMs, submittedAtMs: replacedSubmittedAtMs });
             return { hash: replacement.hash, error: e2 };
           }
-          setTx({ stage: "failed", label, error: normalizeError(e2) });
+          setTx({ stage: "failed", label, error: normalizeError(e2), startedAtMs, submittedAtMs: replacedSubmittedAtMs });
           if (opts?.persist) {
             clearTx(opts.persist.chainId, opts.persist.account);
           }
@@ -83,13 +90,19 @@ export async function runTxDetailed(
         }
       } else if ((e as Error)?.message === "TX_TIMEOUT") {
         // Timeout: do not mark failed (avoid false negatives); keep persisted pending.
-        setTx({ stage: "stuck", label, hash: tx.hash });
+        setTx({ stage: "stuck", label, hash: tx.hash, startedAtMs, submittedAtMs });
         return { hash: tx.hash, error: e };
       } else {
         // If it's a replacement-cancel, that's a definitive outcome.
         const cancelled = (e as { cancelled?: unknown })?.cancelled;
         if (code === "TRANSACTION_REPLACED" && cancelled) {
-          setTx({ stage: "failed", label, error: normalizeError(new Error(`Transaction was cancelled (${String(reason ?? "replaced")})`)) });
+          setTx({
+            stage: "failed",
+            label,
+            error: normalizeError(new Error(`Transaction was cancelled (${String(reason ?? "replaced")})`)),
+            startedAtMs,
+            submittedAtMs,
+          });
           if (opts?.persist) {
             clearTx(opts.persist.chainId, opts.persist.account);
           }
@@ -99,13 +112,13 @@ export async function runTxDetailed(
       }
     }
 
-    setTx({ stage: "confirmed", label, hash: finalHash });
+    setTx({ stage: "confirmed", label, hash: finalHash, startedAtMs, submittedAtMs, confirmedAtMs: Date.now() });
     if (opts?.persist) {
       clearTx(opts.persist.chainId, opts.persist.account);
     }
     return { receipt, hash: finalHash };
   } catch (e) {
-    setTx({ stage: "failed", label, error: normalizeError(e) });
+    setTx({ stage: "failed", label, error: normalizeError(e), startedAtMs, confirmedAtMs: Date.now() });
     if (opts?.persist) {
       clearTx(opts.persist.chainId, opts.persist.account);
     }

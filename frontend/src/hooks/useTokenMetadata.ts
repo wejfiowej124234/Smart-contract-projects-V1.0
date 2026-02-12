@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import type { Contract } from "ethers";
 import { normalizeError } from "../state/errors";
 
+/**
+ * Fetches symbol and decimals for a token so the UI can display amounts and labels correctly.
+ */
 type TokenMeta = {
   symbol?: string;
   decimals?: number;

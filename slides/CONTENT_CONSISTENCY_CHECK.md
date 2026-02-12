@@ -107,7 +107,7 @@
 
 ### 3. 刷新策略描述可以更详细
 **当前描述**：
-- "Three layers (in order): 1) After tx confirmation: force refresh 2) Contract events: Supplied/Withdrawn/Borrowed/Repaid (mandatory) 3) Optional fail-safe: throttled block listener + small-range backfill"
+- "Three layers (in order): 1) After tx confirmation: force refresh 2) Contract events: Supplied/Withdrawn/Borrowed/Repaid (primary path, enabled by default) 3) Optional fail-safe: throttled block listener + small-range backfill"
 
 **建议**：中文版可以补充更详细的说明
 
@@ -135,23 +135,23 @@
 ## 🎯 总体评价
 
 ### 内容准确性：10/10 ✅
-- 所有技术信息100%准确
-- 所有文件路径100%正确
-- 所有函数名100%匹配
+- 技术信息与代码实现一致（已逐条核对）
+- 文件路径存在且可定位
+- 函数名与合约/前端实现匹配
 
 ### 内容完整性：9/10 ✅
 - 覆盖了所有关键信息
 - 可以补充事件名称的明确列出
 
 ### 项目映射一致性：10/10 ✅
-- 与项目代码完全一致
-- 与项目结构完全匹配
+- 与项目代码实现保持一致
+- 与项目结构保持匹配
 
 ---
 
 ## ✅ 结论
 
-**PDF内容与项目完全一致，所有技术细节准确无误。**
+**PDF 内容与项目实现已逐项对照，结论为一致（以当前仓库状态为准）。**
 
 **建议的微小优化**（可选）：
 1. 在"刷新策略"页面明确列出事件名称
@@ -162,4 +162,4 @@
 ---
 
 **检查完成时间**：2026-01-28
-**检查结果**：✅ **内容完全准确，与项目100%一致**
+**检查结果**：✅ **内容已核对，与项目实现一致**

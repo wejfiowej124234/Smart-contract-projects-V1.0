@@ -4,6 +4,7 @@ import { exportArtifacts, type DeploymentsJson } from "./_lib/export";
 const TOKEN_DECIMALS = 18n;
 const SEED_RECIPIENTS = 5; // seed the first N local accounts for demos
 const SEED_AMOUNT = 10_000n; // 10k tokens each
+const SEED_ETH_FOR_GAS = "1.0"; // only used for SEED_ADDRESS on local chain
 
 function normalizeSeedAddress(raw: string, ethers: typeof hre.ethers): string {
   if (!ethers.isAddress(raw)) {
@@ -55,6 +56,24 @@ async function main(): Promise<void> {
 
   const seeded = new Set<string>();
 
+  async function maybeFundGasForExternalAddress(to: string): Promise<void> {
+    // Only fund gas for a user-provided SEED_ADDRESS on local Hardhat.
+    if (chainId !== 31337) return;
+    const normalized = hre.ethers.getAddress(to);
+    const seedEnv = seedAddressFromEnv;
+    if (!seedEnv) return;
+    if (normalized.toLowerCase() !== seedEnv.toLowerCase()) return;
+
+    const current = await hre.ethers.provider.getBalance(normalized);
+    const min = hre.ethers.parseEther("0.2");
+    if (current >= min) return;
+
+    const value = hre.ethers.parseEther(SEED_ETH_FOR_GAS);
+    const tx = await deployer.sendTransaction({ to: normalized, value });
+    await tx.wait();
+    console.log(`Funded ${normalized} with ${SEED_ETH_FOR_GAS} ETH for gas`);
+  }
+
   async function seedTo(to: string): Promise<void> {
     const normalized = hre.ethers.getAddress(to);
     if (normalized.toLowerCase() === deployerAddress.toLowerCase()) {
@@ -68,6 +87,7 @@ async function main(): Promise<void> {
     await tx1.wait();
     const tx2 = await weth.transfer(normalized, seedValue);
     await tx2.wait();
+    await maybeFundGasForExternalAddress(normalized);
     seeded.add(normalized.toLowerCase());
     console.log(`Seeded ${normalized}: USD8 + WETH = ${SEED_AMOUNT.toString()}`);
   }
