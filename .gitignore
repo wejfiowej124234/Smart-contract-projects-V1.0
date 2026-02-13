@@ -46,6 +46,8 @@ NUL
 !.vscode/extensions.json
 
 # --- Not for project lead / interviewer (internal only) ---
+# Slides: for learning/demo repo only; main repo = code + technical docs for PM/engineers
+slides/
 .cursorrules
 generate-pdf.bat
 生成PDF.bat
