@@ -28,6 +28,9 @@ evidence-pack/
 test-results/
 e2e/evidence/
 
+# CI / gate output (do not commit)
+p10-ci-out.txt
+
 # Local logs / pid files
 .hardhat-node.log
 .hardhat-node.pid

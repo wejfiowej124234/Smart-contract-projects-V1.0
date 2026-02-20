@@ -65,4 +65,8 @@
 
 ---
 
+**交付仓说明**：本交付仓（V1）**不包含** `project-upgrade/` 与 `docs/archive/`；文档中对这两处的引用为历史/内部版约定，运行与验证以 [09-本地链标准与地址](09-本地链标准与地址.md)、[03-08-deployment-runbook](03-08-deployment-runbook.md)、[00-INDEX](00-INDEX.md) 为准。
+
+---
+
 *文档版本：与 00-INDEX、01-README 一致；项目方 = 客户/交付对象/项目负责人/审查方。*

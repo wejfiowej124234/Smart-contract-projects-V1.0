@@ -26,9 +26,9 @@ This repository delivers **P0–P10 Engineering-Complete (Local-Only)** Enterpri
 | [docs/01-README.md](docs/01-README.md) | **Doc index** (by role and purpose) |
 | [docs/00-INDEX.md](docs/00-INDEX.md) | **Sole index** (by role / P0–P10 / run command) |
 | [docs/02-PROJECT-LEAD-ENTRY.md](docs/02-PROJECT-LEAD-ENTRY.md) | Tech stack, runbook, P0–P6 summary（原 Technical_Overview 已合并） |
-| learning/ | 学习与面试材料；**入口**：[learning/项目总览架构.md](learning/项目总览架构.md)（若存在，已与 v1.0 P0–P10 对齐） |
-| [slides/](slides/) | Slide decks and exports |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution and code/doc conventions |
+
+*This delivery repo does not include `learning/` or `slides/`; see [docs/REPO-FOR-PROJECT-PARTY.md](docs/REPO-FOR-PROJECT-PARTY.md) for scope.*
 
 ## Scope & Non-Goals
 
