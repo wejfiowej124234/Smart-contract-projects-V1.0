@@ -16,8 +16,8 @@ frontend/.env.*
 # Docs archive: internal only, do not push (interviewer/lead see main docs only)
 docs/archive/
 
-# Learning materials: not for repo / interviewer (PDFs already ignored below)
-learning/
+# Learning materials: now tracked and pushed to repo (00-09 + 项目总览架构)
+# learning/
 
 # Local logs / pid files
 .hardhat-node.log
@@ -82,9 +82,14 @@ slides/INTERVIEW_DECK.zh-cn.md
 slides/SPEAKER_SCRIPT.zh-cn.md
 # Internal dev notes: not for lead/interviewer
 CODING_TEST_PITFALLS_AND_OPTIMIZATIONS.md
+# Evidence-pack generated artifacts (addresses must come from deployments/<chainId>.json only)
+evidence-pack/deployments-*.json
+evidence-pack/evidence-summary.json
+evidence-pack/*.txt
+evidence-pack/screenshots/
+
 # Internal / process docs: not for interviewer (keep repo project-only)
-CHANGELOG.md
-PUBLIC_RELEASE_CHECKLIST.md
+# CHANGELOG.md is tracked for v1.0 public release; pre-push checklist see docs/release/ (see docs/01-README.md)
 README_CODING_TEST_CHECKLIST.md
 # Local-only audit and pre-push checklist (do not push)
 AUDIT_LOCAL.md
