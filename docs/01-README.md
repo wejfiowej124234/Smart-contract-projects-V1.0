@@ -39,6 +39,7 @@
 - **Quick start**: [02-PROJECT-LEAD-ENTRY.md](02-PROJECT-LEAD-ENTRY.md)（技术概览、仓库结构、P0–P6 总结，原三份已合并）.
 - **What’s in the repo**: [07-REPO-HYGIENE.md](07-REPO-HYGIENE.md) Part D（tracked files and verification steps，原 REPO_AUDIT 已合并）.
 - **排错与已知限制**: [10-TROUBLESHOOTING-AND-LIMITATIONS.md](10-TROUBLESHOOTING-AND-LIMITATIONS.md)（CreateFileMapping、Tooltip、已知限制统一口径）。
+- **项目方仓库边界**（哪些内容建议不放入交付仓）: [REPO-FOR-PROJECT-PARTY.md](REPO-FOR-PROJECT-PARTY.md)。
 - **本地链唯一标准与地址**（合约以谁为准、标准操作顺序、RPC/端口/Chain ID/合约地址、环境变量、常见错误；**Part 4 企业级调试前准备与调试工作清单**）: [09-本地链标准与地址.md](09-本地链标准与地址.md)。与此不一致的以该文档为准。
 - **治理（创建提案/测试治理币）**（表单填写、setLTV 示例；地址与 09 一致，序号 15）: [15-governance-create-proposal-example.md](15-governance-create-proposal-example.md)。
 - **深度审计**（硬编码对齐、RPC 畅通、UI 跳转钱包）: [06-AUDIT-SUITE.md](06-AUDIT-SUITE.md) Part F（不弹窗/RPC 排查见 [09-本地链标准与地址.md](09-本地链标准与地址.md) Part 2 §5、[10-TROUBLESHOOTING-AND-LIMITATIONS.md](10-TROUBLESHOOTING-AND-LIMITATIONS.md)）。

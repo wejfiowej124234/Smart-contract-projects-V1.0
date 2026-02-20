@@ -16,8 +16,17 @@ frontend/.env.*
 # Docs archive: internal only, do not push (interviewer/lead see main docs only)
 docs/archive/
 
-# Learning materials: now tracked and pushed to repo (00-09 + 项目总览架构)
-# learning/
+# Learning materials: not for project-party delivery (see docs/REPO-FOR-PROJECT-PARTY.md)
+learning/
+
+# Upgrade process / internal planning: not for project-party repo
+project-upgrade/
+
+# Run artifacts / evidence: not for delivery (use deployments/<chainId>.json as SSOT)
+evidence/
+evidence-pack/
+test-results/
+e2e/evidence/
 
 # Local logs / pid files
 .hardhat-node.log
