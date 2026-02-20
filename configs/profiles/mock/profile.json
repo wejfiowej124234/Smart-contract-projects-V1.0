@@ -1,0 +1,30 @@
+{
+  "mode": "mock",
+  "description": "Local-Only Demo: Hardhat 31337, Mock Oracle + Mock Tokens, Scenario Presets",
+  "chainIds": [31337],
+  "oracle": {
+    "type": "mock",
+    "heartbeatSeconds": 31536000,
+    "minAnswer": 0,
+    "maxAnswer": "200000000",
+    "usePriceBoundGuard": false,
+    "maxDeviationBps": 1000
+  },
+  "tokens": "deploy",
+  "reservesConfigPath": "scripts/config/reserves.31337.json",
+  "governance": {
+    "guardian": "deployer",
+    "timelockMinDelaySeconds": 60,
+    "votingDelayBlocks": 1,
+    "votingPeriodBlocks": 100,
+    "proposalThreshold": 0,
+    "quorumNumerator": 1
+  },
+  "securityGate": {
+    "allowEoaChainIds": [31337],
+    "allowSkipB1B2B3": true,
+    "allowSkipB4": true,
+    "allowSkipR1": true,
+    "requireSmokeC3aGovernanceE2EEvidencePack": true
+  }
+}

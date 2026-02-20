@@ -1,0 +1,231 @@
+/* Productized empty state: no proposals yet */
+.governanceEmptyState {
+  padding: var(--spacing-xxl);
+  text-align: center;
+}
+.governanceEmptyStateIcon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.8;
+}
+.governanceEmptyStateTitle {
+  font-size: var(--fontSize-lg);
+  font-weight: var(--fontWeight-semibold);
+  margin: 0 0 var(--spacing-sm);
+}
+.governanceEmptyStateCta {
+  color: var(--color-textMuted);
+  margin: 0 0 var(--spacing-sm);
+}
+.governanceEmptyStateHint {
+  margin: 0 0 var(--spacing-lg);
+  font-size: var(--fontSize-sm);
+}
+.governanceEmptyStateActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+/* Governance: KPI grid, my info card, proposal table, votes bar, timelock countdown */
+.governanceKpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+.governanceKpiItem {
+  background: var(--color-surfaceAlt);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+}
+.governanceKpiLabel {
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+  margin-bottom: var(--spacing-xxs);
+}
+.governanceKpiValue {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.governanceMyInfoCard {
+  background: var(--color-surfaceAlt);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-lg);
+}
+.governanceMyInfoCard h3 {
+  font-size: var(--fontSize-sm);
+  margin-bottom: var(--spacing-sm);
+}
+.governanceMyInfoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+  font-size: var(--fontSize-sm);
+}
+.governanceMyInfoActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* DAO parameters panel (quorum, voting period, timelock delay, proposal threshold) */
+.governanceDaoParamsCard {
+  margin-bottom: var(--spacing-lg);
+  max-width: 360px;
+}
+.governanceDaoParamsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+  font-size: var(--fontSize-sm);
+}
+.governanceDaoParamsLabel {
+  color: var(--color-textMuted);
+}
+.governanceDaoParamsValue {
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--fontWeight-medium);
+}
+.governanceDaoParamsSource {
+  margin: var(--spacing-sm) 0 0;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fontSize-xs);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+.governanceDaoParamsAddress { font-size: inherit; }
+.governanceDaoParamsCopy { margin-left: var(--spacing-xxs); }
+
+.governanceEmptyRow td { padding: var(--spacing-md); vertical-align: middle; }
+.governanceTimelinePlaceholderHint { display: block; font-size: var(--fontSize-xs); margin-top: var(--spacing-xxs); }
+
+.proposalTable .proposalTitleCell {
+  max-width: 200px;
+}
+.proposalTable .proposalTitleCell .proposalTitleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+.proposalVotesBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  min-width: 80px;
+}
+.proposalVotesBarTrack {
+  display: flex;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--color-surfaceAlt);
+}
+.proposalVotesBarSegment {
+  height: 100%;
+  min-width: 2px;
+}
+.proposalVotesBarSegment--for {
+  background: var(--color-success);
+}
+.proposalVotesBarSegment--against {
+  background: var(--color-danger);
+}
+.proposalVotesBarSegment--abstain {
+  background: var(--color-textMuted);
+}
+.proposalVotesBarSegment {
+  transition: width 0.35s ease-out;
+}
+.proposalVotesBarLegend {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: var(--fontSize-xs);
+}
+.proposalQuorumProgress {
+  font-size: var(--fontSize-xs2);
+  color: var(--color-textMuted);
+  margin-top: var(--spacing-xxs);
+}
+.proposalQuorumProgressValue {
+  font-variant-numeric: tabular-nums;
+}
+.proposalQuorumMet {
+  color: var(--color-success);
+  font-weight: var(--fontWeight-medium);
+}
+.proposalQuorumNotMet {
+  color: var(--color-warning);
+}
+/* Proposal state timeline: Pending → Active → Succeeded → Queued → Executed */
+.proposalStateTimeline {
+  margin-top: var(--spacing-xs);
+}
+.proposalStateTimelineTrack {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.proposalStateTimelineStep {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+}
+.proposalStateTimelineDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-surfaceAlt);
+  flex-shrink: 0;
+}
+.proposalStateTimelineStep--past .proposalStateTimelineDot {
+  background: var(--color-success);
+}
+.proposalStateTimelineStep--current .proposalStateTimelineDot {
+  background: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary);
+}
+.proposalStateTimelineStep--future .proposalStateTimelineDot {
+  background: var(--color-border);
+}
+.proposalStateTimelineLine {
+  width: 12px;
+  height: 1px;
+  background: var(--color-border);
+  margin: 0 2px;
+}
+.proposalStateTimelineStep--past .proposalStateTimelineLine {
+  background: var(--color-success);
+}
+.proposalStateTimelineLabel {
+  font-size: var(--fontSize-xs2);
+  color: var(--color-textMuted);
+  white-space: nowrap;
+}
+.proposalStateTimelineStep--current .proposalStateTimelineLabel {
+  color: var(--color-text);
+  font-weight: var(--fontWeight-medium);
+}
+.proposalStateTimelineFailed {
+  font-size: var(--fontSize-xs);
+  color: var(--color-danger);
+  margin: var(--spacing-xxs) 0 0;
+}
+.timelockCountdown {
+  font-size: var(--fontSize-xs2);
+  color: var(--color-textMuted);
+}

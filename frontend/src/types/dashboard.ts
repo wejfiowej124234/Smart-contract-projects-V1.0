@@ -49,6 +49,8 @@ export interface PoolOverviewProps {
   borrowRate: string | bigint;
   formatToken?: (v: bigint, decimals: number) => string;
   formatPercent?: (v: bigint) => string;
+  /** Optional pool asset symbol for unit hint (e.g. "Pool totals (USD8)"). */
+  symbol?: string;
 }
 
 export interface UserPositionProps {
@@ -58,6 +60,8 @@ export interface UserPositionProps {
   maxWithdraw: string | bigint;
   maxBorrow: string | bigint;
   healthColor?: string;
+  /** Token decimals from ERC20.decimals() (e.g. USD8). Used for supplied/borrowed/maxWithdraw/maxBorrow display; no minimum clamp. */
+  tokenDecimals?: number;
   formatToken?: (v: bigint, decimals: number) => string;
   formatPercent?: (v: bigint) => string;
 }
@@ -71,7 +75,7 @@ export interface ActionCardProps {
   disabled: boolean;
   maxButtonDisabled?: boolean;
   actionDisabledReason: string | undefined;
-  allowanceStatus?: { loading: boolean; sufficient: boolean | undefined; value?: string };
+  allowanceStatus?: { loading: boolean; sufficient: boolean | undefined; value?: string; error?: string };
   symbol: string;
   decimals: number;
   placeholder?: string;
@@ -96,6 +100,8 @@ export interface TxStatusProps {
   stageClass: string;
   stepText: string | undefined;
   hintText: string | undefined;
+  /** When Signing exceeds 10s without hash: hint to check MetaMask popup/pending + troubleshooting link. */
+  signingPendingHint?: { text: string; troubleshootingLabel: string };
   errorTitle: string | undefined;
   elapsed: string;
   onCopyHash: () => void;
@@ -105,6 +111,21 @@ export interface TxStatusProps {
   onClearPending: () => void;
   timingText?: string;
   disableRefreshClear?: boolean;
+  lifecycleSteps?: Array<{ step: string; state: string; label: string; sublabel?: string }>;
+  confirmedInText?: string;
+  confirmedInHintText?: string;
+  blockConfirmationsText?: string;
+  suggestion?: string;
+  /** Optional context for "Copy tx debug" bundle (chainId, rpcTier, version, etc.). */
+  debugContext?: {
+    chainId?: number;
+    rpcTier?: string;
+    version?: string;
+    configFingerprint?: string;
+    sessionId?: string;
+    gasEstimate?: unknown;
+    feeData?: unknown;
+  };
 }
 
 export type DashboardInputs = { supply: string; withdraw: string; borrow: string; repay: string };
@@ -138,6 +159,7 @@ export interface UseTxDisplayReturn {
   stageClass: string;
   stepText: string | undefined;
   hintText: string | undefined;
+  signingPendingHint?: { text: string; troubleshootingLabel: string };
   errorTitle: string | undefined;
   elapsed: string;
   timingText: string;

@@ -12,7 +12,7 @@ From repo root, start the local node and deploy/export ABIs:
 
 ```bash
 npx hardhat node
-npx hardhat run scripts/deploy.ts --network localhost
+npm run deploy:localhost
 ```
 
 Then run the frontend:
@@ -48,14 +48,41 @@ npm run lint
 npm run build
 ```
 
+## P10 gate (full stack验收)
+
+From **repo root** (not `frontend/`), run:
+
+```bash
+npm run p10:gate
+```
+
+This starts the local chain, runs deploy + P9 governance steps + E2E (Playwright), then generates the evidence pack. Ensure port **8545** and **5173** are free. Frontend is exercised by E2E (connect wallet, Supply/Borrow/Repay/Withdraw, Governance page); selectors are documented in «E2E selectors» above and must not be removed.
+
+**Before first run:** install Playwright browsers from repo root: `npx playwright install` (or `npx playwright install chromium`). Otherwise E2E will fail with “Executable doesn't exist”.
+
+The gate uses **build + preview** for the frontend (not dev server), so the app is ready quickly. If E2E fails with `frontend did not become ready at http://127.0.0.1:5173`, check that no other process is using 5173 and re-run.
+
 ## Scope & assumptions
 
 - `WETH` is display-only and does not participate in lending math.
 - The protocol is intentionally simplified for this demo and is not intended for mainnet use.
 
-## Architecture (minimal, production-minded)
+## Architecture (refactor blueprint — Plan A)
 
-- `src/contracts/`: deployments + ABI + contract factory helpers
-- `src/hooks/`: wallet / read-model / write-model hooks
-- `src/state/`: tx state machine + error normalization
-- `src/utils/`: pure helpers
+- **Routes:** `/` Dashboard, `/markets` Markets, `/markets/:assetId` Asset detail, `/governance` Governance (user), `/activity` Activity (placeholder), `/settings` Settings (placeholder), `/admin` → `/admin/proposals`, `/admin/proposals/:id` Admin proposal detail.
+- **Layout:** `Layout` (exported as `AppLayout`) with `Header` + main nav (Dashboard | Markets | Governance) + `<Outlet />`. Admin: `AdminLayout` with back link, Proposals nav, `<Outlet />`.
+- **Components:** `components/layout/`, `components/dashboard/` (DashboardKpiBar, RiskParametersPanel, PoolOverview, UserPosition), `components/actions/`, `components/charts/PriceVolumeChart`, `components/governance/ProposalVotesBar`, `TimelockCountdown`, `components/markets/ReserveList`, `components/admin/` (AdminLayout, PauseUnpauseBar).
+- **Data:** `src/contracts/`, `src/hooks/` (useWallet, useDashboard, usePoolInfo, useActions, …), `src/state/`, `src/utils/`.
+
+## E2E selectors (Playwright)
+
+Stable selectors used by repo-root `e2e/` tests; do not remove or change semantics:
+
+- **App layout:** `[data-testid="app-layout"]`, `[data-testid="main-nav"]`.
+- **Nav links:** `[data-testid="nav-dashboard"]`, `[data-testid="nav-markets"]`, `[data-testid="nav-governance"]` (link text "Governance" — `getByRole("link", { name: /governance/i })`).
+- **Connect wallet:** `getByRole("button", { name: /connect wallet/i })`; after connect: `getByText(/connected/i)`.
+- **Chain:** `getByText(/Hardhat Local|31337/i)`.
+- **Action cards:** `#action-card-supply`, `#action-card-borrow`, `#action-card-repay`, `#action-card-withdraw` (must remain for lending flow).
+- **Governance:** `getByRole("heading", { name: /governance/i })`, `getByText(/proposal|loading|connect wallet to view/i)`.
+- **Pause:** `getByRole("region", { name: /pause control/i })` or `getByText(/Pool is (active|paused)/i)`.
+- **Admin:** `[data-testid="admin-layout"]`, `[data-testid="admin-back-to-app"]`, `[data-testid="admin-nav-proposals"]`.

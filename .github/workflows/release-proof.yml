@@ -1,0 +1,49 @@
+# Release-Proof: 节点启动 → deploy → diagnose → E2E → p10:gate → evidence-pack
+# 产出可复现的发布级证据链：manifest SHA256、四锚点、健康检查结果
+name: Release-Proof
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  release-proof:
+    name: Node → Deploy → Diagnose → E2E → Gate → Evidence
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Install Playwright (Chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Release-Proof gate (node → deploy → diagnose → E2E → evidence-pack)
+        run: npm run p10:gate
+        env:
+          SKIP_E2E_UI: ${{ vars.SKIP_E2E_UI || '0' }}
+
+      - name: Upload evidence-pack
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: evidence-pack
+          path: evidence-pack/
+          retention-days: 90
+
+      - name: Output evidence chain (same format as local release-proof:report)
+        if: success()
+        run: npm run release-proof:report

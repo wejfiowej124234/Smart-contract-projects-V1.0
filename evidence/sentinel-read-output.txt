@@ -1,0 +1,50 @@
+--- Sentinel read diagnostic (run after verify:consistency CONSISTENT) ---
+
+Account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+
+[getCode] usd8 (0x5FbDB2315678afecb367f032d93F642f64180aa3): has code
+[getCode] weth (0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512): has code
+[getCode] simpleLending (0x5FC8d32690cc91D4c39d9d3abcBD16989F875707): has code
+[getCode] oracle (0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE): has code
+
+[OK] usd8.symbol: USD8
+[OK] usd8.decimals: 18
+[OK] usd8.balanceOf(account): 960000000000000000000000
+[OK] weth.symbol: WETH
+[OK] weth.decimals: 18
+[OK] weth.balanceOf(account): 960000000000000000000000
+
+[OK] getPoolInfo: totalSupply=0 totalBorrow=0 utilization=0 supplyRate=2 borrowRate=4
+[OK] getUserPosition(account): supplied=0 borrowed=0 collateralValue=0 healthFactor=115792089237316195423570985008687907853269984665640564039457584007913129639935
+[OK] reserveList.length: 1 (reserveList(1) out-of-bounds, expected)
+[OK] calculateMaxWithdraw(account) / calculateMaxBorrow(account)
+
+[OK] oracle.getPrice(USD8): 100000000
+
+--- useDashboard 短路分支映射 ---
+1. refresh 未执行: !provider || !account → return; → data 始终 undefined → Dashboard 不展示余额。
+2. !effectiveContracts: setError(...), return; → data 未设置 → 不展示余额。
+3. 首轮 Promise.all 抛错 (getNetwork/balanceOf 等): 进入 catch，setError，未执行 setData → data 仍 undefined → MetaMask 有余额但 Dashboard 不展示。
+4. network.chainId !== deployments.chainId: throw → 同上 catch，不 setData。
+5. getPoolInfo revert: setError(errorDashboardPoolReadFailed)，return；此时已 setData({ usd8Balance, wethBalance }) → 余额会展示，池子不展示。
+6. getUserPosition/calculateMax* revert: setError(errorDashboardPositionReadFailed)，return；data 已有 pool → 余额与池子会展示，仓位不展示。
+7. account 清空: useEffect 清空 setData(undefined) setError(undefined)。
+8. chainId/contracts/deployments 不匹配: useEffect 清空 data/error。
+
+
+--- 多币种断言 ---
+MULTI_CURRENCY_SUPPORTED: false
+EVIDENCE: reserveList.length=1; contract initReserve allows only pool token and reverts ReserveAlreadySet for second reserve (LendingPoolImpl.initReserve).
+
+--- 结论 ---
+1. 多币种支持: reserves=1。当前实现 initReserve 仅允许 pool token 且 ReserveAlreadySet 阻止第二枚储备；configurator 可对唯一储备调用 initReserve/setReserveLTV 以启用 borrow，但 reserveList.length 仅 1 → 真实为单币种（单储备），非多币种。
+
+2. 为何 MetaMask 有余额但 Dashboard 不展示:
+   - 若首轮调用 (balanceOf(account) / getNetwork) revert 或抛错：refresh 进入 catch，setError，从未执行 setData({ usd8Balance, wethBalance }) → data 一直 undefined → Dashboard 不展示余额。
+   - 若 getPoolInfo 或 getUserPosition 才 revert：此前已 setData 含余额，故余额会展示；仅池子或仓位不展示。
+   - 根因多为: 链与 deployments 不一致（节点重启未重新 deploy）、或 Oracle 未设置导致 getUserPosition 内部 getPrice revert、或 frontend 所用 chainId/contracts 未解析到 31337。
+
+--- Summary ---
+SENTINEL_PASSED: true
+ROOT_CAUSE: NONE
+FIX: none

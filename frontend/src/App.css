@@ -1,5 +1,10 @@
 /* CSS variables are in index.css :root. Component styles are split for maintainability. */
 @import "./styles/layout.css";
 @import "./styles/cards-dashboard.css";
+@import "./styles/markets-charts.css";
+@import "./styles/governance.css";
 @import "./styles/tx-modal.css";
 @import "./styles/forms-buttons.css";
+@import "./styles/states-toast-skeleton.css";
+@import "./styles/production-polish.css";
+@import "./styles/product-finish.css";

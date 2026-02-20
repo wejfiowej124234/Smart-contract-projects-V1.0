@@ -1,0 +1,9 @@
+runId=7d5afbc9-5f33-49f6-a975-7b83faa8e2cb
+gitSha=9101e124660b6ec00947dec34a49e92c85c9445a
+appVersion=0.0.0
+manifestSha256=n/a
+timestamp=2026-02-17T09:54:28.563Z
+baseUrl=http://127.0.0.1:5173
+port=5173
+previewPid=16048
+exitCode=1

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supply, withdraw, borrow, repay, max, emptyPlaceholder, amountLabel, loading as loadingText, allowanceColon, sufficientLabel, needsApproveLabel, blockedPrefix, allowanceTooltip } from "../../config/ui";
+import { supply, withdraw, borrow, repay, max, emptyPlaceholder, amountLabel, loading as loadingText, allowanceColon, sufficientLabel, needsApproveLabel, blockedPrefix, allowanceTooltip, errorContractReadFailedShort } from "../../config/ui";
 import type { ActionCardProps } from "../../types/dashboard";
 
 const ACTION_LABELS: Record<ActionCardProps["type"], string> = {
@@ -90,6 +90,13 @@ export function ActionCard({
               </span>
             </>
           )}
+          {allowanceStatus.error && (
+            <span className="errorText actionCardAllowanceError" role="alert" title={allowanceStatus.error}>
+              {allowanceStatus.error.length > 80 && allowanceStatus.error.includes("Contract read failed")
+                ? errorContractReadFailedShort
+                : allowanceStatus.error}
+            </span>
+          )}
         </div>
       )}
       {cardHint && <p className="muted cardHint" role="note">{cardHint}</p>}
@@ -109,7 +116,7 @@ export function ActionCard({
           buttonLabel
         )}
       </button>
-      {hasTouched && actionDisabledReason && (
+      {(hasTouched || disabled) && actionDisabledReason && (
         <div className="actionDisabledReason" role="alert">{blockedPrefix}{actionDisabledReason}</div>
       )}
     </div>

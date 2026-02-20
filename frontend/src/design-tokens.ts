@@ -1,5 +1,6 @@
 /**
  * Design tokens — single source for colors, spacing, radius, font, shadow.
+ * F6 Tech UI: bg/surface/border/text/accent/warn/success; radius 8/12/16; shadow soft+glow; spacing 4/8/12/16/24/32; typography.
  * Injected into :root in index.css. Components use var(--color-*), var(--spacing-*), etc. only.
  */
 
@@ -10,6 +11,8 @@
 export const colors = {
   primary: "#4f46e5",
   primaryHover: "#4338ca",
+  /** F6: alias for primary (accent) */
+  accent: "#4f46e5",
   success: "#059669",
   warning: "#d97706",
   danger: "#dc2626",
@@ -31,6 +34,8 @@ export const spacing = {
   md: "12px",
   lg: "16px",
   xl: "24px",
+  /** F6: 32px spacing */
+  xxl: "32px",
   listIndent: "18px",
 } as const;
 
@@ -52,6 +57,8 @@ export const radius = {
   sm: "6px",
   md: "8px",
   lg: "12px",
+  /** F6: 16px radius */
+  xl: "16px",
   pill: "999px",
   card: "10px",
 } as const;
@@ -67,6 +74,14 @@ export const fontSize = {
   md: "1rem",
   lg: "1.125rem",
   xl: "1.25rem",
+} as const;
+
+/** F6: typography roles — title / number / body / caption */
+export const typography = {
+  title: "var(--fontSize-xl)",
+  number: "var(--fontSize-lg)",
+  body: "var(--fontSize-md)",
+  caption: "var(--fontSize-sm)",
 } as const;
 
 export const opacity = {
@@ -88,6 +103,10 @@ export const fontWeight = {
 export const shadow = {
   sm: "0 1px 3px rgba(15,23,42,0.06)",
   md: "0 4px 6px -1px rgba(15,23,42,0.08), 0 2px 4px -2px rgba(15,23,42,0.04)",
+  /** F6: soft shadow for cards */
+  soft: "0 2px 8px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04)",
+  /** F6: glow (theme-specific in CSS) */
+  glow: "0 0 20px rgba(79, 70, 229, 0.15)",
 } as const;
 
 export const zIndex = {

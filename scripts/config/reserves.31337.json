@@ -1,0 +1,12 @@
+{
+  "description": "Reserve config for local chain (chainId 31337). Aligns with project-upgrade 02-资产清单.",
+  "reserves": [
+    {
+      "asset": "USD8",
+      "symbol": "USD8",
+      "ltv": 75,
+      "liquidationThreshold": 80,
+      "interestRateStrategy": "LinearRateStrategy"
+    }
+  ]
+}

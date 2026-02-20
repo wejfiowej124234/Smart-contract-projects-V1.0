@@ -1,0 +1,30 @@
+{
+  "mode": "real",
+  "description": "Deploy-Ready: sepolia / mainnet / L2 mainnet, real oracle, B1–B4/R1 enforced",
+  "chainIds": [1, 11155111, 10, 42161, 8453, 534352, 421614],
+  "oracle": {
+    "type": "chainlink",
+    "feeds": {},
+    "heartbeatSeconds": 3600,
+    "minAnswer": 0,
+    "maxAnswer": "100000000000"
+  },
+  "tokens": {},
+  "reservesConfigPath": null,
+  "governance": {
+    "guardian": null,
+    "timelockMinDelaySeconds": 86400,
+    "votingDelayBlocks": 1,
+    "votingPeriodBlocks": 45818,
+    "proposalThreshold": 0,
+    "quorumNumerator": 4
+  },
+  "securityGate": {
+    "allowEoaChainIds": [11155111, 5, 421614],
+    "allowSkipB1B2B3": false,
+    "allowSkipB4": false,
+    "allowSkipR1": false,
+    "requireB4EvidenceOnL2Mainnet": true
+  },
+  "b4EvidenceSigners": []
+}

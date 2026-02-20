@@ -1,0 +1,245 @@
+/**
+ * Production-Polish: consistent information hierarchy, state feedback, and visual weight.
+ * Does not change tech-style tokens; only spacing, grouping, and state presentation.
+ */
+
+/* ----- Page intro (muted line under section title) ----- */
+.pageIntro {
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--fontSize-sm);
+  color: var(--color-textMuted);
+}
+
+/* ----- Unified state feedback (loading / error / empty) ----- */
+.pageStateLoading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) 0;
+  font-size: var(--fontSize-sm);
+  color: var(--color-textMuted);
+}
+.pageStateLoading::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-pill);
+  animation: productionPolishSpinner 0.7s linear infinite;
+}
+@keyframes productionPolishSpinner {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pageStateLoading::before {
+    animation: none;
+    border-top-color: var(--color-textMuted);
+  }
+}
+
+.pageStateError {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--color-surfaceWarn);
+  border: 1px solid var(--color-warning);
+  font-size: var(--fontSize-sm);
+  color: var(--color-text);
+}
+.pageStateError [role="alert"] {
+  margin: 0;
+}
+.pageStateError .errorText {
+  color: var(--color-danger);
+}
+
+.pageStateEmpty {
+  padding: var(--spacing-xl) var(--spacing-md);
+  text-align: center;
+  font-size: var(--fontSize-sm);
+  color: var(--color-textMuted);
+  border-radius: var(--radius-md);
+  background: var(--color-surfaceAlt);
+  border: 1px dashed var(--color-border);
+}
+.pageStateEmptyCell {
+  padding: var(--spacing-lg) var(--spacing-md);
+  text-align: center;
+  font-size: var(--fontSize-sm);
+  color: var(--color-textMuted);
+}
+
+/* ----- Content block spacing (between major sections) ----- */
+.contentBlock {
+  margin-top: var(--spacing-xl);
+}
+.contentBlock + .contentBlock {
+  margin-top: var(--spacing-xl);
+}
+
+/* ----- Dashboard: content region and first-block spacing ----- */
+.dashboardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.dashboardContent .dashboardKpiBar {
+  margin-top: var(--spacing-md);
+}
+.dashboardContent .txStatusBlock {
+  margin-top: var(--spacing-sm);
+}
+.dashboardContent .inlineError {
+  margin-bottom: var(--spacing-md);
+}
+
+/* ----- Markets: section hierarchy and card emphasis ----- */
+.marketsSection .marketsGrid {
+  margin-top: var(--spacing-lg);
+}
+.marketsSection .marketCard {
+  min-height: 0;
+}
+.marketCardValue--primary {
+  font-size: var(--fontSize-xl);
+  font-weight: var(--fontWeight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- Governance: subsection spacing and table clarity ----- */
+.governanceSection .sectionSubtitle {
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+}
+.governanceSection .sectionSubtitle:first-of-type {
+  margin-top: var(--spacing-lg);
+}
+.governanceSection .governanceTableWrap {
+  margin-top: var(--spacing-md);
+}
+.governanceSection .governanceMyInfoCard {
+  margin-bottom: 0;
+}
+.proposalTable thead th {
+  font-size: var(--fontSize-xs);
+  font-weight: var(--fontWeight-semibold);
+  color: var(--color-textMuted);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+.proposalTable tbody td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  vertical-align: middle;
+}
+
+/* ----- CTA grouping: primary action prominence ----- */
+.actionsCtaGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+.actionsCtaGroup .btnPrimary {
+  font-weight: var(--fontWeight-semibold);
+}
+
+/* ----- Shippable: data provenance + success link ----- */
+.dataProvenanceBlock {
+  margin-top: var(--spacing-sm);
+  font-size: var(--fontSize-sm);
+}
+.dataProvenanceSummary {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: var(--fontWeight-medium);
+  list-style: none;
+}
+.dataProvenanceSummary::-webkit-details-marker { display: none; }
+.dataProvenanceSummary::before { content: "▸ "; }
+.dataProvenanceBlock[open] .dataProvenanceSummary::before { content: "▾ "; }
+.dataProvenanceContent {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid var(--color-border);
+}
+.dataProvenanceRow {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xxs);
+}
+.dataProvenanceLabel {
+  min-width: 5rem;
+  color: var(--color-textMuted);
+}
+.dataProvenanceValue { font-variant-numeric: tabular-nums; }
+.dataProvenanceLink {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.dataProvenanceLink:hover { text-decoration: underline; }
+.dataProvenanceFormula {
+  margin-top: var(--spacing-sm);
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+.dataProvenanceHint {
+  margin: var(--spacing-xs) 0 var(--spacing-md);
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+.txSuccessActivityLink {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--fontSize-sm);
+}
+.txSuccessActivityLink .navLink {
+  font-weight: var(--fontWeight-medium);
+}
+.governanceFlowHint {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--fontSize-xs);
+}
+
+/* ----- Shippable: numeric readability (contrast already from tokens) ----- */
+.metricValue,
+.poolHeroValue,
+.dashboardKpiValue,
+.governanceKpiValue,
+.marketCardValue {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- Shippable: mobile & narrow-screen ----- */
+@media (max-width: 640px) {
+  .dashboardContent .dashboardKpiBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .governanceKpiGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .governanceSection .governanceMyInfoCard .governanceMyInfoRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xxs);
+  }
+  .proposalTable thead th,
+  .proposalTable tbody td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--fontSize-xs);
+  }
+  .proposalTable .proposalTitleCell .proposalTitleText {
+    max-width: 120px;
+  }
+}
+@media (max-width: 480px) {
+  .governanceKpiGrid {
+    grid-template-columns: 1fr;
+  }
+  .actionsCtaGroup {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

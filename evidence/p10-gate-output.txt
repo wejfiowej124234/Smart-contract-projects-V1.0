@@ -1,0 +1,25 @@
+P10 Local-Only Gate: running gate-validation unit tests (mandatory pre-step)...
+P10 Local-Only Gate: gate-validation passed, checking port 8545...
+P10 Local-Only Gate: starting local chain...
+P10 Local-Only Gate: chain ready (eth_chainId=0x7a69), genesisBlockHash captured, running p10:ci...
+P10 Local-Only Gate: p10:ci failed (exit 1). Gate blocked.
+EVIDENCE-PACK-MANIFEST-SHA256: 16fdfda5608130216b47e20e7aa163e2ccaee6fcdfea4b488fc536733a1ffa71
+COMMIT_SHA: 9101e124660b6ec00947dec34a49e92c85c9445a
+NODE_VERSION: v22.14.0
+NPM_VERSION: n/a
+OS: win32/10.0.26100
+DIAGNOSTIC: n/a
+SENTINEL: n/a
+
+--- Release-Proof Evidence Chain (four anchors + manifest) ---
+MANIFEST_SHA256_PRE_BIND: 16fdfda5608130216b47e20e7aa163e2ccaee6fcdfea4b488fc536733a1ffa71
+MANIFEST_SHA256_FINAL: 16fdfda5608130216b47e20e7aa163e2ccaee6fcdfea4b488fc536733a1ffa71
+ANCHOR_COMMIT: 9101e124660b6ec00947dec34a49e92c85c9445a
+ANCHOR_NODE: v22.14.0
+ANCHOR_NPM: n/a
+ANCHOR_OS: win32/10.0.26100
+DIAGNOSTIC_PASSED: false
+SENTINEL_PASSED: false
+FAIL_REASON: P10_CI_FAILED
+
+P10 Local-Only Gate: evidence-pack/ generated (minimal) for forensics. Gate blocked.

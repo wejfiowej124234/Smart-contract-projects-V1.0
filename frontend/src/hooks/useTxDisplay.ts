@@ -17,6 +17,8 @@ import {
   hintTextConfirmed,
   hintTextFailed,
   hintTextUserRejected,
+  signingPendingLongHint,
+  signingPendingTroubleshootingLabel,
   stepPrefix1of2,
   stepPrefix2of2,
   stepPrefix1of3,
@@ -28,8 +30,18 @@ import {
   repay,
   approveLabelUsd8,
   approveLabelUsd8Reset,
+  txLifecycleSigning,
+  txLifecycleSubmitted,
+  txLifecyclePending,
+  txLifecycleConfirmed,
+  txLifecycleFailed,
+  txLifecycleReplaced,
+  txConfirmedInTemplate,
+  txConfirmedInClientClockHint,
+  txBlockConfirmationsTemplate,
 } from "../config/ui";
-import { TX_ELAPSED_INTERVAL_MS } from "../config/runtime";
+import { revertSuggestions } from "../config/ui";
+import { TX_ELAPSED_INTERVAL_MS, SIGNING_PENDING_HINT_AFTER_MS } from "../config/runtime";
 import { formatLocalTime } from "../utils/format";
 
 const STAGE_TEXT: Record<string, string> = {
@@ -100,6 +112,13 @@ export function useTxDisplay(params: {
     return HINT_TEXT[tx.stage];
   }, [tx.stage, tx.error?.kind]);
 
+  const signingPendingHint = useMemo(() => {
+    if (tx.stage !== "signing" || !tx.startedAtMs) return undefined;
+    const elapsed = nowMs - tx.startedAtMs;
+    if (elapsed < SIGNING_PENDING_HINT_AFTER_MS) return undefined;
+    return { text: signingPendingLongHint, troubleshootingLabel: signingPendingTroubleshootingLabel };
+  }, [tx.stage, tx.startedAtMs, nowMs]);
+
   const errorTitle = useMemo(() => {
     const e = tx.error;
     if (!e) return undefined;
@@ -135,6 +154,46 @@ export function useTxDisplay(params: {
     return parts.length ? parts.join(" · ") : "";
   }, [tx.confirmedAtMs, tx.stage, tx.startedAtMs, tx.submittedAtMs, txTick]);
 
+  const confirmedInSeconds = tx.confirmedInSeconds ?? (tx.confirmedAtMs != null && tx.submittedAtMs != null ? Math.max(0, Math.floor((tx.confirmedAtMs - tx.submittedAtMs) / 1000)) : undefined);
+  const confirmedInText = useMemo(() => {
+    if (tx.stage !== "confirmed" && tx.stage !== "failed") return undefined;
+    if (confirmedInSeconds == null) return undefined;
+    return txConfirmedInTemplate.replace("{s}", String(confirmedInSeconds));
+  }, [tx.stage, confirmedInSeconds]);
+  const confirmedInHintText = tx.stage === "confirmed" || tx.stage === "failed" ? txConfirmedInClientClockHint : undefined;
+  const blockConfirmationsText = useMemo(() => {
+    if (tx.stage !== "confirmed" || tx.blockNumber == null) return undefined;
+    const n = tx.confirmations ?? 1;
+    return txBlockConfirmationsTemplate.replace("{block}", String(tx.blockNumber)).replace("{n}", String(n));
+  }, [tx.stage, tx.blockNumber, tx.confirmations]);
+
+  const lifecycleSteps = useMemo(() => {
+    const steps: Array<{ step: string; state: "done" | "current" | "pending"; label: string; sublabel?: string }> = [];
+    const add = (step: string, state: "done" | "current" | "pending", label: string, sublabel?: string) => {
+      steps.push({ step, state, label, sublabel });
+    };
+    add("signing", tx.stage === "signing" ? "current" : tx.startedAtMs ? "done" : "pending", txLifecycleSigning);
+    add("submitted", tx.submittedAtMs ? "done" : tx.stage === "signing" ? "pending" : "pending", txLifecycleSubmitted);
+    add("pending", tx.stage === "pending" || tx.stage === "stuck" ? "current" : tx.submittedAtMs && tx.stage !== "signing" ? "done" : "pending", txLifecyclePending);
+    if (tx.stage === "confirmed" || tx.outcome === "confirmed") {
+      add("confirmed", "done", txLifecycleConfirmed, confirmedInText ? `${confirmedInText} (${txConfirmedInClientClockHint})` : undefined);
+    } else if (tx.stage === "failed" || tx.outcome === "failed" || tx.outcome === "replaced") {
+      add(tx.outcome === "replaced" ? "replaced" : "failed", "done", tx.outcome === "replaced" ? txLifecycleReplaced : txLifecycleFailed);
+    } else {
+      add("confirmed", "pending", txLifecycleConfirmed);
+    }
+    return steps;
+  }, [tx.stage, tx.outcome, tx.startedAtMs, tx.submittedAtMs, confirmedInText]);
+
+  const suggestion = useMemo(() => {
+    if (!tx.error?.message) return undefined;
+    const raw = tx.error.meta?.rawMessage as string | undefined;
+    for (const [key, val] of Object.entries(revertSuggestions)) {
+      if (raw?.includes(key) || tx.error?.message?.includes(val.title)) return val.suggestion;
+    }
+    return undefined;
+  }, [tx.error]);
+
   const onCopyHash = async () => {
     if (!tx.hash) return;
     try {
@@ -153,6 +212,7 @@ export function useTxDisplay(params: {
     stageClass,
     stepText,
     hintText,
+    signingPendingHint,
     errorTitle,
     elapsed,
     timingText,
@@ -161,5 +221,10 @@ export function useTxDisplay(params: {
     onToggleDetails: () => setDetailsOpen((v) => !v),
     onRefreshPending: refreshPendingTx,
     onClearPending: clearPendingTx,
+    lifecycleSteps,
+    confirmedInText,
+    confirmedInHintText,
+    blockConfirmationsText,
+    suggestion,
   };
 }

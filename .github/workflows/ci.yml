@@ -19,6 +19,8 @@ jobs:
         run: npm run compile
       - name: Test
         run: npm run test
+      - name: Gate validation (release-proof)
+        run: npm run test:gate-validation
 
   frontend:
     runs-on: ubuntu-latest
@@ -38,3 +40,32 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
+
+  security-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Compile
+        run: npm run compile
+      - name: Security Gate (requires deployments; skip if missing)
+        run: |
+          if [ -f deployments/31337.json ]; then
+            npx hardhat security-gate --network hardhat
+          else
+            echo "No deployments/31337.json; skipping security-gate (run deploy first)"
+          fi
+      - name: B4 L2 evidence check (when CI_L2_CHAIN_ID set)
+        run: |
+          if [ -n "${{ env.CI_L2_CHAIN_ID }}" ]; then
+            CI_L2_CHAIN_ID="${{ env.CI_L2_CHAIN_ID }}" npx hardhat run scripts/security-gate/check-b4-evidence.ts
+          else
+            echo "CI_L2_CHAIN_ID not set; skipping B4 evidence check"
+          fi
+        env:
+          CI_L2_CHAIN_ID: ""

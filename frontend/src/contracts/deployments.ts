@@ -6,6 +6,26 @@ export type Deployments = {
   usd8Address: string;
   wethAddress: string;
   simpleLendingAddress: string;
+  /** P5: aToken (supply receipt) address; optional until P5 deploy. */
+  aTokenAddress?: string;
+  /** P5: variableDebtToken (borrow debt) address; optional until P5 deploy. */
+  variableDebtTokenAddress?: string;
+  /** P6: Oracle router address; optional until P6 deploy. */
+  oracleRouterAddress?: string;
+  /** Security gate B1: ProxyAdmin address. */
+  proxyAdminAddress?: string;
+  /** PoolConfigurator address; admin check. */
+  configuratorAddress?: string;
+  /** Mock mode only: MockAggregator for scenarios. */
+  mockAggregatorAddress?: string;
+  /** P9: Governor (GovernorP9) address; optional until P9 deploy. */
+  governorAddress?: string;
+  /** P9: Governance token (GOV) address; optional until P9 deploy. */
+  governanceTokenAddress?: string;
+  /** P9: TimelockController address; optional until P9 deploy. */
+  timelockAddress?: string;
+  /** P9: EmergencyModule address. */
+  emergencyModuleAddress?: string;
 };
 
 /** Multi-chain: deployments.json is Record<chainId, Deployments> keyed by string. Legacy: single object. */
@@ -49,6 +69,6 @@ function getDefaultDeployments(): Deployments {
   if (entry) return entry;
   const first = Object.values(deploymentsMap)[0];
   if (first) return first;
-  throw new Error("Deployments map is empty. Run the deploy script (e.g. npx hardhat run scripts/deploy.ts --network localhost) first.");
+  throw new Error("Deployments map is empty. Run npm run deploy:localhost (and npm run deploy:p9 if needed) first.");
 }
 export const deployments: Deployments = getDefaultDeployments();

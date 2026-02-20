@@ -4,6 +4,7 @@ import {
   connectWalletHint,
   connected,
   disconnectWallet,
+  disconnectWalletHint,
   installMetaMask,
   metaMaskMissing,
   wrongNetwork,
@@ -72,6 +73,7 @@ export function Header({
               className="btn btnSecondary btnSmall"
               onClick={onDisconnect}
               aria-label={disconnectWallet}
+              title={disconnectWalletHint}
             >
               {disconnectWallet}
             </button>

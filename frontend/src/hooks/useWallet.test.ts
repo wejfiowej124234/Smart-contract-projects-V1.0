@@ -1,16 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
+import React from "react";
+import { WalletProvider } from "./useWallet";
 
 // Mock network config to keep the test deterministic (DEFAULT_CHAIN_ID required for switchToExpectedChain)
-vi.mock("../config/network", () => {
-  return {
-    AUTO_ADD_CHAIN: false,
-    DEFAULT_CHAIN_ID: 31337,
-    EXPECTED_CHAIN_ID: 31337,
-    EXPECTED_CHAIN_NAME: "Local (31337)",
-    LOCAL_RPC_URL: undefined,
-  };
-});
+vi.mock("../config/network", () => ({
+  AUTO_ADD_CHAIN: false,
+  DEFAULT_CHAIN_ID: 31337,
+  EXPECTED_CHAIN_ID: 31337,
+  EXPECTED_CHAIN_NAME: "Local (31337)",
+  LOCAL_RPC_URL: undefined,
+  getRpcUrls: () => [],
+}));
 
 type RequestArgs = { method: string; params?: unknown[] };
 
@@ -20,7 +21,8 @@ describe("useWallet", () => {
     Reflect.deleteProperty(window as unknown as Record<string, unknown>, "ethereum");
 
     const { useWallet } = await import("./useWallet");
-    const { result } = renderHook(() => useWallet());
+    const wrapper = ({ children }: { children: React.ReactNode }) => React.createElement(WalletProvider, null, children);
+    const { result } = renderHook(() => useWallet(), { wrapper });
 
     await act(async () => {
       await result.current.refresh();
@@ -49,7 +51,8 @@ describe("useWallet", () => {
     (window as unknown as Record<string, unknown>).ethereum = ethereum;
 
     const { useWallet } = await import("./useWallet");
-    const { result } = renderHook(() => useWallet());
+    const wrapper = ({ children }: { children: React.ReactNode }) => React.createElement(WalletProvider, null, children);
+    const { result } = renderHook(() => useWallet(), { wrapper });
 
     await act(async () => {
       await result.current.connect();

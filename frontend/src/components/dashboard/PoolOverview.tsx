@@ -3,6 +3,10 @@ import {
   poolTitle,
   poolTotalSupplyLabel,
   poolTotalBorrowLabel,
+  poolTotalsLabel,
+  poolSuppliedShortLabel,
+  poolBorrowedShortLabel,
+  poolTotalsUnitTooltipSuffix,
   poolUtilizationRateLabel,
   poolSupplyRateLabel,
   poolBorrowRateLabel,
@@ -35,13 +39,15 @@ export function PoolOverview({
   borrowRate,
   formatToken,
   formatPercent,
+  symbol,
 }: PoolOverviewProps) {
   const totalSupplyStr = typeof totalSupply === "string" ? totalSupply : (formatToken ? formatToken(totalSupply, DEFAULT_DECIMALS) : totalSupply.toString());
   const totalBorrowStr = typeof totalBorrow === "string" ? totalBorrow : (formatToken ? formatToken(totalBorrow, DEFAULT_DECIMALS) : totalBorrow.toString());
   const utilizationStr = fmt(utilization, formatToken, formatPercent);
   const supplyRateStr = fmt(supplyRate, formatToken, formatPercent);
   const borrowRateStr = fmt(borrowRate, formatToken, formatPercent);
-  const isEmpty = totalSupplyStr === "0" && totalBorrowStr === "0";
+  const isZero = (s: string) => s === "0" || s === "0.00" || (parseFloat(s) === 0 && s !== emptyPlaceholder);
+  const isEmpty = isZero(totalSupplyStr) && isZero(totalBorrowStr);
   const displaySupply = formatNumericDisplay(isEmpty ? emptyPlaceholder : totalSupplyStr);
   const displayBorrow = formatNumericDisplay(isEmpty ? emptyPlaceholder : totalBorrowStr);
   const displayUtil = formatNumericDisplay(isEmpty ? emptyPlaceholder : utilizationStr);
@@ -65,16 +71,17 @@ export function PoolOverview({
       </div>
       <div className="metricGrid metricGrid--market">
         <div className="metricItem">
-          <span className="metricLabel">{poolTotalSupplyLabel}</span>
-          <span className="metricValue">{displaySupply}</span>
-        </div>
-        <div className="metricItem">
-          <span className="metricLabel">{poolTotalBorrowLabel}</span>
-          <span className="metricValue">{displayBorrow}</span>
-        </div>
-        <div className="metricItem">
           <span className="metricLabel" title={utilizationRateTooltip}>{poolUtilizationRateLabel}</span>
           <span className="metricValue">{displayUtil}</span>
+        </div>
+        <div className="metricItem">
+          <span className="metricLabel">
+            {poolTotalsLabel}
+            {symbol && <span className="metricLabelUnit muted" title={poolTotalsUnitTooltipSuffix}> ({symbol})</span>}
+          </span>
+          <span className="metricValue muted" title={`${poolTotalSupplyLabel}: ${displaySupply}; ${poolTotalBorrowLabel}: ${displayBorrow}. ${poolTotalsUnitTooltipSuffix}`}>
+            {isEmpty ? emptyPlaceholder : `${displaySupply} ${poolSuppliedShortLabel} / ${displayBorrow} ${poolBorrowedShortLabel}`}
+          </span>
         </div>
       </div>
       {!isEmpty && (

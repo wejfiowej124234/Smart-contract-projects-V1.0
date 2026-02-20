@@ -5,7 +5,7 @@ Use this checklist to verify the app end-to-end and catch regressions (e.g. BigI
 ## Prerequisites
 
 - `npx hardhat node` running
-- `npx hardhat run scripts/deploy.ts --network localhost` done
+- `npm run deploy:localhost` done
 - `cd frontend && npm run dev` running
 - MetaMask connected to Hardhat Local (31337)
 

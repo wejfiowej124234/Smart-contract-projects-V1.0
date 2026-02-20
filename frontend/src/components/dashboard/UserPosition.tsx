@@ -19,7 +19,7 @@ import {
   positionEmptyCtaLabel,
   emptyPlaceholder,
 } from "../../config/ui";
-import { healthFactorColor, healthFactorStatusText, formatHealthFactorForDisplay, formatWithThousandsSeparator } from "../../utils/format";
+import { healthFactorColor, healthFactorStatusText, formatHealthFactorForDisplay, formatWithThousandsSeparator, formatHeadroomDisplay } from "../../utils/format";
 import type { UserPositionProps } from "../../types/dashboard";
 
 export function UserPosition({
@@ -29,20 +29,32 @@ export function UserPosition({
   maxWithdraw,
   maxBorrow,
   healthColor,
+  tokenDecimals,
   formatToken,
 }: UserPositionProps) {
-  const suppliedStr = typeof supplied === "string" ? supplied : (formatToken ? formatToken(supplied, DEFAULT_DECIMALS) : supplied.toString());
-  const borrowedStr = typeof borrowed === "string" ? borrowed : (formatToken ? formatToken(borrowed, DEFAULT_DECIMALS) : borrowed.toString());
+  const decimals = tokenDecimals ?? DEFAULT_DECIMALS;
+  const suppliedStr = typeof supplied === "string" ? supplied : (formatToken ? formatToken(supplied, decimals) : supplied.toString());
+  const borrowedStr = typeof borrowed === "string" ? borrowed : (formatToken ? formatToken(borrowed, decimals) : borrowed.toString());
   const color = healthColor ?? (typeof healthFactor === "bigint" ? healthFactorColor(healthFactor) : undefined);
   const healthStatusText = typeof healthFactor === "bigint" ? healthFactorStatusText(healthFactor) : null;
   const isEmpty = suppliedStr === "0" && borrowedStr === "0";
   const isHealthCritical = healthStatusText === healthFactorStatusDanger && !isEmpty;
-  const maxWithdrawStr = typeof maxWithdraw === "string" ? maxWithdraw : (formatToken ? formatToken(maxWithdraw, DEFAULT_DECIMALS) : maxWithdraw.toString());
-  const maxBorrowStr = typeof maxBorrow === "string" ? maxBorrow : (formatToken ? formatToken(maxBorrow, DEFAULT_DECIMALS) : maxBorrow.toString());
+  const maxWithdrawHeadroom =
+    typeof maxWithdraw === "string"
+      ? { display: maxWithdraw, tooltip: undefined as string | undefined }
+      : formatToken
+        ? formatHeadroomDisplay(maxWithdraw, decimals, (v, d) => formatToken(v, d))
+        : { display: maxWithdraw.toString(), tooltip: undefined };
+  const maxBorrowHeadroom =
+    typeof maxBorrow === "string"
+      ? { display: maxBorrow, tooltip: undefined as string | undefined }
+      : formatToken
+        ? formatHeadroomDisplay(maxBorrow, decimals, (v, d) => formatToken(v, d))
+        : { display: maxBorrow.toString(), tooltip: undefined };
   const displaySupplied = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(suppliedStr);
   const displayBorrowed = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(borrowedStr);
-  const displayMaxWithdraw = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(maxWithdrawStr);
-  const displayMaxBorrow = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(maxBorrowStr);
+  const displayMaxWithdraw = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(maxWithdrawHeadroom.display);
+  const displayMaxBorrow = isEmpty ? emptyPlaceholder : formatWithThousandsSeparator(maxBorrowHeadroom.display);
   const isInfiniteHealth = healthStatusText === healthFactorStatusInfinite;
   const displayHealthVal =
     isEmpty || isInfiniteHealth
@@ -78,11 +90,11 @@ export function UserPosition({
         </div>
         <div className="metricItem">
           <span className="metricLabel" title={maxWithdrawTooltip}>{positionMaxWithdrawLabel}</span>
-          <span className="metricValue">{displayMaxWithdraw}</span>
+          <span className="metricValue" title={maxWithdrawHeadroom.tooltip ?? maxWithdrawTooltip}>{displayMaxWithdraw}</span>
         </div>
         <div className="metricItem">
           <span className="metricLabel">{positionMaxBorrowLabel}</span>
-          <span className="metricValue">{displayMaxBorrow}</span>
+          <span className="metricValue" title={maxBorrowHeadroom.tooltip}>{displayMaxBorrow}</span>
         </div>
       </div>
       <p className="muted healthFactorThresholdHint" aria-hidden="true">{healthFactorThresholdHint}</p>

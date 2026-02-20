@@ -4,8 +4,11 @@ import path from "node:path";
 import net from "node:net";
 
 const ROOT = path.resolve(process.cwd());
-const RPC_HOST = process.env.RPC_HOST ?? "127.0.0.1";
-const RPC_PORT = Number(process.env.RPC_PORT ?? 8545);
+/** RPC URL: single source of truth per docs/09 (http://127.0.0.1:8545). Override via LOCAL_RPC_URL. */
+const { RPC_URL } = await import(path.join(ROOT, "configs", "localChain.mjs"));
+const RPC_URL_PARSED = new URL(RPC_URL);
+const RPC_HOST = process.env.RPC_HOST ?? RPC_URL_PARSED.hostname;
+const RPC_PORT = Number(process.env.RPC_PORT ?? RPC_URL_PARSED.port || 8545);
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -104,8 +107,13 @@ async function main() {
     assert(fs.existsSync(usd8AbiPath), `Missing ${usd8AbiPath}`);
     assert(fs.existsSync(lendingAbiPath), `Missing ${lendingAbiPath}`);
 
-    const frontendDeployments = readJson(frontendDeploymentsPath);
-    assert(typeof frontendDeployments.chainId === "number", `Expected numeric chainId in ${frontendDeploymentsPath}`);
+    const frontendDeploymentsRaw = readJson(frontendDeploymentsPath);
+    // Support both multi-chain format { "31337": { chainId, ... } } and legacy single { chainId, ... }
+    const frontendDeployments =
+      typeof frontendDeploymentsRaw.chainId === "number"
+        ? frontendDeploymentsRaw
+        : frontendDeploymentsRaw["31337"] ?? Object.values(frontendDeploymentsRaw)[0];
+    assert(frontendDeployments && typeof frontendDeployments.chainId === "number", `Expected chainId in ${frontendDeploymentsPath}`);
     const chainId = frontendDeployments.chainId;
 
     const deploymentsPath = path.join(ROOT, "deployments", `${chainId}.json`);
@@ -123,7 +131,7 @@ async function main() {
     console.log("[smoke:e2e] Running chain interaction smoke using exported ABIs...");
 
     const { JsonRpcProvider, Contract, parseUnits } = await import("ethers");
-    const provider = new JsonRpcProvider(`http://${RPC_HOST}:${RPC_PORT}`);
+    const provider = new JsonRpcProvider(RPC_URL);
 
     const usd8AbiJson = readJson(usd8AbiPath);
     const lendingAbiJson = readJson(lendingAbiPath);

@@ -1,3 +1,88 @@
+/* F2: Dashboard KPI bar (blueprint §10.2) */
+.dashboardKpiBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-bg-card);
+  border: var(--borderWidth) solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.dashboardKpiItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+}
+.dashboardKpiLabel {
+  font-size: var(--fontSize-xs);
+  color: var(--color-text-secondary, var(--color-textMuted));
+}
+.dashboardKpiValue {
+  font-size: var(--fontSize-lg);
+  font-weight: var(--fontWeight-bold);
+  color: var(--color-hero-value);
+}
+.dashboardKpiBar--skeleton .skeletonKpiLabel,
+.dashboardKpiBar--skeleton .skeletonKpiValue {
+  display: block;
+  height: 0.875rem;
+  border-radius: var(--radius-sm);
+}
+.dashboardKpiBar--skeleton .skeletonKpiValue {
+  height: 1.125rem;
+  margin-top: var(--spacing-xxs);
+}
+
+/* Health factor band: ≥1.5 green, 1.1–1.5 yellow, <1 red */
+.dashboardKpiHealth.dashboardKpiHealth--safe .dashboardKpiValue { color: var(--color-success); }
+.dashboardKpiHealth.dashboardKpiHealth--warn .dashboardKpiValue { color: var(--color-warning); }
+.dashboardKpiHealth.dashboardKpiHealth--danger .dashboardKpiValue { color: var(--color-danger); }
+.dashboardKpiHealth.dashboardKpiHealth--infinite .dashboardKpiValue { color: var(--color-success); }
+
+/* Danger zone: red pulse animation */
+.dashboardKpiHealth--pulse.dashboardKpiHealth--danger {
+  animation: healthFactorDangerPulse 1.5s ease-in-out infinite;
+}
+@keyframes healthFactorDangerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+.dashboardKpiHealth--pulse.dashboardKpiHealth--danger .dashboardKpiValue {
+  filter: drop-shadow(0 0 6px var(--color-danger));
+}
+
+/* Borrow limit used: threshold bands + Aave-style bar */
+.dashboardKpiLimitUsedWrap { display: flex; flex-direction: column; gap: var(--spacing-xxs); }
+.dashboardKpiLimitUsedRow { display: flex; align-items: center; gap: var(--spacing-sm); }
+.dashboardKpiLimitUsedBar {
+  flex: 1;
+  min-width: 2rem;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.dashboardKpiLimitUsedBarFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.2s ease;
+}
+.dashboardKpiLimitUsed--safe .dashboardKpiLimitUsedBarFill { background: var(--color-success); }
+.dashboardKpiLimitUsed--safe .dashboardKpiValue { color: var(--color-success); }
+.dashboardKpiLimitUsed--warn .dashboardKpiLimitUsedBarFill { background: var(--color-warning); }
+.dashboardKpiLimitUsed--warn .dashboardKpiValue { color: var(--color-warning); }
+.dashboardKpiLimitUsed--danger .dashboardKpiLimitUsedBarFill { background: var(--color-danger); }
+.dashboardKpiLimitUsed--danger .dashboardKpiValue { color: var(--color-danger); }
+.dashboardKpiLimitUsed--overLimit .dashboardKpiLimitUsedBarFill { background: var(--color-danger); }
+.dashboardKpiLimitUsed--overLimit .dashboardKpiValue { color: var(--color-danger); }
+
+.dashboardKpiBar--riskHigh {
+  border-color: var(--color-warning);
+  box-shadow: 0 0 0 1px var(--color-warning);
+}
+
 /* Web3 cards: primary border + left accent in dark theme + hover emphasis */
 .card {
   border: var(--borderWidth) solid var(--color-card-border);
@@ -345,13 +430,18 @@
 }
 
 /* Aave-style: Supply/Withdraw/Borrow/Repay in fixed 2×2 */
-/* P4: Actions cards uniform height to avoid layout jump */
+/* P4: Actions cards uniform height; flex so submit buttons align at bottom */
 .actionsGrid {
   grid-template-columns: repeat(2, 1fr);
   align-items: stretch;
 }
 .actionsGrid .card {
   min-height: var(--actionCardMinHeight);
+  display: flex;
+  flex-direction: column;
+}
+.actionsGrid .card .actionCardSubmit {
+  margin-top: auto;
 }
 /* P6: Actions cards stagger entrance; respect reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
@@ -419,3 +509,129 @@
   margin-bottom: 0;
 }
 
+/* Risk viz card: HF progress bar, liquidation value, borrow usage ring */
+.riskVizCard {
+  margin-bottom: var(--spacing-lg);
+}
+.riskVizCardTitle {
+  margin-bottom: var(--spacing-md);
+}
+.riskVizGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+.riskVizItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+.riskVizItem--ring {
+  align-items: center;
+}
+.riskVizLabel {
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+.riskVizValue {
+  font-weight: var(--fontWeight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.riskVizValue--liquidation {
+  color: var(--color-warning);
+}
+.riskVizValue--margin {
+  color: var(--color-success);
+}
+.riskVizSubLabel {
+  display: block;
+  font-size: var(--fontSize-xs2);
+  margin-top: var(--spacing-xxs);
+}
+.riskVizHfBarWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+.riskVizHfBar--track {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surfaceAlt);
+  overflow: hidden;
+}
+.riskVizHfBar--fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.3s ease-out;
+}
+.riskVizHfBar--fill.riskVizHfBar--safe {
+  background: var(--color-success);
+}
+.riskVizHfBar--fill.riskVizHfBar--warn {
+  background: var(--color-warning);
+}
+.riskVizHfBar--fill.riskVizHfBar--danger {
+  background: var(--color-danger);
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+}
+.riskVizHfBar--fill.riskVizHfBar--infinite {
+  background: var(--color-success);
+}
+.riskVizHfBarLegend {
+  font-size: var(--fontSize-xs);
+  font-variant-numeric: tabular-nums;
+  min-width: 2.5rem;
+  text-align: right;
+}
+.riskVizHfBadge {
+  display: inline-block;
+  margin-top: var(--spacing-xxs);
+  font-size: var(--fontSize-xs2);
+  font-weight: var(--fontWeight-medium);
+  padding: 0.15em 0.5em;
+  border-radius: var(--radius-pill);
+}
+.riskVizHfBadge--safe { background: rgba(34, 197, 94, 0.15); color: var(--color-success); }
+.riskVizHfBadge--warn { background: rgba(234, 179, 8, 0.15); color: var(--color-warning); }
+.riskVizHfBadge--danger { background: rgba(239, 68, 68, 0.15); color: var(--color-danger); }
+.riskVizHfBadge--infinite { background: rgba(34, 197, 94, 0.12); color: var(--color-success); }
+.riskVizRingWrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.riskVizRing {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.riskVizRingTrack {
+  stroke: var(--color-surfaceAlt);
+  stroke-linecap: round;
+}
+.riskVizRingFill {
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.4s ease-out;
+}
+.riskVizRingFill--safe {
+  stroke: var(--color-success);
+}
+.riskVizRingFill--warn {
+  stroke: var(--color-warning);
+}
+.riskVizRingFill--danger {
+  stroke: var(--color-danger);
+  filter: drop-shadow(0 0 6px rgba(220, 38, 38, 0.5));
+}
+.riskVizRingValue {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fontSize-sm);
+  font-weight: var(--fontWeight-semibold);
+  font-variant-numeric: tabular-nums;
+}

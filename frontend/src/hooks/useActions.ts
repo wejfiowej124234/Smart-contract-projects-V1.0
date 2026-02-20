@@ -5,7 +5,11 @@ import { getWriteLending, getWriteToken } from "../contracts/write";
 import { runTxDetailed, TX_IDLE, type TxState } from "../state/tx";
 import { isUserRejected, normalizeError } from "../state/errors";
 import { requireAmountStrict } from "../utils/amount";
+import { logRpcError, logSendPath } from "../utils/rpcErrorLog";
+import { setSplitMatch } from "../state/sendPathEvidence";
 import { clearTx, loadPendingTx } from "../state/txStore";
+import { appendTxHistory } from "../state/txHistory";
+import { append as appendSessionEvidence } from "../state/sessionEvidence";
 import { POST_STATE_MAX_WAIT_MS, POST_STATE_POLL_INTERVAL_MS, TX_CONFIRMATIONS, TX_PENDING_TIMEOUT_MS } from "../config/runtime";
 import {
   supply as labelSupply,
@@ -39,6 +43,15 @@ function nowMs(): number {
   return Date.now();
 }
 
+/** True when the error is from a failed eth_call/estimateGas (no tx sent yet, so no popup). */
+function isCallException(err: unknown): boolean {
+  if (err == null) return false;
+  const o = err as { code?: string | number; message?: string };
+  const code = o?.code != null ? String(o.code) : "";
+  const msg = (o?.message ?? "") as string;
+  return code === "CALL_EXCEPTION" || /missing revert data|execution reverted/i.test(msg);
+}
+
 export function useActions(params: {
   provider?: BrowserProvider;
   account?: string;
@@ -49,8 +62,10 @@ export function useActions(params: {
   decimals: number;
   onConfirmed?: () => void;
   approveMode?: ApproveMode;
+  /** When false (readChainId !== walletChainId on 31337), write actions are disabled. */
+  splitMatch?: boolean;
 }) {
-  const { provider, account, chainId, usd8, lending, simpleLendingAddress, decimals, onConfirmed, approveMode = "exact" } = params;
+  const { provider, account, chainId, usd8, lending, simpleLendingAddress, decimals, onConfirmed, approveMode = "exact", splitMatch } = params;
   const [tx, setTx] = useState<TxState>(TX_IDLE);
 
   const ready = useMemo(
@@ -90,6 +105,9 @@ export function useActions(params: {
   }, []);
 
   const verifySeq = useRef(0);
+  const lastAppendedHashRef = useRef<string | null>(null);
+  /** Shippable: amount string for the in-flight tx so Activity history can show it. */
+  const lastSubmittedAmountRef = useRef<string>("");
 
   const readPosition = useCallback(async (): Promise<Position> => {
     if (!lending || !account) throw new Error(errorWalletNotConnected);
@@ -151,6 +169,43 @@ export function useActions(params: {
     },
     [readPosition, setTx],
   );
+
+  const lastTxSubmitHashRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (tx.stage !== "pending" || !tx.hash || !tx.label || chainId === undefined) return;
+    if (lastTxSubmitHashRef.current === tx.hash) return;
+    lastTxSubmitHashRef.current = tx.hash;
+    appendSessionEvidence("TxSubmit", { action: tx.label, txHash: tx.hash, chainId });
+  }, [tx.stage, tx.hash, tx.label, chainId]);
+
+  // F8: Append to Activity history when tx settles (confirmed/failed/dropped); once per hash.
+  useEffect(() => {
+    if (chainId === undefined || !account || !tx.hash || !tx.label) return;
+    const settled = tx.stage === "confirmed" || tx.stage === "failed" || (tx.stage === "stuck" && tx.outcome === "dropped");
+    if (!settled) return;
+    if (lastAppendedHashRef.current === tx.hash) return;
+    lastAppendedHashRef.current = tx.hash;
+    if (tx.stage === "confirmed") {
+      appendSessionEvidence("TxConfirm", { txHash: tx.hash, blockNumber: tx.blockNumber, gasUsed: tx.gasUsed });
+    } else {
+      const msg = tx.error?.message ?? "";
+      appendSessionEvidence("TxFail", { action: tx.label, kind: tx.error?.kind, messagePreview: msg.slice(0, 64) });
+    }
+    const amountStr = lastSubmittedAmountRef.current || "";
+    if (lastSubmittedAmountRef.current) lastSubmittedAmountRef.current = "";
+    appendTxHistory(chainId, account, {
+      type: tx.label,
+      asset: "USD8",
+      amount: amountStr,
+      txHash: tx.hash,
+      status: tx.stage === "confirmed" ? "success" : "failed",
+      blockNumber: tx.blockNumber,
+      gasUsed: tx.gasUsed,
+      outcome: tx.outcome,
+      replacementHash: tx.replacementHash,
+      droppedReason: tx.droppedReason,
+    });
+  }, [chainId, account, tx.stage, tx.hash, tx.label, tx.blockNumber, tx.gasUsed, tx.error?.message, tx.error?.kind, tx.outcome, tx.replacementHash, tx.droppedReason]);
 
   // Resume a pending tx after page refresh (best-effort).
   useEffect(() => {
@@ -248,18 +303,35 @@ export function useActions(params: {
 
       const desiredAllowance = approveMode === "infinite" ? MaxUint256 : requiredAmount;
 
+      setSplitMatch(splitMatch ?? true);
       const signer = await provider.getSigner();
+      const signerAddress = await signer.getAddress();
+      if (provider) {
+        try {
+          const network = await provider.getNetwork();
+          const pendingNonce = await provider.getTransactionCount(signerAddress, "pending");
+          logSendPath("preWrite.walletState", { walletChainId: Number(network.chainId), pendingNonce });
+        } catch {
+          // ignore
+        }
+      }
+      logSendPath("approve.signer", { signerAddress });
       const token = getWriteToken(usd8, signer);
 
       // Enterprise compatibility: some tokens require approve(0) before approve(non-zero).
       const doApprove = async (value: bigint, label: string) => {
+        logSendPath("approve.write", { label, value: value.toString() });
+        const baseOpts = chainId !== undefined
+          ? { persist: { chainId, account }, confirmations: TX_CONFIRMATIONS, provider }
+          : { confirmations: TX_CONFIRMATIONS, provider };
         return runTxDetailed(
           label,
           () => token.approve(simpleLendingAddress!, value),
           setTx,
-          chainId !== undefined
-            ? { persist: { chainId, account }, confirmations: TX_CONFIRMATIONS }
-            : { confirmations: TX_CONFIRMATIONS },
+          {
+            ...baseOpts,
+            meta: { chainId, contractAddress: (usd8 as { target?: string })?.target, method: "approve", args: [simpleLendingAddress, value.toString()] },
+          },
         );
       };
 
@@ -271,6 +343,34 @@ export function useActions(params: {
 
       // If the user rejected, do NOT attempt any fallback (avoid multiple wallet prompts).
       if (r1.error && isUserRejected(r1.error)) return false;
+
+      // When estimateGas fails (CALL_EXCEPTION), force-send approve with fixed gasLimit so MetaMask can pop up.
+      if (r1.error) {
+        const callException = isCallException(r1.error);
+        if (callException) {
+          logSendPath("approve.forceSend", { reason: "callException" });
+          const r1Force = await runTxDetailed(
+            approveLabelUsd8,
+            () =>
+              usd8.connect(signer).getFunction("approve")(simpleLendingAddress!, desiredAllowance, { gasLimit: 150000n }),
+            setTx,
+            {
+              ...(chainId !== undefined ? { persist: { chainId, account }, confirmations: TX_CONFIRMATIONS, provider } : { confirmations: TX_CONFIRMATIONS, provider }),
+              meta: { chainId, contractAddress: (usd8 as { target?: string })?.target, method: "approve", args: [simpleLendingAddress, desiredAllowance.toString()] },
+            },
+          );
+          if (r1Force.receipt) {
+            if (onConfirmed) onConfirmed();
+            return true;
+          }
+          if (r1Force.error && isUserRejected(r1Force.error)) return false;
+        } else {
+          logSendPath("approve.skipForceSend", {
+            code: (r1.error as { code?: unknown })?.code,
+            message: (r1.error as { message?: string })?.message?.slice(0, 80),
+          });
+        }
+      }
 
       // Fallback path (only when direct approve failed).
       if (allowance !== 0n && desiredAllowance !== 0n) {
@@ -290,7 +390,7 @@ export function useActions(params: {
       // We refresh read-models on confirmation to keep a single source of truth (the chain).
       return false;
     },
-    [account, approveMode, chainId, onConfirmed, provider, usd8],
+    [account, approveMode, chainId, onConfirmed, provider, simpleLendingAddress, splitMatch, usd8],
   );
 
   const supply = useCallback(
@@ -300,23 +400,51 @@ export function useActions(params: {
         if (!ready) throw new Error(errorWalletNotConnected);
         await withLock("supply", async () => {
           const amount = requireAmountStrict(amountStr, decimals);
+          lastSubmittedAmountRef.current = amountStr;
           const before = await readPosition();
           const approved = await approveIfNeeded(amount);
           if (!approved) return;
+          setSplitMatch(splitMatch ?? true);
           const signer = await provider!.getSigner();
+          const signerAddress = await signer.getAddress();
+          try {
+            const network = await provider!.getNetwork();
+            const pendingNonce = await provider!.getTransactionCount(signerAddress, "pending");
+            logSendPath("preWrite.walletState", { walletChainId: Number(network.chainId), pendingNonce });
+          } catch {
+            // ignore
+          }
+          logSendPath("actions.supply.signer", { signerAddress, label });
           const write = getWriteLending(lending!, signer);
-          const r = await runTxDetailed(
-            label,
-            () => write.supply(amount),
-            setTx,
-            chainId !== undefined ? { persist: { chainId, account: account! } } : undefined,
-          );
+          logSendPath("actions.supply.write", { label, amount: amount.toString() });
+          const txOpts = {
+            ...(chainId !== undefined ? { persist: { chainId, account: account! }, provider } : { provider }),
+            meta: { chainId, contractAddress: simpleLendingAddress!, method: "supply", args: [amount.toString()] },
+          };
+          let r = await runTxDetailed(label, () => write.supply(amount), setTx, txOpts);
+          if (!r.receipt && r.error) {
+            if (isCallException(r.error)) {
+              logSendPath("actions.supply.forceSend", { reason: "callException" });
+              r = await runTxDetailed(
+                label,
+                () => lending!.connect(signer).getFunction("supply")(amount, { gasLimit: 300000n }),
+                setTx,
+                txOpts,
+              );
+            } else {
+              logSendPath("actions.supply.skipForceSend", {
+                code: (r.error as { code?: unknown })?.code,
+                message: (r.error as { message?: string })?.message?.slice(0, 80),
+              });
+            }
+          }
           if (r.receipt && r.hash) {
             if (onConfirmed) onConfirmed();
             void verifyPostState({ label, hash: r.hash, before, amount, kind: "supply" });
           }
         });
       } catch (e) {
+        logRpcError("actions.supply", e);
         fail(label, e);
       }
     },
@@ -331,6 +459,7 @@ export function useActions(params: {
       provider,
       readPosition,
       ready,
+      splitMatch,
       verifyPostState,
       withLock,
     ],
@@ -343,10 +472,12 @@ export function useActions(params: {
         if (!ready) throw new Error(errorWalletNotConnected);
         await withLock("withdraw", async () => {
           const amount = requireAmountStrict(amountStr, decimals);
+          lastSubmittedAmountRef.current = amountStr;
           const before = await readPosition();
 
           // UX-only: avoid sending a tx that will obviously fail due to insufficient pool liquidity.
-          const poolLiquidity = (await usd8!.balanceOf(simpleLendingAddress!)) as bigint;
+          const poolAddress = simpleLendingAddress!;
+          const poolLiquidity = (await usd8!.balanceOf(poolAddress)) as bigint;
           if (poolLiquidity < amount) {
             throw new Error(errorInsufficientLiquidity);
           }
@@ -357,7 +488,10 @@ export function useActions(params: {
             label,
             () => write.withdraw(amount),
             setTx,
-            chainId !== undefined ? { persist: { chainId, account: account! } } : undefined,
+            {
+              ...(chainId !== undefined ? { persist: { chainId, account: account! }, provider } : { provider }),
+              meta: { chainId, contractAddress: simpleLendingAddress!, method: "withdraw", args: [amount.toString()] },
+            },
           );
           if (r.receipt && r.hash) {
             if (onConfirmed) onConfirmed();
@@ -365,10 +499,11 @@ export function useActions(params: {
           }
         });
       } catch (e) {
+        logRpcError("actions.withdraw", e);
         fail(label, e);
       }
     },
-    [account, chainId, decimals, fail, lending, onConfirmed, provider, readPosition, ready, usd8, verifyPostState, withLock],
+    [account, chainId, decimals, fail, lending, onConfirmed, provider, readPosition, ready, simpleLendingAddress, usd8, verifyPostState, withLock],
   );
 
   const borrow = useCallback(
@@ -378,6 +513,7 @@ export function useActions(params: {
         if (!ready) throw new Error(errorWalletNotConnected);
         await withLock("borrow", async () => {
           const amount = requireAmountStrict(amountStr, decimals);
+          lastSubmittedAmountRef.current = amountStr;
           const before = await readPosition();
           const signer = await provider!.getSigner();
           const write = getWriteLending(lending!, signer);
@@ -385,7 +521,10 @@ export function useActions(params: {
             label,
             () => write.borrow(amount),
             setTx,
-            chainId !== undefined ? { persist: { chainId, account: account! } } : undefined,
+            {
+              ...(chainId !== undefined ? { persist: { chainId, account: account! }, provider } : { provider }),
+              meta: { chainId, contractAddress: simpleLendingAddress!, method: "borrow", args: [amount.toString()] },
+            },
           );
           if (r.receipt && r.hash) {
             if (onConfirmed) onConfirmed();
@@ -393,6 +532,7 @@ export function useActions(params: {
           }
         });
       } catch (e) {
+        logRpcError("actions.borrow", e);
         fail(label, e);
       }
     },
@@ -406,6 +546,7 @@ export function useActions(params: {
         if (!ready) throw new Error(errorWalletNotConnected);
         await withLock("repay", async () => {
           const amount = requireAmountStrict(amountStr, decimals);
+          lastSubmittedAmountRef.current = amountStr;
           const before = await readPosition();
           const approved = await approveIfNeeded(amount);
           if (!approved) return;
@@ -415,7 +556,10 @@ export function useActions(params: {
             label,
             () => write.repay(amount),
             setTx,
-            chainId !== undefined ? { persist: { chainId, account: account! } } : undefined,
+            {
+              ...(chainId !== undefined ? { persist: { chainId, account: account! }, provider } : { provider }),
+              meta: { chainId, contractAddress: simpleLendingAddress!, method: "repay", args: [amount.toString()] },
+            },
           );
           if (r.receipt && r.hash) {
             if (onConfirmed) onConfirmed();
@@ -423,6 +567,7 @@ export function useActions(params: {
           }
         });
       } catch (e) {
+        logRpcError("actions.repay", e);
         fail(label, e);
       }
     },

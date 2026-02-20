@@ -61,6 +61,28 @@
   color: inherit;
 }
 
+.btnText {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.btnText:hover:not(:disabled) { opacity: var(--opacity-muted); }
+.btnLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.btnLink:hover { color: var(--color-primaryHover, var(--color-primary)); }
+.btnLinkMuted {
+  color: var(--color-textMuted);
+}
+.btnLinkMuted:hover { color: var(--color-text); }
 .btnSmall {
   padding: var(--spacing-xxxs) var(--spacing-sm2);
   border-radius: var(--radius-pill);
@@ -225,6 +247,61 @@ input[aria-invalid="true"],
 .preflightOverviewRow--muted {
   color: var(--color-textMuted);
 }
+.preflightImpactBlock {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid var(--color-border);
+}
+.preflightImpactTitle {
+  font-weight: var(--fontWeight-semibold);
+  font-size: var(--fontSize-sm);
+  margin-bottom: var(--spacing-xxs);
+}
+.preflightImpactHint {
+  margin: 0;
+  font-size: var(--fontSize-xs);
+}
+.preflightImpactTableWrap {
+  margin-top: var(--spacing-xs);
+  overflow-x: auto;
+}
+.preflightImpactTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fontSize-xs);
+}
+.preflightImpactTh,
+.preflightImpactCell {
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  text-align: right;
+}
+.preflightImpactThLabel,
+.preflightImpactCellLabel {
+  text-align: left;
+  font-weight: var(--fontWeight-medium);
+}
+.preflightImpactTh:first-child,
+.preflightImpactCell:first-child {
+  padding-left: 0;
+}
+.preflightImpactRow--worse .preflightImpactCellAfter,
+.preflightImpactRow--worse .preflightImpactCellDelta {
+  color: var(--danger, #c53030);
+  font-weight: var(--fontWeight-semibold);
+}
+.preflightImpactWorseSummary {
+  margin: 0 0 var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--surface-warn, rgba(237, 137, 54, 0.12));
+  border-left: 3px solid var(--warning, #ed8936);
+  border-radius: var(--radius-sm);
+  font-size: var(--fontSize-sm);
+  color: var(--text, inherit);
+}
+.preflightImpactWorseHint {
+  margin: var(--spacing-xs) 0 0;
+  font-size: var(--fontSize-xs);
+}
 .preflightNote {
   font-size: var(--fontSize-xs);
   opacity: var(--opacity-subtle);
@@ -275,12 +352,22 @@ input[aria-invalid="true"],
   font-weight: var(--fontWeight-medium);
 }
 .txStuckBanner { margin-top: var(--spacing-sm); }
+.txOutcomeLine { margin-top: var(--spacing-xs); font-size: var(--fontSize-sm); display: flex; align-items: center; gap: var(--spacing-sm); flex-wrap: wrap; }
+.txOutcomeLine--dropped { margin-bottom: var(--spacing-xxs); }
+.txCopyReplacementBtn { flex-shrink: 0; }
 .txStuckHint { font-size: var(--fontSize-xs2); opacity: var(--opacity-muted); }
 .txStuckActions { display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-sm); flex-wrap: wrap; }
 
 .approveToolbarWrap { margin-bottom: var(--spacing-md); }
-.approveToolbarLabelRow { font-size: var(--fontSize-sm); opacity: var(--opacity-dim); }
-.approveToolbarLabel { margin-left: var(--spacing-sm); }
+.approveToolbarLabelRow { font-size: var(--fontSize-sm); opacity: var(--opacity-dim); display: flex; align-items: center; flex-wrap: wrap; gap: var(--spacing-xxs); }
+.approveToolbarTooltipWrap { cursor: help; display: inline-flex; }
+.approveToolbarTooltipIcon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1rem; height: 1rem; border-radius: 50%;
+  background: var(--color-textMuted); color: var(--color-bg);
+  font-size: 0.7rem; font-weight: var(--fontWeight-bold);
+}
+.approveToolbarLabel { margin-left: var(--spacing-xs); }
 
 .dataStatusBanner { margin-top: var(--spacing-sm); }
 .dataStatusBannerBody { font-size: var(--fontSize-xs2); opacity: var(--opacity-muted); }

@@ -1,4 +1,4 @@
-import { approvalModeLabel, exactSafer, infiniteConvenience, enterpriseNoteInfiniteApproval, enterpriseNoticeTitle, enterpriseNoticeWarningChar } from "../../config/ui";
+import { approvalModeLabel, exactSafer, infiniteConvenience, approvalModeTooltip, enterpriseNoteInfiniteApproval, enterpriseNoticeTitle, enterpriseNoticeWarningChar } from "../../config/ui";
 
 export function ApproveToolbar(props: { approveMode: "exact" | "infinite"; setApproveMode: (m: "exact" | "infinite") => void; disabled: boolean }) {
   const { approveMode, setApproveMode, disabled } = props;
@@ -6,6 +6,9 @@ export function ApproveToolbar(props: { approveMode: "exact" | "infinite"; setAp
     <div className="toolbar approveToolbarWrap">
       <div className="approveToolbarLabelRow">
         {approvalModeLabel}:
+        <span className="approveToolbarTooltipWrap" title={approvalModeTooltip} aria-label={approvalModeTooltip}>
+          <span className="approveToolbarTooltipIcon" aria-hidden="true">?</span>
+        </span>
         <label className="approveToolbarLabel">
           <input type="radio" name="approveMode" checked={approveMode === "exact"} disabled={disabled} onChange={() => setApproveMode("exact")} /> {exactSafer}
         </label>

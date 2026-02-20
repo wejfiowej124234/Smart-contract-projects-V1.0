@@ -13,7 +13,7 @@ import {
 } from "../config/ui";
 import { DEFAULT_CHAIN_ID } from "../config/network";
 import { parseAmountStrict } from "../utils/amount";
-import { clampDecimalsForDisplay } from "../utils/format";
+import { clampDecimalsForDisplay, formatAmountForDisplayWithStrategy } from "../utils/format";
 import type { PreflightAction, DashboardInputs } from "../types/dashboard";
 
 export function useDashboardForm(params: {
@@ -78,13 +78,11 @@ export function useDashboardForm(params: {
       if (pos.borrowed === 0n && prev.repay.trim()) next = { ...next, repay: "" };
       return next !== prev ? next : prev;
     });
-  }, [dashboardData?.position?.maxWithdraw, dashboardData?.position?.maxBorrow, dashboardData?.position?.borrowed]);
+  }, [dashboardData?.position]);
 
   const formatToken = (v: bigint | undefined, decimals: number): string => {
-    if (v === undefined) return emptyPlaceholder;
-    const s = clampDecimalsForDisplay(formatUnits(v, decimals), DISPLAY_MAX_DECIMALS);
-    if (s.startsWith("-")) return emptyPlaceholder;
-    return s;
+    if (v === undefined || v < 0n) return emptyPlaceholder;
+    return formatAmountForDisplayWithStrategy(v, decimals);
   };
   const formatPercent = (v: bigint | undefined) => (v !== undefined ? `${v.toString()}%` : emptyPlaceholder);
 

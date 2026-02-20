@@ -1,8 +1,8 @@
 # Security Policy
 
-This repository is a demo project. The goal of this document is **clear communication** (how to report, what's in scope, what to expect). It is **not** a company SLA, not a bug bounty, and not a promise of response time.
+This repository is a **v1.0 Local-Only** deliverable. The goal of this document is **clear communication** (how to report, what's in scope, what to expect). It is **not** a company SLA, not a bug bounty, and not a promise of response time.
 
-This project has not undergone third-party security audit and is not intended for mainnet use.
+This project has not undergone third-party security audit and is not intended for mainnet use. **v1.0 已实现**（P0–P10 Local-Only）；唯一验收：`npm run p10:gate` exit 0。
 
 It is not designed to safeguard real funds; use it only in local/test/demo environments.
 
@@ -28,9 +28,8 @@ Recommended channel:
 - CI/build scripts that could cause supply-chain risk within this repo.
 
 ### Out of scope
-- Issues that require a full protocol redesign to be "real DeFi production", such as:
-  - Price oracles, liquidation engine, interest accrual, multi-asset collateral.
-- Third-party systems (wallet providers, RPC endpoints, MetaMask itself).
+- **Production / mainnet commitment**: This repo is v1.0 Local-Only deliverable. We do not promise production-grade oracle/liquidation/mainnet fund safety or third-party mainnet audit.
+- **Third-party systems**: Wallet providers, RPC endpoints, MetaMask (report issues in those ecosystems to their maintainers).
 
 ### Response
 - This repo does not provide a guaranteed SLA. Best-effort triage and fixes.
@@ -71,7 +70,7 @@ Baseline hardening applied (project scope):
 - `SafeERC20` for token transfers
 
 Important boundary:
-- The protocol is intentionally **single-asset** for this project. It does not implement oracle/liquidation/interest accrual.
+- v1.0 includes proxy, governance, oracle, liquidation, and interest accrual for **local/test/demo** use. The protocol is not intended for mainnet production use without further audit and hardening.
 
 ---
 

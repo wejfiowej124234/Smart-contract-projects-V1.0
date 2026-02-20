@@ -1,5 +1,7 @@
 # Local run steps (fix "Contract read failed" / balance not showing)
 
+**企业级清单**：前后端调试前**全部准备工作**与**调试工作**（顺序、打勾、诊断命令）见 [docs/09-本地链标准与地址.md](docs/09-本地链标准与地址.md) **Part 4**。本文为快速排错摘要。
+
 ## Important
 
 - **Restarting the Hardhat node clears the chain.** Previous contracts and tokens are gone; "old" balances no longer exist on the new chain.
@@ -27,10 +29,11 @@ In **terminal 2** (new window):
 
 ```bash
 cd "c:\Users\plant\Desktop\Smart contract projects"
-npx hardhat run scripts/deploy.ts --network localhost
+npm run deploy:localhost
+npm run deploy:p9
 ```
 
-Success when you see `USD8 address`, `SimpleLending address`, and `Seeded 0x7099...79C8` in the output.
+Success when you see `USD8 address`, `SimpleLending address`, and `Seeded 0x7099...79C8` from deploy:localhost, and governance addresses from deploy:p9. For canonical order see [docs/09-本地链标准与地址.md](docs/09-本地链标准与地址.md).
 
 ### 3. Restart the frontend and hard-refresh the page
 
@@ -39,7 +42,7 @@ Success when you see `USD8 address`, `SimpleLending address`, and `Seeded 0x7099
 
 ### 4. Check the network
 
-In MetaMask, select **Hardhat Local (31337)**. Keep the same account (e.g. 0x7099...79C8); no need to log in again.
+In MetaMask, select **Hardhat Local** with **RPC URL** `http://127.0.0.1:8545` and **Chain ID** `31337`. Keep the same account (e.g. 0x7099...79C8); no need to log in again. See [docs/09-本地链标准与地址.md](docs/09-本地链标准与地址.md) for the canonical setup.
 
 ### 5. If the app shows correct balance but MetaMask still shows old balance (e.g. 9,994 instead of 10,000)
 

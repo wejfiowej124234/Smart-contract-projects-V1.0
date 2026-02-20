@@ -1,0 +1,6 @@
+{
+  "chainId": 421614,
+  "sequencerGuard": "deployed address or N/A if using Option A chain check",
+  "evidenceNote": "Manual verification that SequencerUptimeGuard is implemented and wired in oracle path; or tx hash of setFeed(asset, sequencerGuard).",
+  "verifiedAt": "ISO8601 or block number"
+}

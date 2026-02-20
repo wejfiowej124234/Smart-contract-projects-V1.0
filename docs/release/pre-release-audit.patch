@@ -1,0 +1,58 @@
+--- a/scripts/governance/verify-recovery-paths.ts
++++ b/scripts/governance/verify-recovery-paths.ts
+@@ -1,6 +1,7 @@
+ /**
+  * Protocol-level: Verify multi-layer recovery paths (L1 Guardian, L2 Timelock admin, L3 ProxyAdmin owner).
+  * Ensures no single point of failure and that recovery actors are set. In production these should be multi-sig.
++ * Prerequisite: deploy-p9 run; deployments/<chainId>.json with emergencyModule, timelock, proxyAdmin.
+  * Usage: npx hardhat run scripts/governance/verify-recovery-paths.ts --network localhost
+  */
+ import fs from "fs";
+--- a/scripts/governance/risk-simulate-params.ts
++++ b/scripts/governance/risk-simulate-params.ts
+@@ -2,6 +2,7 @@
+  * Protocol-level: Risk simulation for parameter changes (LTV, LT, etc.).
+  * Forks at latest block (or given block), applies param set, runs basic liquidation/rate checks.
+  * Output: metrics (e.g. positions at risk, utilization). Used before parameter-change proposals.
++ * Prerequisite: deployments/<chainId>.json with simpleLendingAddress, usd8Address.
+  * Usage: npx hardhat run scripts/governance/risk-simulate-params.ts --network localhost
+  *
+  * Optional env: LTV=76 LT=80 (defaults from deployments if not set). SIM_BLOCK=latest to fork at specific block.
+--- a/scripts/governance/verify-p9-complete.ts
++++ b/scripts/governance/verify-p9-complete.ts
+@@ -1,5 +1,6 @@
+ /**
+  * P9: Verify V1–V8 (governance contracts deployed, permissions on Timelock, one full cycle executed).
++ * Prerequisite: deploy-p9 and (optionally) one full governance cycle run; deployments/<chainId>.json present.
+  * Usage: npx hardhat run scripts/governance/verify-p9-complete.ts --network localhost
+  * Exit 0 only if all checks pass.
+  */
+--- a/scripts/governance/governance-audit-log.ts
++++ b/scripts/governance/governance-audit-log.ts
+@@ -2,6 +2,7 @@
+  * Institutional DAO: Emit governance audit log (chainId, block range, steps with txHash/blockNumber, final params).
+  * Can run standalone (reads governor + timelock from deployments, fetches current params) or after full-lifecycle
+  * (optionally merge with evidence-pack lifecycle JSON for one audit artifact).
++ * Prerequisite: deploy-p9 run; deployments/<chainId>.json with governor and timelock.
+  * Usage: npx hardhat run scripts/governance/governance-audit-log.ts --network localhost
+  * Optional: GOVERNANCE_LIFECYCLE_JSON=evidence-pack/governance-full-lifecycle.json to merge steps from that file.
+  */
+--- a/scripts/ops/fix-supply-revert-31337.ts
++++ b/scripts/ops/fix-supply-revert-31337.ts
+@@ -2,6 +2,7 @@
+  * Diagnose and fix Supply tx revert on local 31337 (no frontend/contract core changes).
+  * Checks in order: lending.paused(), lending.reservePaused(usd8), user allowance, balance, amount>0.
+  * If pause is the cause: uses PAUSER account (deployer) to unpause() and/or clear reserve pause.
++ * Prerequisite: Node running; deployments/<chainId>.json for the chain (e.g. 31337).
+  * Usage: npm run ops:fix-supply-revert (or npx hardhat run scripts/ops/fix-supply-revert-31337.ts --network localhost)
+  * Optional: USER_ADDRESS=0x... to check allowance/balance for a specific user.
+  */
+--- a/scripts/security-gate/check-b4-evidence.ts
++++ b/scripts/security-gate/check-b4-evidence.ts
+@@ -1,5 +1,6 @@
+ /**
+  * B4 L2 evidence file check for CI: exit 1 if chainId is L2 and evidence file is missing.
++ * Prerequisite: CHAIN_ID or CI_L2_CHAIN_ID set when running on L2 release; B4 evidence file expected for L2.
+  * Usage: CHAIN_ID=421614 npx hardhat run scripts/security-gate/check-b4-evidence.ts
+  * Or from CI: pass chainId for the network you are releasing to.
+  */

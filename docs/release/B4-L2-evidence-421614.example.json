@@ -1,0 +1,9 @@
+{
+  "chainId": 421614,
+  "sequencerGuardChecklist": [
+    "SequencerUptimeGuard deployed and wired in OracleRouter feed path",
+    "isSequencerUp() returns false when sequencer down; getPrice reverts"
+  ],
+  "evidenceTxOrDoc": "optional: tx hash that set feed to SequencerUptimeGuard, or link to deployment doc",
+  "updatedAt": "YYYY-MM-DD"
+}

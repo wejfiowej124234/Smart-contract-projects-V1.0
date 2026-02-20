@@ -58,8 +58,10 @@ function rewriteMessage(raw: string): { message: string; meta?: Record<string, u
   if (/insufficient balance/i.test(m) || /ERC20: transfer amount exceeds balance/i.test(m))
     return { message: errorInsufficientTokenBalance, meta: { rawMessage: m } };
 
-  // Replace noisy RPC messages (e.g. "missing revert data" / localized ethers) with a clearer message.
-  if (/missing revert data|缺少还原数据/i.test(m))
+  // Replace noisy RPC messages (e.g. "missing revert data" / "could not coalesce" / localized ethers) with a clearer message.
+  // Caller may override with errorDashboardPoolReadFailed or errorDashboardPositionReadFailed for precise diagnosis.
+  // Match English and localized RPC revert messages so we show a single clear message
+  if (/missing revert data|缺少还原数据|could not coalesce/i.test(m))
     return { message: errorDashboardContractReadFailed, meta: { rawMessage: m } };
   if (/failed to fetch|network error|socket hang up|ECONNRESET|ECONNREFUSED/i.test(m))
     return { message: errorRpcNetworkCheckNode, meta: { rawMessage: m } };

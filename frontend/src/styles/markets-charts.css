@@ -1,0 +1,355 @@
+/* Markets page + chart component */
+.marketsSection {
+  margin-top: var(--spacing-md);
+}
+.marketsSubtitle {
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-lg);
+}
+.marketsConnectCard {
+  max-width: 32rem;
+}
+.marketsToolbar {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.marketsSortLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+}
+.marketsSortLabelText {
+  font-size: var(--fontSize-sm);
+  color: var(--color-textMuted);
+}
+.marketsSortSelect {
+  min-height: 36px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  padding-right: 2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: var(--fontSize-sm);
+  cursor: pointer;
+  box-sizing: border-box;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+}
+.marketsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .marketsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.marketCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+.marketCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+}
+.marketAssetSymbol {
+  font-size: var(--fontSize-xl);
+  font-weight: var(--fontWeight-bold);
+  color: var(--color-text);
+}
+.marketAssetName {
+  font-size: var(--fontSize-sm);
+  color: var(--color-textMuted);
+}
+.marketCardHero {
+  display: flex;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+.marketCardRiskLine { margin: 0 0 var(--spacing-xs); font-size: var(--fontSize-xs); }
+.marketCardMetric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+}
+.marketCardLabel {
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+.marketCardValue {
+  font-size: var(--fontSize-lg);
+  font-weight: var(--fontWeight-semibold);
+  color: var(--color-text);
+}
+.marketCardValue--primary {
+  color: var(--color-hero-value);
+}
+.marketCardMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--spacing-md);
+}
+.marketCardActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+.marketCtaBtn {
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  min-height: var(--btn-primary-min-height, 2.75rem);
+}
+.marketCardHint {
+  font-size: var(--fontSize-xs);
+  margin: 0;
+}
+.marketChartSlot {
+  min-width: 0;
+}
+
+/* Reserve list table (blueprint §10.2 ReserveList) */
+.reserveListWrap {
+  overflow-x: auto;
+  margin-bottom: var(--spacing-xl);
+  border: var(--borderWidth) solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+.reserveListSection {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.reserveListSection:last-of-type { border-bottom: 0; }
+.reserveListSectionHeader {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+.reserveListSectionTitle {
+  font-size: var(--fontSize-sm);
+  font-weight: var(--fontWeight-semibold);
+  color: var(--color-textMuted);
+  margin: 0 0 var(--spacing-sm);
+}
+.reserveListSectionHeader .reserveListSectionTitle { margin-bottom: 0; }
+.reserveListExplanationBtn {
+  font-size: var(--fontSize-xs);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.reserveListExplanationBtn:hover { opacity: var(--opacity-muted); }
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.modal--narrow { max-width: 420px; }
+.modalBodyText { margin: 0; }
+.reserveListTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fontSize-sm);
+}
+.reserveListTable th,
+.reserveListTable td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+/* Numeric columns: right-align so digits line up (Supply APY, Borrow APY, Utilization, Liquidity, Supply, Borrow, LTV, LT) */
+.reserveListTable th:nth-child(n+2):not(:last-child),
+.reserveListTable td:nth-child(n+2):not(:last-child) {
+  text-align: right;
+}
+.reserveListTable th {
+  font-weight: var(--fontWeight-semibold);
+  color: var(--color-textMuted);
+  background: var(--color-surfaceAlt);
+}
+.reserveListTable tbody tr:last-child td { border-bottom: 0; }
+.reserveListTable tbody tr:hover { background: var(--color-surfaceAlt); }
+.reserveSymbol { font-weight: var(--fontWeight-semibold); display: block; }
+.reserveName { font-size: var(--fontSize-xs); color: var(--color-textMuted); display: block; }
+.reserveMockBadge {
+  display: inline-block;
+  margin-left: var(--spacing-xs);
+  padding: 2px var(--spacing-xs);
+  font-size: var(--fontSize-xs2);
+  color: var(--color-textMuted);
+  background: var(--color-surfaceAlt);
+  border-radius: var(--radius-pill);
+  border: 1px dashed var(--color-border);
+}
+.reserveListMockActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+}
+.reserveListMockBadge {
+  font-weight: var(--fontWeight-medium);
+  color: var(--color-textMuted);
+}
+.reserveListMockHint {
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+}
+.reserveApy { font-weight: var(--fontWeight-semibold); }
+.reserveApy--supply { color: var(--color-hero-value); }
+.reserveUtilization { font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: var(--spacing-xxs); }
+.reserveUtilizationIndicator { font-size: 0.5em; line-height: 1; opacity: 0.9; }
+.reserveUtilization--low .reserveUtilizationIndicator { color: var(--color-success); }
+.reserveUtilization--medium .reserveUtilizationIndicator { color: var(--color-warning); }
+.reserveUtilization--high .reserveUtilizationIndicator { color: var(--color-danger); }
+.reserveUtilization--low { color: var(--color-success); }
+.reserveUtilization--medium { color: var(--color-warning); }
+.reserveUtilization--high { color: var(--color-danger); }
+.reserveListTable td .btn { margin-right: var(--spacing-sm); }
+@media (max-width: 640px) {
+  .reserveListWrap { overflow-x: visible; }
+  .reserveListTable thead { display: none; }
+  .reserveListTable tbody tr {
+    display: block;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .reserveListTable tbody tr:last-child { margin-bottom: 0; }
+  .reserveListTable td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) 0;
+    border-bottom: none;
+  }
+  .reserveListTable td::before {
+    content: attr(data-label);
+    font-size: var(--fontSize-xs);
+    color: var(--color-textMuted);
+    font-weight: var(--fontWeight-medium);
+    flex-shrink: 0;
+  }
+  .reserveListTable td:last-child::before { display: none; }
+  .reserveListTable td:last-child { flex-wrap: wrap; justify-content: flex-start; }
+}
+
+/* Mobile: Reserve list as cards */
+@media (max-width: 640px) {
+  .reserveListWrap { overflow-x: visible; }
+  .reserveListTable,
+  .reserveListTable thead,
+  .reserveListTable tbody,
+  .reserveListTable tr,
+  .reserveListTable td { display: block; }
+  .reserveListTable thead tr {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+  }
+  .reserveListTable tbody tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-surface);
+  }
+  .reserveListTable td {
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .reserveListTable td:last-child { border-bottom: 0; }
+  .reserveListTable td[data-label]::before {
+    content: attr(data-label);
+    font-weight: var(--fontWeight-semibold);
+    display: inline-block;
+    min-width: 5rem;
+    margin-right: var(--spacing-sm);
+    color: var(--color-textMuted);
+  }
+}
+
+/* Chart card */
+.chartCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+.chartHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+.chartTitle {
+  font-size: var(--fontSize-lg);
+  font-weight: var(--fontWeight-semibold);
+  margin: 0;
+  color: var(--color-text);
+}
+.chartSimulatedBadge {
+  font-size: var(--fontSize-xs);
+  color: var(--color-textMuted);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border-radius: var(--radius-pill);
+  border: 1px dashed var(--color-border);
+  margin-left: var(--spacing-sm);
+}
+.chartTimeRange {
+  display: flex;
+  gap: var(--spacing-xxs);
+}
+.chartTimeBtn {
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  font-size: var(--fontSize-xs);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-textMuted);
+  cursor: pointer;
+  font-weight: var(--fontWeight-medium);
+}
+.chartTimeBtn:hover {
+  color: var(--color-text);
+  border-color: var(--color-primary);
+}
+.chartTimeBtn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+.chartWrapper {
+  width: 100%;
+  min-height: 280px;
+}
+.chartSimulatedCaption {
+  font-size: var(--fontSize-xs);
+  margin: 0;
+}
+.chartDataSourceHint {
+  font-size: var(--fontSize-xs);
+  margin: 0;
+}
